@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="fr" data-theme="cupcake">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Erwan Rivet : Développeur web </title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+
+</head>
+<body class="min-h-full">
+<header class="sticky top-0 z-50">
+    <div class="navbar bg-base-100 shadow-sm">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 6h16M4 12h8m-8 6h16"/>
+                    </svg>
+                </div>
+                <ul tabindex="0"
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                    <li>
+                        <button class="pres-cta">Présentation</button>
+                    </li>
+                    <li>
+                        <button class="exp-cta">Expériences</button>
+                    </li>
+                    <li>
+                        <button class="project-cta">Projets</button>
+                    </li>
+                    <li>
+                        <button class="sk-cta">Soft Skills</button>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1">
+                <li>
+                    <button class="pres-cta text-xl">Présentation</button>
+                </li>
+                <li>
+                    <button class="exp-cta text-xl">Expériences</button>
+                </li>
+                <li>
+                    <button class="project-cta text-xl">Projets</button>
+                </li>
+                <li>
+                    <button class="sk-cta text-xl">Soft Skills</button>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-end">
+            <a class="btn mx-2" href="mailto:riveterwan8@gmail.com">Mail</a>
+            <a class="btn mx-2" href="tel:0680177585">Phone</a>
+        </div>
+    </div>
+</header>
+<main class="mx-auto max-w-[1170px] px-4">
+    <div id="about-me" class="hidden my-12" >
+        <section class="relative bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+            <div class="container mx-auto px-6 py-20 flex flex-col md:flex-row items-center">
+                <div class="flex-1">
+                    <h1 class="text-4xl md:text-6xl font-bold leading-tight">
+                        Salut, je suis <span class="text-yellow-300">Erwan Rivet</span>
+                    </h1>
+                    <p class="mt-6 text-lg md:text-xl">
+                        Développeur web passionné, spécialisé en PHP, Laravel 12, Livewire 3, Filament 4 et WordPress.
+                        Je crée des applications web modernes et performantes, des plugins WordPress sur mesure et des blocs Gutenberg interactifs en React.
+                    </p>
+                    <div class="mt-8 flex gap-4">
+                        <a href="#projets" class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg font-semibold shadow hover:bg-yellow-300 transition">
+                            Voir mes projets
+                        </a>
+                        <a href="#contact" class="border border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition">
+                            Me contacter
+                        </a>
+                    </div>
+                </div>
+                <div class="flex-1 mt-10 md:mt-0 flex justify-center">
+                    <img src="assets/images/erwan-rivet.webp" alt="Erwan en action" class="rounded-xl shadow-lg max-w-full">
+                </div>
+            </div>
+        </section>
+
+        <!-- Compétences et expertises -->
+        <section class="container mx-auto px-6 py-20">
+            <h2 class="text-3xl font-bold text-center mb-12">Mes expertises</h2>
+            <div class="md:flex md:gap-12 items-center">
+                <div class="md:w-1/2">
+                    <p class="text-lg mb-6">
+                        Je conçois des applications web sur mesure, que ce soit en backend avec Laravel 12, Livewire 3 et Filament 4, ou en front-end avec React et des blocs Gutenberg interactifs pour WordPress.
+                        J’aime combiner performance, modularité et expérience utilisateur.
+                    </p>
+                    <p class="text-lg">
+                        Je suis également passionné par la qualité du code, les bonnes pratiques, l’optimisation et les workflows efficaces pour des projets rapides et maintenables.
+                    </p>
+
+                </div>
+                <div class="md:w-1/2 mt-8 md:mt-0 flex flex-wrap gap-4 justify-center">
+                    <div class="group bg-white p-6 rounded-xl shadow hover:shadow-lg transition w-40 flex justify-center items-center relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/60 before:to-black/50 before:z-10 before:opacity-100 before:transition-opacity before:duration-300 overflow-hidden hover:bg-transparent group-hover:before:opacity-0">
+                        <h3 class="text-xl font-semibold mb-3 text-center relative z-20 text-white transition-opacity duration-300 group-hover:opacity-0">Laravel 12 & Livewire 3</h3>
+                        <img class="absolute top-0 w-full h-full z-0 object-cover overlay" src="assets/images/livewire.png" alt="Livewire">
+                    </div>
+                    <div class="group bg-white p-6 rounded-xl shadow hover:shadow-lg transition w-40 flex justify-center items-center relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/60 before:to-black/50 before:z-10 before:opacity-100 before:transition-opacity before:duration-300 overflow-hidden hover:bg-transparent group-hover:before:opacity-0">
+                        <h3 class="text-xl font-semibold mb-3 text-center relative z-20 text-white transition-opacity duration-300 group-hover:opacity-0">Filament 4</h3>
+                        <img class="absolute top-0 w-full h-full z-0 object-cover overlay" src="assets/images/filament.png" alt="Livewire">
+                    </div>
+                    <div class="group bg-white p-6 rounded-xl shadow hover:shadow-lg transition w-40 flex justify-center items-center relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/60 before:to-black/50 before:z-10 before:opacity-100 before:transition-opacity before:duration-300 overflow-hidden hover:bg-transparent group-hover:before:opacity-0">
+                        <h3 class="text-xl font-semibold mb-3 text-center relative z-20 text-white transition-opacity duration-300 group-hover:opacity-0">Blocks Gutenberg Custom</h3>
+                        <img class="absolute top-0 w-full h-full z-0 object-cover overlay" src="assets/images/logo-gutenberg.png" alt="Livewire">
+                    </div>
+                    <div class="group bg-white p-6 rounded-xl shadow hover:shadow-lg transition w-40 flex justify-center items-center relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/60 before:to-black/50 before:z-10 before:opacity-100 before:transition-opacity before:duration-300 overflow-hidden hover:bg-transparent group-hover:before:opacity-0">
+                        <h3 class="text-xl font-semibold mb-3 text-center relative z-20 text-white transition-opacity duration-300 group-hover:opacity-0">Wordpress FSE </h3>
+                        <img class="absolute top-0 w-full h-full z-0 object-cover overlay" src="assets/images/fse.jpg" alt="Livewire">
+                    </div>
+                    <div class="group bg-white p-6 rounded-xl shadow hover:shadow-lg transition w-40 flex justify-center items-center relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black/60 before:to-black/50 before:z-10 before:opacity-100 before:transition-opacity before:duration-300 overflow-hidden hover:bg-transparent group-hover:before:opacity-0">
+                        <h3 class="text-xl font-semibold mb-3 text-center relative z-20 text-white transition-opacity duration-300 group-hover:opacity-0">Expérimentations et veille</h3>
+                        <img class="absolute top-0 w-full h-full z-0 object-cover overlay" src="assets/images/filament.png" alt="Livewire">
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Projets -->
+        <section id="projets" class="bg-gray-100 py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">Projets récents</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Projet Woodbrass (e-commerce / maintenance) -->
+                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                        <img src="https://source.unsplash.com/600x400/?ecommerce,shop" alt="Projet Woodbrass" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold">Woodbrass / évolution & maintenance</h3>
+                            <p class="mt-2 text-gray-600">
+                                Maintenance backend & frontend, évolution des fonctionnalités de la boutique, API REST, optimisation, versioning sur PHP / WordPress
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Projet site vitrine Anne Thierrée -->
+                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                        <img src="https://source.unsplash.com/600x400/?art,portfolio,website" alt="Projet Anne Thierrée" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold">Anne Thierrée — site vitrine artistique</h3>
+                            <p class="mt-2 text-gray-600">
+                                Site vitrine + portfolio, développement WordPress sur mesure, interface éditable simple, mise en ligne rapide
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Autre projet WordPress / Front-end -->
+                    <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                        <img src="https://source.unsplash.com/600x400/?wordpress,plugin,web development" alt="Plugin WordPress / Projet front-end">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold">Plugin / Front-end WordPress</h3>
+                            <p class="mt-2 text-gray-600">
+                                Développement de plugin personnalisé + stylisation front-end, optimisation UX et accessibilité
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Tu peux ajouter d’autres projets comme “Plateformes internes”, etc. -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Avis / Témoignages -->
+        <section class="container mx-auto px-6 py-20">
+            <h2 class="text-3xl font-bold text-center mb-12">Ils parlent de moi</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow">
+                    <p class="text-gray-800 italic mb-4">
+                        « Erwan est très à l’écoute des besoins de son interlocuteur et très réactif. Il fait tout pour que l’utilisation du back office du site internet soit simple et pratique. »
+                    </p>
+                    <p class="font-semibold">— Anne-Anne Thierrée</p>
+                </div>
+                <!-- Une autre recommandation -->
+                <div class="bg-white p-8 rounded-xl shadow">
+                    <p class="text-gray-800 italic mb-4">
+                        « Respect des délais, qualité du code, communication fluide : travailler avec Erwan est un réel plaisir. »
+                    </p>
+                    <p class="font-semibold">— Client / Partenaire récent</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tarifs & Jour / Disponibilités -->
+        <section class="bg-gray-200 py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-6">Modalités & tarif indicatif</h2>
+                <p class="text-lg mb-4">
+                    Mon taux journalier : <strong>≈ 400 €/jour</strong> (en freelance).<br>
+                    Expérience : 3-7 ans, réponse rapide, rigueur & sérieux dans la gestion de projet.
+                </p>
+                <a href="#contact" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold shadow hover:bg-blue-500 transition">
+                    Discutons de votre projet
+                </a>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="container mx-auto px-6 py-20 text-center">
+            <h2 class="text-3xl font-bold mb-6">Contact</h2>
+            <p class="text-lg mb-8">
+                Envie de travailler ensemble ou d’auditer votre projet ?
+                Je suis disponible pour échanger, analyser vos besoins et vous proposer la meilleure solution.
+            </p>
+            <a href="mailto:erwan.email@example.com" class="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold shadow hover:bg-blue-500 transition">
+                Me contacter
+            </a>
+        </section>
+
+        <!-- Footer -->
+
+    </div>
+    <div id="experiences" class="hidden">
+        experiences
+    </div>
+    <div id="projects" class="hidden">
+        Projets
+    </div>
+    <div id="soft-skills" class="hidden">
+        soft-skills
+    </div>
+</main>
+<div class="flex flex-col md:flex-row items-center justify-between p-6 bg-white shadow-lg border border-gray-200">
+    <div class="flex justify-center md:justify-start ">
+        <img src="assets/images/erwan-rivet.webp"
+             alt="Erwan Rivet"
+             class="rounded-full w-40 h-40 border-4 border-tertiary shadow-md">
+    </div>
+
+    <div class="mt-4 md:mt-0 md:ml-6 text-center md:text-left flex-1">
+        <p class="text-3xl font-bold text-gray-900">
+            Erwan RIVET
+            <span class="text-tertiary text-lg block md:inline md:ml-2">Développeur Web</span>
+        </p>
+        <div class="flex ">
+            <a href="mailto:riveterwan8@gmail.com"
+               class="block text-sm mr-3 text-tertiary hover:underline">Mail</a>
+            <a href="https://github.com/waner1er"
+               target="_blank"
+               class="block text-sm mr-3 text-gray-600 hover:underline">GitHub</a>
+            <a href="https://linkedin.com/in/erwan-rivet"
+               target="_blank"
+               class="block text-sm mr-3 text-gray-600 hover:underline">LinkedIn</a>
+        </div>
+        <p class="text-gray-600 mt-2">
+            PHP (Laravel, Symfony, WordPress) & JavaScript.
+            Passionné par le développement web et la création de solutions sur mesure.
+        </p>
+        <div class="flex flex-wrap justify-center md:justify-start mt-3 space-x-2">
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">PHP</span>
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Laravel</span>
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Symfony</span>
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">WordPress</span>
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">JavaScript</span>
+            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">SQL</span>
+        </div>
+    </div>
+</div>
+<footer class="bg-gray-900 text-gray-400 text-center py-6">
+    <p>© 2025 Erwan Rivet — Développeur Web PHP / Laravel / WordPress — Nantes & région</p>
+</footer>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+    AOS.init({
+        duration: 10000,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false,
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const sections = ['about-me', 'experiences', 'projects', 'soft-skills'];
+
+        function showSection(targetId) {
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (id === targetId) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        function normalizeSlug(s) {
+            return (s || '')
+                .toString()
+                .trim()
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
+        const slugToSection = {
+            'about-me': 'about-me',
+            'experiences': 'experiences',
+            'projets': 'projects',
+            'soft-skills': 'soft-skills'
+        };
+
+        const classToSlug = {
+            'pres-cta': 'about-me',
+            'exp-cta': 'experiences',
+            'project-cta': 'projets',
+            'sk-cta': 'soft-skills'
+        };
+
+        function showBySlug(rawSlug) {
+            const slug = normalizeSlug(rawSlug);
+            const id = slugToSection[slug] || 'about-me';
+            showSection(id);
+        }
+
+        function navigateTo(slug) {
+            const normalized = normalizeSlug(slug);
+            if (normalizeSlug(location.hash.slice(1)) !== normalized) {
+                location.hash = normalized; // met à jour l'URL
+            }
+            showBySlug(normalized);
+        }
+
+        document
+            .querySelectorAll('.pres-cta, .exp-cta, .project-cta, .sk-cta')
+            .forEach(btn => {
+                const cls = Object.keys(classToSlug).find(c => btn.classList.contains(c));
+                if (!cls) return;
+                btn.addEventListener('click', () => navigateTo(classToSlug[cls]));
+            });
+
+        window.addEventListener('hashchange', () => {
+            showBySlug(location.hash.slice(1));
+        });
+
+        const initialRaw = location.hash.slice(1);
+        const initial = normalizeSlug(initialRaw) || 'about-me';
+        if (!initialRaw) {
+            location.hash = initial;
+        }
+        showBySlug(initial);
+    });
+</script>
+
+</body>
+</html>
