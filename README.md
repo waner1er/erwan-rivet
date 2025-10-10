@@ -2,6 +2,10 @@
 
 Portfolio personnel d'Erwan Rivet, développeur web spécialisé en PHP, Laravel, WordPress et technologies modernes.
 
+> **🚀 REDÉPLOIEMENT RAPIDE** : Consultez [QUICKSTART.md](QUICKSTART.md) pour la réponse rapide !
+> 
+> **📚 Guide détaillé** : Consultez [DEPLOYMENT.md](DEPLOYMENT.md) pour toutes les options de déploiement.
+
 ## 🚀 Déploiement
 
 Ce site est un site statique simple (HTML, CSS, JavaScript) qui peut être déployé de plusieurs façons.
