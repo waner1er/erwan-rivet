@@ -79,7 +79,8 @@ if (!PUSH) process.exit(0);
 const remote = execFileSync('git', ['remote', 'get-url', 'origin'], { encoding: 'utf8' }).trim();
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'gh-pages-'));
 fs.cpSync(OUT, tmp, { recursive: true });
-const git = (...args) => sh('git', args, { cwd: tmp });
+// No shell for git: arguments with spaces (commit message) must stay intact on Windows.
+const git = (...args) => sh('git', args, { cwd: tmp, shell: false });
 const author = (key) => execFileSync('git', ['config', key], { encoding: 'utf8' }).trim();
 
 git('init', '-q', '-b', BRANCH);
