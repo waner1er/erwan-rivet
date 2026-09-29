@@ -1,0 +1,73 @@
+---
+// Contact form reusing the Fluent Forms markup so the original styles apply.
+const status = Astro.url.searchParams.get('contact');
+---
+
+<div class="fluentform ff-default fluentform_wrapper_3 ffs_default_wrap" id="contact-form">
+  {
+    status === 'ok' && (
+      <div class="ff-message-success" role="status">
+        <p>Merci pour votre message, je vous répondrai rapidement.</p>
+      </div>
+    )
+  }
+  {
+    status === 'error' && (
+      <div class="ff-errors-in-stack" role="alert">
+        <div class="error text-danger">Merci de remplir correctement les champs obligatoires.</div>
+      </div>
+    )
+  }
+  <form class="frm-fluent-form fluent_form_3 ff-el-form-top ffs_default" method="post" action="/api/contact">
+    <fieldset style="border:none;margin:0;padding:0;min-inline-size:100%">
+      <legend class="screen-reader-text">Contact</legend>
+      <div class="ff-field_container ff-name-field-wrapper">
+        <div class="ff-t-container">
+          <div class="ff-t-cell">
+            <div class="ff-el-group ff-el-form-top">
+              <div class="ff-el-input--label ff-el-is-required asterisk-right">
+                <label for="ff_first_name">Prénom</label>
+              </div>
+              <div class="ff-el-input--content">
+                <input type="text" name="first_name" id="ff_first_name" class="ff-el-form-control" placeholder="Prénom" required maxlength="100" />
+              </div>
+            </div>
+          </div>
+          <div class="ff-t-cell">
+            <div class="ff-el-group ff-el-form-top">
+              <div class="ff-el-input--label ff-el-is-required asterisk-right">
+                <label for="ff_last_name">Nom</label>
+              </div>
+              <div class="ff-el-input--content">
+                <input type="text" name="last_name" id="ff_last_name" class="ff-el-form-control" placeholder="Nom de famille" required maxlength="100" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ff-el-group">
+        <div class="ff-el-input--label ff-el-is-required asterisk-right">
+          <label for="ff_email">E-mail</label>
+        </div>
+        <div class="ff-el-input--content">
+          <input type="email" name="email" class="ff-el-form-control" id="ff_email" required maxlength="200" />
+        </div>
+      </div>
+      <div class="ff-el-group">
+        <div class="ff-el-input--label asterisk-right">
+          <label for="ff_message">Commentaire ou message</label>
+        </div>
+        <div class="ff-el-input--content">
+          <textarea name="message" class="ff-el-form-control" id="ff_message" rows="4" maxlength="5000"></textarea>
+        </div>
+      </div>
+      <div class="screen-reader-text" aria-hidden="true">
+        <label for="ff_website">Ne pas remplir</label>
+        <input type="text" name="website" id="ff_website" tabindex="-1" autocomplete="off" />
+      </div>
+      <div class="ff-el-group ff-text-left ff_submit_btn_wrapper">
+        <button type="submit" class="ff-btn ff-btn-submit ff-btn-md ff_btn_style">Demander une information, un devis</button>
+      </div>
+    </fieldset>
+  </form>
+</div>

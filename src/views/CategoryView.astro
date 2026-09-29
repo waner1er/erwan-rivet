@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryPosts from '../components/CategoryPosts.astro';
+import { childCategories, type Category } from '../lib/content.ts';
+
+interface Props {
+  category: Category;
+}
+
+const { category } = Astro.props;
+const hasChildren = childCategories(category.id).length > 0;
+---
+
+<BaseLayout title={category.name} description={category.description}>
+  <main id="wp--skip-link--target" class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+    <h1 class="wp-block-query-title has-text-align-center">{category.name}</h1>
+    {
+      category.description && (
+        <div class="wp-block-term-description has-text-align-left">
+          <p>{category.description}</p>
+        </div>
+      )
+    }
+    <div style="height:100px" aria-hidden="true" class="wp-block-spacer"></div>
+    <div class="wp-block-group alignwide has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+      {
+        hasChildren ? (
+          <CategoryPosts terms={[category]} columns={3} childColumns={1} postColumns={1} showTermHeader={false} showDate />
+        ) : (
+          <CategoryPosts terms={[category]} leaf columns={3} postColumns={3} showDate />
+        )
+      }
+    </div>
+  </main>
+</BaseLayout>

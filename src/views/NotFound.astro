@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page introuvable" noindex>
+  <main
+    id="wp--skip-link--target"
+    class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
+    style="margin-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)"
+  >
+    <h1 class="wp-block-heading has-text-align-center">Page introuvable</h1>
+    <p class="has-text-align-center">La page que vous cherchez n’existe pas ou a été déplacée.</p>
+    <div class="wp-block-buttons is-content-justification-center is-layout-flex wp-block-buttons-is-layout-flex" style="justify-content:center">
+      <div class="wp-block-button">
+        <a class="wp-block-button__link wp-element-button" href="/">-&gt; Retour à l’accueil</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

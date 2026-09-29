@@ -1,0 +1,151 @@
+---
+// Live search in the header, same markup as the original "erwan-live-search" block.
+---
+
+<div class="erwan-live-search wp-block-erwan-live-search" data-live-search>
+  <form class="erwan-live-search__form" role="search" method="get" action="/recherche/">
+    <button aria-expanded="false" type="button" class="erwan-live-search__toggle" aria-controls="live-search-input" data-ls-toggle>
+      <span class="screen-reader-text">Ouvrir la recherche</span>
+      <svg class="erwan-live-search__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
+        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+      </svg>
+    </button>
+    <label class="screen-reader-text" for="live-search-input">Rechercher</label>
+    <input
+      aria-expanded="false"
+      id="live-search-input"
+      class="erwan-live-search__input"
+      type="search"
+      name="q"
+      autocomplete="off"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-controls="live-search-panel"
+      placeholder="Rechercher…"
+      data-ls-input
+    />
+    <span hidden class="erwan-live-search__spinner" aria-hidden="true" data-ls-spinner></span>
+  </form>
+  <div hidden id="live-search-panel" class="erwan-live-search__panel" data-ls-panel>
+    <ul class="erwan-live-search__results" role="listbox" data-ls-results></ul>
+    <p hidden class="erwan-live-search__empty" data-ls-empty>Aucun résultat.</p>
+  </div>
+</div>
+
+<script>
+  interface Result {
+    id: string;
+    title: string;
+    url: string;
+    excerpt: string;
+    thumbnail: string | null;
+    typeLabel: string;
+  }
+
+  const root = document.querySelector<HTMLElement>('[data-live-search]');
+  if (root) {
+    const toggle = root.querySelector<HTMLButtonElement>('[data-ls-toggle]')!;
+    const input = root.querySelector<HTMLInputElement>('[data-ls-input]')!;
+    const spinner = root.querySelector<HTMLElement>('[data-ls-spinner]')!;
+    const panel = root.querySelector<HTMLElement>('[data-ls-panel]')!;
+    const list = root.querySelector<HTMLUListElement>('[data-ls-results]')!;
+    const empty = root.querySelector<HTMLElement>('[data-ls-empty]')!;
+    let seq = 0;
+    let timer: number | undefined;
+
+    const setOpen = (open: boolean) => {
+      root.classList.toggle('is-open', open);
+      panel.hidden = !open;
+      input.setAttribute('aria-expanded', String(open));
+    };
+    const setExpanded = (expanded: boolean) => {
+      root.classList.toggle('is-expanded', expanded);
+      toggle.setAttribute('aria-expanded', String(expanded));
+      if (expanded) input.focus();
+    };
+    const setLoading = (loading: boolean) => {
+      root.classList.toggle('is-loading', loading);
+      spinner.hidden = !loading;
+    };
+
+    function render(results: Result[]) {
+      list.replaceChildren(
+        ...results.map((r) => {
+          const li = document.createElement('li');
+          li.className = 'erwan-live-search__result';
+          li.setAttribute('role', 'option');
+          const a = document.createElement('a');
+          a.className = 'erwan-live-search__link';
+          a.href = r.url;
+          if (r.thumbnail) {
+            const img = document.createElement('img');
+            img.className = 'erwan-live-search__thumb';
+            img.src = r.thumbnail;
+            img.alt = '';
+            img.loading = 'lazy';
+            a.append(img);
+          }
+          const body = document.createElement('span');
+          body.className = 'erwan-live-search__body';
+          for (const [cls, text] of [
+            ['title', r.title],
+            ['type', r.typeLabel],
+            ['excerpt', r.excerpt],
+          ]) {
+            const span = document.createElement('span');
+            span.className = `erwan-live-search__${cls}`;
+            span.textContent = text;
+            body.append(span);
+          }
+          a.append(body);
+          li.append(a);
+          return li;
+        }),
+      );
+      empty.hidden = results.length > 0;
+      setOpen(true);
+    }
+
+    async function runSearch(query: string) {
+      const current = ++seq;
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const data: Result[] = res.ok ? await res.json() : [];
+        if (current === seq) render(data);
+      } finally {
+        if (current === seq) setLoading(false);
+      }
+    }
+
+    input.addEventListener('input', () => {
+      window.clearTimeout(timer);
+      const query = input.value.trim();
+      if (query.length < 2) {
+        seq++;
+        setLoading(false);
+        setOpen(false);
+        return;
+      }
+      timer = window.setTimeout(() => runSearch(query), 200);
+    });
+    input.addEventListener('focus', () => {
+      if (list.children.length && input.value.trim().length >= 2) setOpen(true);
+    });
+    toggle.addEventListener('click', () => setExpanded(!root.classList.contains('is-expanded')));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        setExpanded(false);
+        toggle.focus();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target as Node)) {
+        setOpen(false);
+        if (!input.value) setExpanded(false);
+      }
+    });
+  }
+</script>

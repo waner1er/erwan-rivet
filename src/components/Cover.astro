@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+  image?: string | null;
+  /** "archive" reproduces the query-title cover used on listing pages. */
+  variant?: 'single' | 'archive';
+}
+
+const { title, image, variant = 'single' } = Astro.props;
+const archive = variant === 'archive';
+---
+
+<div
+  class="wp-block-cover alignfull wan-object-fit-contain-force box-shadowed"
+  style={`border-style:none;border-width:0px;${archive ? 'margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;' : ''}min-height:250px;aspect-ratio:unset;`}
+>
+  <span aria-hidden="true" class="wp-block-cover__background has-contrast-background-color has-background-dim-60 has-background-dim"></span>
+  {image && <img class="wp-block-cover__image-background wp-post-image" alt="" src={image} data-object-fit="cover" decoding="async" fetchpriority="high" />}
+  <div
+    class:list={[
+      'wp-block-cover__inner-container has-global-padding is-layout-constrained wp-block-cover-is-layout-constrained',
+      { 'wp-container-core-cover-is-layout-60c54119': archive },
+    ]}
+  >
+    {
+      archive ? (
+        <h1 class="has-text-align-center wp-block-query-title">{title}</h1>
+      ) : (
+        <h1
+          style="padding-right:0;padding-left:0;padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0"
+          class="has-text-align-center alignwide wp-block-post-title"
+        >
+          {title}
+        </h1>
+      )
+    }
+  </div>
+</div>

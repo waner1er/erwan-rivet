@@ -1,0 +1,69 @@
+---
+// Front-end router: resolves any public URL to a page, a post, a category or a tag.
+import PageView from '../views/PageView.astro';
+import PostView from '../views/PostView.astro';
+import CategoryView from '../views/CategoryView.astro';
+import TagView from '../views/TagView.astro';
+import NotFound from '../views/NotFound.astro';
+import {
+  POST_TYPES,
+  getCategoryBySlug,
+  getPageBySlug,
+  getPostBySlug,
+  getTagBySlug,
+  type Category,
+  type Page,
+  type Post,
+  type PostType,
+  type Tag,
+} from '../lib/content.ts';
+
+const raw = Astro.params.path ?? '';
+
+// Legacy WordPress URLs such as /projets-personnels.html or /blog/index.html
+if (/(^|\/)index\.html$|\.html$/.test(raw)) {
+  return Astro.redirect('/' + raw.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '/'), 301);
+}
+
+// Logged-in editors can preview drafts with ?preview
+const drafts = !!Astro.locals.user && Astro.url.searchParams.has('preview');
+if (drafts) Astro.response.headers.set('Cache-Control', 'no-store');
+
+const segments = raw.split('/').filter(Boolean);
+const baseToType = new Map(Object.entries(POST_TYPES).map(([type, def]) => [def.base, type as PostType]));
+
+let page: Page | undefined;
+let post: Post | undefined;
+let category: Category | undefined;
+let tag: Tag | undefined;
+
+if (segments.length === 0) {
+  page = getPageBySlug('', drafts);
+} else if (segments.length === 1) {
+  const [slug] = segments;
+  page = getPageBySlug(slug, drafts);
+  post = page ? undefined : getPostBySlug('post', slug, drafts);
+  if (!page && !post) {
+    const cat = getCategoryBySlug(slug);
+    if (cat && !cat.parent_id) category = cat;
+  }
+} else if (segments.length === 2) {
+  const [first, second] = segments;
+  const type = baseToType.get(first);
+  if (type) post = getPostBySlug(type, second, drafts);
+  else if (first === 'tag') tag = getTagBySlug(second);
+  else {
+    const parent = getCategoryBySlug(first);
+    const child = getCategoryBySlug(second);
+    if (parent && child && child.parent_id === parent.id) category = child;
+  }
+}
+
+if (!page && !post && !category && !tag) Astro.response.status = 404;
+---
+
+{page && <PageView page={page} />}
+{post && <PostView post={post} />}
+{category && <CategoryView category={category} />}
+{tag && <TagView tag={tag} />}
+{!page && !post && !category && !tag && <NotFound />}

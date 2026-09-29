@@ -1,0 +1,61 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { authenticate, createSession, updatePassword } from '../../lib/auth.ts';
+import { run } from '../../lib/db.ts';
+import { text } from '../../lib/forms.ts';
+
+const user = Astro.locals.user!;
+let error = '';
+let notice = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const action = text(form, 'action');
+
+  if (action === 'profile') {
+    const name = text(form, 'name');
+    if (name) {
+      run('UPDATE users SET name = ? WHERE id = ?', [name, user.id]);
+      return Astro.redirect('/admin/account?profile', 303);
+    }
+    error = 'Le nom est obligatoire.';
+  }
+
+  if (action === 'password') {
+    const current = String(form.get('current') ?? '');
+    const next = String(form.get('next') ?? '');
+    const confirm = String(form.get('confirm') ?? '');
+    if (!authenticate(user.email, current)) error = 'Mot de passe actuel incorrect.';
+    else if (next.length < 12) error = 'Le nouveau mot de passe doit faire au moins 12 caractères.';
+    else if (next !== confirm) error = 'La confirmation ne correspond pas.';
+    else {
+      // Invalidates every session, then logs this browser back in.
+      updatePassword(user.id, next);
+      createSession(user.id, Astro.cookies, Astro.url.protocol === 'https:');
+      return Astro.redirect('/admin/account?password', 303);
+    }
+  }
+}
+if (Astro.url.searchParams.has('profile')) notice = 'Profil mis à jour.';
+if (Astro.url.searchParams.has('password')) notice = 'Mot de passe modifié. Les autres sessions ont été déconnectées.';
+---
+
+<AdminLayout title="Mon compte">
+  {notice && <div class="alert alert--ok">{notice}</div>}
+  {error && <div class="alert alert--error" role="alert">{error}</div>}
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start">
+    <form method="post" class="card">
+      <h2 style="margin-top:0">Profil</h2>
+      <div class="field"><label for="email">E-mail</label><input id="email" type="email" value={user.email} disabled /></div>
+      <div class="field"><label for="name">Nom affiché</label><input id="name" name="name" type="text" value={user.name} required /></div>
+      <button class="btn" name="action" value="profile">Enregistrer</button>
+    </form>
+    <form method="post" class="card">
+      <h2 style="margin-top:0">Mot de passe</h2>
+      <div class="field"><label for="current">Mot de passe actuel</label><input id="current" name="current" type="password" autocomplete="current-password" required /></div>
+      <div class="field"><label for="next">Nouveau mot de passe</label><input id="next" name="next" type="password" autocomplete="new-password" minlength="12" required /></div>
+      <div class="field"><label for="confirm">Confirmation</label><input id="confirm" name="confirm" type="password" autocomplete="new-password" minlength="12" required /></div>
+      <button class="btn" name="action" value="password">Changer le mot de passe</button>
+    </form>
+  </div>
+</AdminLayout>

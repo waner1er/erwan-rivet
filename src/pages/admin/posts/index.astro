@@ -1,0 +1,62 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { isPostType, listCategories, listPosts, POST_TYPES, postUrl } from '../../../lib/content.ts';
+
+const typeParam = Astro.url.searchParams.get('type');
+const type = isPostType(typeParam) ? typeParam : 'post';
+const def = POST_TYPES[type];
+const q = (Astro.url.searchParams.get('q') ?? '').trim().toLowerCase();
+const status = Astro.url.searchParams.get('status');
+
+let posts = listPosts({ type, includeDrafts: true });
+if (q) posts = posts.filter((p) => p.title.toLowerCase().includes(q));
+if (status === 'published' || status === 'draft') posts = posts.filter((p) => p.status === status);
+
+const categories = new Map(listCategories().map((c) => [c.id, c.name]));
+const deleted = Astro.url.searchParams.has('deleted');
+---
+
+<AdminLayout title={def.plural}>
+  {deleted && <div class="alert alert--ok">Contenu supprimé.</div>}
+  <form class="btn-row" method="get" style="margin-bottom:1rem">
+    <input type="hidden" name="type" value={type} />
+    <a class="btn" href={`/admin/posts/new?type=${type}`}>+ Ajouter</a>
+    <input type="search" name="q" value={q} placeholder="Rechercher un titre…" style="max-width:260px" />
+    <select name="status" style="max-width:160px">
+      <option value="">Tous les statuts</option>
+      <option value="published" selected={status === 'published'}>Publiés</option>
+      <option value="draft" selected={status === 'draft'}>Brouillons</option>
+    </select>
+    <button class="btn btn--ghost" type="submit">Filtrer</button>
+  </form>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th></th><th>Titre</th>{type === 'post' && <th>Catégorie</th>}<th>Statut</th><th>Publication</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {posts.length === 0 && (
+          <tr><td colspan="6" class="muted">Aucun contenu.</td></tr>
+        )}
+        {
+          posts.map((post) => (
+            <tr>
+              <td style="width:72px">{post.cover_image ? <img class="thumb" src={post.cover_image} alt="" loading="lazy" /> : <span class="thumb" />}</td>
+              <td><a href={`/admin/posts/${post.id}`}><strong>{post.title}</strong></a><br /><small class="muted">{postUrl(post)}</small></td>
+              {type === 'post' && <td class="muted">{post.category_id ? categories.get(post.category_id) : '—'}</td>}
+              <td><span class={`pill pill--${post.status}`}>{post.status === 'published' ? 'Publié' : 'Brouillon'}</span></td>
+              <td class="muted">{post.published_at?.slice(0, 16).replace('T', ' ') ?? '—'}</td>
+              <td class="actions">
+                <a class="btn btn--ghost btn--sm" href={postUrl(post) + (post.status === 'draft' ? '?preview' : '')} target="_blank">Voir</a>
+                <a class="btn btn--sm" href={`/admin/posts/${post.id}`}>Modifier</a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>

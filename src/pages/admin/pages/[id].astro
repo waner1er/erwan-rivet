@@ -1,0 +1,184 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ContentEditor from '../../../components/admin/ContentEditor.astro';
+import ImageField from '../../../components/admin/ImageField.astro';
+import {
+  deletePage,
+  getPage,
+  pageUrl,
+  POST_TYPES,
+  savePage,
+  slugify,
+  type Page,
+  type PageInput,
+  type PageTemplate,
+  type PostType,
+} from '../../../lib/content.ts';
+import { isUniqueViolation, nullable, oneOf, paramId, text } from '../../../lib/forms.ts';
+
+const RESERVED = new Set(['admin', 'api', 'uploads', 'tag', 'feed', 'recherche', 'css', 'fonts', 'sitemap.xml', 'robots.txt', ...Object.values(POST_TYPES).map((t) => t.base)]);
+const TEMPLATES: [PageTemplate, string, string][] = [
+  ['default', 'Standard', 'Contenu seul, comme la page d’accueil.'],
+  ['cover', 'Avec bannière', 'Bannière avec titre et image, puis le contenu.'],
+  ['raw', 'Libre', 'Le contenu occupe toute la page, sans conteneur.'],
+  ['blog', 'Accueil du blog', 'Titre, introduction puis articles par catégorie.'],
+  ['list', 'Liste de contenus', 'Bannière, introduction puis la liste choisie ci-dessous.'],
+];
+
+const id = paramId(Astro.params.id);
+if (id === null) return Astro.redirect('/admin/pages');
+const existing = id === 'new' ? undefined : getPage(id);
+if (id !== 'new' && !existing) return Astro.redirect('/admin/pages');
+
+const blank: PageInput = {
+  slug: '',
+  title: '',
+  content: '',
+  format: 'html',
+  template: 'cover',
+  list_type: null,
+  cover_image: null,
+  meta_description: null,
+  status: 'draft',
+};
+let values: PageInput = existing ?? blank;
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const action = text(form, 'action');
+
+  if (action === 'delete' && existing) {
+    deletePage(existing.id);
+    return Astro.redirect('/admin/pages?deleted', 303);
+  }
+
+  const isHome = existing?.slug === '';
+  values = {
+    title: text(form, 'title'),
+    slug: isHome ? '' : slugify(text(form, 'slug') || text(form, 'title')),
+    content: String(form.get('content') ?? ''),
+    format: oneOf(form, 'format', ['html', 'markdown'] as const, 'html'),
+    template: oneOf(form, 'template', TEMPLATES.map((t) => t[0]), 'default'),
+    list_type: (nullable(form, 'list_type') as PostType | null) ?? null,
+    cover_image: nullable(form, 'cover_image'),
+    meta_description: nullable(form, 'meta_description'),
+    status: oneOf(form, 'status', ['published', 'draft'] as const, 'draft'),
+  };
+  if (values.template !== 'list') values.list_type = null;
+  else if (!values.list_type || !(values.list_type in POST_TYPES)) values.list_type = 'realisation';
+
+  if (!values.title) error = 'Le titre est obligatoire.';
+  else if (!isHome && !values.slug) error = 'L’adresse est obligatoire.';
+  else if (RESERVED.has(values.slug)) error = `L’adresse « ${values.slug} » est réservée.`;
+
+  if (!error) {
+    try {
+      const savedId = savePage(values, existing?.id);
+      return Astro.redirect(`/admin/pages/${savedId}?saved`, 303);
+    } catch (err) {
+      if (!isUniqueViolation(err)) throw err;
+      error = `Une page utilise déjà l’adresse « /${values.slug}/ ».`;
+    }
+  }
+  Astro.response.status = 422;
+}
+
+const page = values as Page;
+const saved = Astro.url.searchParams.has('saved');
+const isHome = existing?.slug === '';
+---
+
+<AdminLayout title={existing ? `Modifier « ${existing.title} »` : 'Nouvelle page'}>
+  {saved && <div class="alert alert--ok">Page enregistrée.</div>}
+  {error && <div class="alert alert--error" role="alert">{error}</div>}
+
+  <form method="post" class="editor" data-editor-form>
+    <div>
+      <div class="field">
+        <label for="title">Titre</label>
+        <input class="title-input" id="title" name="title" type="text" required value={page.title} />
+      </div>
+      <div class="field">
+        <label for="slug">Adresse</label>
+        {
+          isHome ? (
+            <input id="slug" type="text" value="/ (page d’accueil)" disabled />
+          ) : (
+            <input id="slug" name="slug" type="text" value={page.slug} placeholder="générée depuis le titre" pattern="[a-z0-9\-]*" />
+          )
+        }
+        <small>Lettres minuscules, chiffres et tirets. La page sera servie sur /adresse/.</small>
+      </div>
+      <div class="field">
+        <span class="label">Contenu</span>
+        <ContentEditor name="content" value={page.content} format={page.format} />
+        <small>Astuce : <code>[contact-form]</code> insère le formulaire de contact. Ctrl+S pour enregistrer.</small>
+      </div>
+    </div>
+
+    <aside class="editor__side">
+      <div class="card">
+        <div class="field">
+          <label for="status">Statut</label>
+          <select id="status" name="status">
+            <option value="published" selected={page.status === 'published'}>Publiée</option>
+            <option value="draft" selected={page.status === 'draft'}>Brouillon</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn" type="submit" name="action" value="save">Enregistrer</button>
+          {existing && <a class="btn btn--ghost" href={pageUrl(existing) + '?preview'} target="_blank">Voir</a>}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <label for="template">Gabarit</label>
+          <select id="template" name="template">
+            {TEMPLATES.map(([value, label, help]) => <option value={value} selected={page.template === value} title={help}>{label}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for="list_type">Contenus listés <small>(gabarit « Liste »)</small></label>
+          <select id="list_type" name="list_type">
+            {Object.entries(POST_TYPES).filter(([t]) => t !== 'post').map(([value, def]) => <option value={value} selected={page.list_type === value}>{def.plural}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for="format">Format du contenu</label>
+          <select id="format" name="format">
+            <option value="html" selected={page.format === 'html'}>HTML</option>
+            <option value="markdown" selected={page.format === 'markdown'}>Markdown</option>
+          </select>
+        </div>
+        <ImageField name="cover_image" label="Image de bannière" value={page.cover_image} />
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <label for="meta_description">Description SEO</label>
+          <textarea id="meta_description" name="meta_description" rows="4" maxlength="320">{page.meta_description ?? ''}</textarea>
+          <small>Laissez vide pour générer depuis le contenu.</small>
+        </div>
+      </div>
+
+      {
+        existing && !isHome && (
+          <div class="card">
+            <button
+              class="btn btn--danger btn--sm"
+              type="submit"
+              name="action"
+              value="delete"
+              formnovalidate
+              onclick="return confirm('Supprimer définitivement cette page ?')"
+            >
+              Supprimer la page
+            </button>
+          </div>
+        )
+      }
+    </aside>
+  </form>
+</AdminLayout>

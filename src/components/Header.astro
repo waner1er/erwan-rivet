@@ -1,0 +1,92 @@
+---
+import type { SiteSettings } from '../lib/settings.ts';
+import SocialLinks from './SocialLinks.astro';
+import LiveSearch from './LiveSearch.astro';
+
+interface Props {
+  settings: SiteSettings;
+}
+
+const { settings } = Astro.props;
+const current = Astro.url.pathname;
+---
+
+<header class="wp-block-template-part">
+  <div
+    class="wp-block-group alignfull has-contrast-color has-text-color has-link-color wp-elements-1 is-content-justification-space-between is-layout-flex wp-container-core-group-is-layout-181240da wp-block-group-is-layout-flex"
+    style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"
+  >
+    <div class="wp-block-group wp-container-content-958eb9dc is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-788841da wp-block-group-is-layout-flex">
+      <p class="has-link-color wp-elements-2 wp-block-site-title has-text-color has-contrast-color has-large-font-size">
+        <a href="/" rel="home" aria-current={current === '/' ? 'page' : undefined}>{settings.siteTitle}</a>
+      </p>
+      <nav class="has-large-font-size items-justified-right wp-block-navigation is-content-justification-right is-layout-flex wp-container-core-navigation-is-layout-3af71591 wp-block-navigation-is-layout-flex" aria-label="Réseaux">
+        <ul class="wp-block-navigation__container has-large-font-size items-justified-right wp-block-navigation">
+          <li class="wp-block-navigation-item">
+            <SocialLinks links={settings.headerSocials} />
+          </li>
+        </ul>
+      </nav>
+      <LiveSearch />
+    </div>
+    <div class="wp-block-group wp-container-content-958eb9dc is-vertical is-content-justification-left is-layout-flex wp-container-core-group-is-layout-86036b5e wp-block-group-is-layout-flex">
+      <nav
+        class="has-medium-font-size is-responsive items-justified-left wp-block-navigation wp-container-content-9cfa9a5a is-content-justification-left is-layout-flex wp-container-core-navigation-is-layout-a0d76386 wp-block-navigation-is-layout-flex"
+        aria-label="Navigation"
+        data-nav
+      >
+        <button aria-haspopup="dialog" class="wp-block-navigation__responsive-container-open" data-nav-open>Menu</button>
+        <div class="wp-block-navigation__responsive-container has-text-color has-base-color has-background has-contrast-background-color" id="modal-nav" data-nav-container>
+          <div class="wp-block-navigation__responsive-close" tabindex="-1">
+            <div class="wp-block-navigation__responsive-dialog">
+              <button class="wp-block-navigation__responsive-container-close" data-nav-close>Fermer</button>
+              <div class="wp-block-navigation__responsive-container-content" id="modal-nav-content">
+                <ul class="wp-block-navigation__container has-medium-font-size is-responsive items-justified-left wp-block-navigation">
+                  {
+                    settings.menu.map((item) => (
+                      <li class:list={['wp-block-navigation-item wp-block-navigation-link', { 'current-menu-item': current.startsWith(item.url) && item.url !== '/' }]}>
+                        <a class="wp-block-navigation-item__content" href={item.url} aria-current={current === item.url ? 'page' : undefined}>
+                          <span class="wp-block-navigation-item__label">{item.label}</span>
+                        </a>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const container = nav?.querySelector<HTMLElement>('[data-nav-container]');
+  const openBtn = nav?.querySelector<HTMLButtonElement>('[data-nav-open]');
+  const closeBtn = nav?.querySelector<HTMLButtonElement>('[data-nav-close]');
+
+  function setOpen(open: boolean) {
+    if (!container) return;
+    container.classList.toggle('has-modal-open', open);
+    container.classList.toggle('is-menu-open', open);
+    document.documentElement.classList.toggle('has-modal-open', open);
+    const dialog = container.querySelector('.wp-block-navigation__responsive-dialog');
+    if (open) {
+      dialog?.setAttribute('role', 'dialog');
+      dialog?.setAttribute('aria-modal', 'true');
+      closeBtn?.focus();
+    } else {
+      dialog?.removeAttribute('role');
+      dialog?.removeAttribute('aria-modal');
+      openBtn?.focus();
+    }
+  }
+
+  openBtn?.addEventListener('click', () => setOpen(true));
+  closeBtn?.addEventListener('click', () => setOpen(false));
+  container?.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && container.classList.contains('is-menu-open')) setOpen(false);
+  });
+</script>

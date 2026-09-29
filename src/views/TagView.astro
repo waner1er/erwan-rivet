@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryPosts from '../components/CategoryPosts.astro';
+import PostGrid from '../components/PostGrid.astro';
+import { listCategories, listPosts, type Tag } from '../lib/content.ts';
+
+interface Props {
+  tag: Tag;
+}
+
+const { tag } = Astro.props;
+const hasBlogPosts = listPosts({ type: 'post', tagId: tag.id, limit: 1 }).length > 0;
+// Réalisations, travaux and projets carrying the tag are listed too.
+const others = listPosts({ tagId: tag.id }).filter((p) => p.type !== 'post');
+---
+
+<BaseLayout title={tag.name}>
+  <div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+    <h1 class="wp-block-query-title has-text-align-center">{tag.name}</h1>
+  </div>
+  <main
+    id="wp--skip-link--target"
+    class="wp-block-group is-style-section-1 has-global-padding is-layout-constrained wp-block-group-is-layout-constrained is-style-section-1--3"
+    style="margin-top:var(--wp--preset--spacing--60)"
+  >
+    {
+      hasBlogPosts && (
+        <CategoryPosts
+          terms={listCategories().filter((c) => !c.parent_id)}
+          columns={1}
+          childColumns={1}
+          postColumns={1}
+          showThumb={false}
+          showDate
+          showMore={false}
+          tagId={tag.id}
+        />
+      )
+    }
+    {others.length > 0 && <PostGrid posts={others} />}
+    {!hasBlogPosts && others.length === 0 && <p>Aucun contenu pour ce mot-clé.</p>}
+  </main>
+</BaseLayout>

@@ -1,0 +1,19 @@
+---
+import ContactForm from './ContactForm.astro';
+
+interface Props {
+  html: string;
+}
+
+// The [contact-form] shortcode can be placed anywhere in a page body.
+const parts = Astro.props.html.split(/(?:<p>\s*)?\[contact-form\](?:\s*<\/p>)?/);
+---
+
+{
+  parts.map((part, i) => (
+    <>
+      <Fragment set:html={part} />
+      {i < parts.length - 1 && <ContactForm />}
+    </>
+  ))
+}

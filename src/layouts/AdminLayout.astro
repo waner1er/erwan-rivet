@@ -1,0 +1,109 @@
+---
+import { get } from '../lib/db.ts';
+import { POST_TYPES, type PostType } from '../lib/content.ts';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const user = Astro.locals.user!;
+const path = Astro.url.pathname.replace(/\/$/, '');
+const currentType = Astro.url.searchParams.get('type');
+const unread = get<{ n: number }>('SELECT COUNT(*) AS n FROM messages WHERE is_read = 0')?.n ?? 0;
+
+const isCurrent = (href: string) => {
+  const [p, q] = href.split('?');
+  if (q) return path.startsWith(p) && currentType === new URLSearchParams(q).get('type');
+  return p === '/admin' ? path === '/admin' : path.startsWith(p) && !(p === '/admin/posts' && currentType);
+};
+
+const sections: { title: string; links: { href: string; label: string; badge?: number }[] }[] = [
+  { title: '', links: [{ href: '/admin', label: 'Tableau de bord' }] },
+  {
+    title: 'Contenus',
+    links: [
+      { href: '/admin/pages', label: 'Pages' },
+      ...(Object.keys(POST_TYPES) as PostType[]).map((type) => ({ href: `/admin/posts?type=${type}`, label: POST_TYPES[type].plural })),
+    ],
+  },
+  {
+    title: 'Blog',
+    links: [
+      { href: '/admin/categories', label: 'Catégories' },
+      { href: '/admin/tags', label: 'Tags' },
+    ],
+  },
+  {
+    title: 'Site',
+    links: [
+      { href: '/admin/media', label: 'Médias' },
+      { href: '/admin/messages', label: 'Messages', badge: unread },
+      { href: '/admin/settings', label: 'Réglages' },
+      { href: '/admin/account', label: 'Mon compte' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} · Administration</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body>
+    <div class="admin" data-admin>
+      <aside class="admin__sidebar" id="admin-nav">
+        <a class="admin__brand" href="/admin">Erwan RIVET<small>Administration</small></a>
+        {
+          sections.map((section) => (
+            <>
+              {section.title && <div class="admin__nav-title">{section.title}</div>}
+              <ul class="admin__nav">
+                {section.links.map((link) => (
+                  <li>
+                    <a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>
+                      {link.label}
+                      {!!link.badge && <span class="badge">{link.badge}</span>}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ))
+        }
+        <ul class="admin__nav" style="margin-top:1.5rem">
+          <li><a href="/" target="_blank" rel="noopener">Voir le site ↗</a></li>
+        </ul>
+      </aside>
+      <div class="admin__main">
+        <div class="admin__topbar">
+          <div class="btn-row">
+            <button class="btn btn--ghost btn--sm admin__menu-toggle" type="button" aria-controls="admin-nav" aria-expanded="false" data-admin-toggle>Menu</button>
+            <h1>{title}</h1>
+          </div>
+          <div class="admin__user">
+            <span>{user.name}</span>
+            <form method="post" action="/admin/logout">
+              <button class="btn btn--ghost btn--sm" type="submit">Déconnexion</button>
+            </form>
+          </div>
+        </div>
+        <slot />
+      </div>
+    </div>
+    <script>
+      const admin = document.querySelector<HTMLElement>('[data-admin]');
+      const toggle = document.querySelector<HTMLButtonElement>('[data-admin-toggle]');
+      toggle?.addEventListener('click', () => {
+        const open = admin!.classList.toggle('is-nav-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+    </script>
+  </body>
+</html>

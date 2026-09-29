@@ -1,0 +1,24 @@
+---
+import type { SocialLink } from '../lib/settings.ts';
+import SocialIcon from './SocialIcon.astro';
+
+interface Props {
+  links: SocialLink[];
+  class?: string;
+}
+
+const { links, class: className = 'is-layout-flex wp-block-social-links-is-layout-flex' } = Astro.props;
+---
+
+<ul class:list={['wp-block-social-links', className]}>
+  {
+    links.map((link) => (
+      <li class={`wp-social-link wp-social-link-${link.service} wp-block-social-link`}>
+        <a href={link.url} class="wp-block-social-link-anchor" rel={link.service === 'mail' ? undefined : 'noopener'}>
+          <SocialIcon service={link.service} />
+          <span class="wp-block-social-link-label screen-reader-text">{link.label}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

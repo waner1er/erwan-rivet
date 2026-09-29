@@ -1,0 +1,74 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { deleteTag, listTags, saveTag, slugify, tagUrl } from '../../lib/content.ts';
+import { intOrNull, isUniqueViolation, text } from '../../lib/forms.ts';
+
+let error = '';
+let notice = '';
+const tags = listTags();
+const editId = Number(Astro.url.searchParams.get('edit')) || null;
+let editing: { id?: number; name: string; slug: string } = tags.find((t) => t.id === editId) ?? { name: '', slug: '' };
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const id = intOrNull(form, 'id') ?? undefined;
+  if (text(form, 'action') === 'delete' && id) {
+    deleteTag(id);
+    return Astro.redirect('/admin/tags?deleted', 303);
+  }
+  editing = { id, name: text(form, 'name'), slug: slugify(text(form, 'slug') || text(form, 'name')) };
+  if (!editing.name || !editing.slug) error = 'Le nom est obligatoire.';
+  else {
+    try {
+      saveTag({ name: editing.name, slug: editing.slug }, id);
+      return Astro.redirect('/admin/tags?saved', 303);
+    } catch (err) {
+      if (!isUniqueViolation(err)) throw err;
+      error = `L’adresse « ${editing.slug} » est déjà utilisée.`;
+    }
+  }
+}
+if (Astro.url.searchParams.has('saved')) notice = 'Tag enregistré.';
+if (Astro.url.searchParams.has('deleted')) notice = 'Tag supprimé.';
+---
+
+<AdminLayout title="Tags">
+  {notice && <div class="alert alert--ok">{notice}</div>}
+  {error && <div class="alert alert--error" role="alert">{error}</div>}
+  <div class="editor">
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Nom</th><th>Adresse</th><th>Contenus</th><th></th></tr></thead>
+        <tbody>
+          {
+            tags.map((t) => (
+              <tr>
+                <td><strong>{t.name}</strong></td>
+                <td class="muted"><a href={tagUrl(t)} target="_blank">{tagUrl(t)}</a></td>
+                <td class="muted">{t.count}</td>
+                <td class="actions">
+                  <a class="btn btn--sm" href={`/admin/tags?edit=${t.id}`}>Modifier</a>
+                  <form method="post" style="display:inline">
+                    <input type="hidden" name="id" value={t.id} />
+                    <button class="btn btn--danger btn--sm" name="action" value="delete" onclick="return confirm('Supprimer ce tag ?')">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <form method="post" class="card editor__side">
+      <strong>{editing.id ? 'Modifier le tag' : 'Nouveau tag'}</strong>
+      {editing.id && <input type="hidden" name="id" value={editing.id} />}
+      <div class="field"><label for="name">Nom</label><input id="name" name="name" type="text" required value={editing.name} /></div>
+      <div class="field"><label for="slug">Adresse</label><input id="slug" name="slug" type="text" value={editing.slug} placeholder="générée depuis le nom" /></div>
+      <div class="btn-row">
+        <button class="btn" type="submit" name="action" value="save">Enregistrer</button>
+        {editing.id && <a class="btn btn--ghost" href="/admin/tags">Annuler</a>}
+      </div>
+    </form>
+  </div>
+</AdminLayout>

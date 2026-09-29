@@ -1,0 +1,66 @@
+---
+import { authenticate, clearFailedLogins, createSession, isThrottled, recordFailedLogin } from '../../lib/auth.ts';
+
+const rawNext = Astro.url.searchParams.get('next') ?? '/admin';
+// Only same-site admin paths, to avoid open redirects.
+const next = /^\/admin(\/|$|\?)/.test(rawNext) ? rawNext : '/admin';
+
+if (Astro.locals.user) return Astro.redirect(next);
+
+let error = '';
+let email = '';
+
+if (Astro.request.method === 'POST') {
+  let ip = 'unknown';
+  try {
+    ip = Astro.clientAddress;
+  } catch {}
+  const form = await Astro.request.formData();
+  email = String(form.get('email') ?? '').trim();
+  const password = String(form.get('password') ?? '');
+
+  if (isThrottled(ip)) {
+    error = 'Trop de tentatives. Réessayez dans quelques minutes.';
+    Astro.response.status = 429;
+  } else {
+    const user = authenticate(email, password);
+    if (user) {
+      clearFailedLogins(ip);
+      createSession(user.id, Astro.cookies, Astro.url.protocol === 'https:');
+      return Astro.redirect(next, 303);
+    }
+    recordFailedLogin(ip);
+    error = 'Identifiants incorrects.';
+    Astro.response.status = 401;
+  }
+}
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Connexion · Administration</title>
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body>
+    <main class="login">
+      <form class="card" method="post">
+        <h1>Administration</h1>
+        {error && <div class="alert alert--error" role="alert">{error}</div>}
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="username" required value={email} autofocus />
+        </div>
+        <div class="field">
+          <label for="password">Mot de passe</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </div>
+        <button class="btn" type="submit" style="width:100%;justify-content:center">Se connecter</button>
+        <p class="muted" style="text-align:center;margin-bottom:0"><a href="/">← Retour au site</a></p>
+      </form>
+    </main>
+  </body>
+</html>

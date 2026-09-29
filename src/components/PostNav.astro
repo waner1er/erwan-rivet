@@ -1,0 +1,46 @@
+---
+import { postUrl, type Post } from '../lib/content.ts';
+
+interface Props {
+  prev?: Post;
+  next?: Post;
+  /** "classic" is the blog single layout (full-width, arrows), "cover" the custom post type one (chevrons). */
+  variant?: 'cover' | 'classic';
+}
+
+const { prev, next, variant = 'cover' } = Astro.props;
+const classic = variant === 'classic';
+const arrows = classic ? { prev: '←', next: '→', cls: 'is-arrow-arrow' } : { prev: '«', next: '»', cls: 'is-arrow-chevron' };
+---
+
+<nav
+  class:list={[
+    'wp-block-group is-content-justification-space-between is-nowrap is-layout-flex wp-block-group-is-layout-flex',
+    classic ? 'alignfull wp-container-core-group-is-layout-1b8c7668' : 'alignwide wp-container-core-group-is-layout-878fe601',
+  ]}
+  aria-label="Navigation des publications"
+  style={classic
+    ? 'border-top-style:none;border-top-width:0px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)'
+    : 'border-top-color:var(--wp--preset--color--accent-6);border-top-width:1px;padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40)'}
+>
+  <div class="post-navigation-link-previous wp-block-post-navigation-link">
+    {
+      prev && (
+        <>
+          <span class={`wp-block-post-navigation-link__arrow-previous ${arrows.cls}`} aria-hidden="true">{arrows.prev}</span>
+          <a href={postUrl(prev)} rel="prev">{prev.title}</a>
+        </>
+      )
+    }
+  </div>
+  <div class="post-navigation-link-next wp-block-post-navigation-link">
+    {
+      next && (
+        <>
+          <a href={postUrl(next)} rel="next">{next.title}</a>
+          <span class={`wp-block-post-navigation-link__arrow-next ${arrows.cls}`} aria-hidden="true">{arrows.next}</span>
+        </>
+      )
+    }
+  </div>
+</nav>

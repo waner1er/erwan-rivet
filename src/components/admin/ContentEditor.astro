@@ -1,0 +1,160 @@
+---
+import type { Format } from '../../lib/content.ts';
+
+interface Props {
+  name: string;
+  value: string;
+  format: Format;
+  /** Name of the <select> holding the format, in the same form. */
+  formatField?: string;
+}
+
+const { name, value, format, formatField = 'format' } = Astro.props;
+---
+
+<div class="content-editor" data-content-editor data-mode="split" data-format-field={formatField} data-initial-format={format}>
+  <div class="content-editor__toolbar" role="toolbar" aria-label="Mise en forme">
+    <button type="button" data-snippet="h2" title="Titre de section">H2</button>
+    <button type="button" data-snippet="h3" title="Sous-titre">H3</button>
+    <button type="button" data-snippet="p" title="Paragraphe">¶</button>
+    <button type="button" data-snippet="strong" title="Gras"><b>G</b></button>
+    <button type="button" data-snippet="em" title="Italique"><i>I</i></button>
+    <button type="button" data-snippet="link" title="Lien">Lien</button>
+    <button type="button" data-snippet="ul" title="Liste">• Liste</button>
+    <button type="button" data-snippet="quote" title="Citation">❝</button>
+    <button type="button" data-snippet="code" title="Bloc de code">{'</>'}</button>
+    <button type="button" data-snippet="hr" title="Séparateur">—</button>
+    <button type="button" data-snippet="button" title="Bouton">Bouton</button>
+    <button type="button" data-snippet="image" title="Image depuis la médiathèque">Image</button>
+    <button type="button" data-snippet="contact" title="Formulaire de contact">Formulaire</button>
+    <span class="spacer"></span>
+    <button type="button" data-mode-btn="code">Code</button>
+    <button type="button" data-mode-btn="split">Partagé</button>
+    <button type="button" data-mode-btn="preview">Aperçu</button>
+  </div>
+  <div class="content-editor__panes">
+    <textarea name={name} spellcheck="false" aria-label="Contenu" data-source>{value}</textarea>
+    <iframe title="Aperçu du contenu" sandbox="allow-same-origin" data-preview></iframe>
+  </div>
+</div>
+
+<script>
+  import { marked } from 'marked';
+  import { openMediaPicker } from '../../scripts/media-picker.ts';
+
+  type Snippet = (sel: string) => { html: string; md: string };
+
+  const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  const SNIPPETS: Record<string, Snippet> = {
+    h2: (s) => ({ html: `<h2 class="wp-block-heading">${s || 'Titre'}</h2>\n`, md: `\n## ${s || 'Titre'}\n` }),
+    h3: (s) => ({ html: `<h3 class="wp-block-heading">${s || 'Sous-titre'}</h3>\n`, md: `\n### ${s || 'Sous-titre'}\n` }),
+    p: (s) => ({ html: `<p class="wp-block-paragraph">${s || 'Texte'}</p>\n`, md: `\n${s || 'Texte'}\n` }),
+    strong: (s) => ({ html: `<strong>${s || 'texte'}</strong>`, md: `**${s || 'texte'}**` }),
+    em: (s) => ({ html: `<em>${s || 'texte'}</em>`, md: `*${s || 'texte'}*` }),
+    link: (s) => ({ html: `<a href="https://">${s || 'lien'}</a>`, md: `[${s || 'lien'}](https://)` }),
+    ul: (s) => {
+      const items = (s || 'Élément').split('\n');
+      return {
+        html: `<ul class="wp-block-list">\n${items.map((i) => `<li>${i}</li>`).join('\n')}\n</ul>\n`,
+        md: `\n${items.map((i) => `- ${i}`).join('\n')}\n`,
+      };
+    },
+    quote: (s) => ({
+      html: `<blockquote class="wp-block-quote"><p>${s || 'Citation'}</p></blockquote>\n`,
+      md: `\n> ${s || 'Citation'}\n`,
+    }),
+    code: (s) => ({ html: `<pre class="wp-block-code"><code>${esc(s || 'code')}</code></pre>\n`, md: `\n\`\`\`\n${s || 'code'}\n\`\`\`\n` }),
+    hr: () => ({ html: `<hr class="wp-block-separator has-alpha-channel-opacity"/>\n`, md: `\n---\n` }),
+    button: (s) => {
+      const html = `<div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex"><div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/contact/">${s || '-&gt; Contact'}</a></div></div>\n`;
+      return { html, md: `\n${html}\n` };
+    },
+    contact: () => ({ html: `<p>[contact-form]</p>\n`, md: `\n[contact-form]\n` }),
+  };
+
+  function preview(content: string, format: string): string {
+    const body = format === 'markdown' ? (marked.parse(content, { async: false }) as string) : content;
+    return `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/css/wp.css"><link rel="stylesheet" href="/css/site.css">
+      <style>body{padding:1rem 0} header{position:static}</style></head>
+      <body class="wp-embed-responsive"><div class="wp-site-blocks"><main class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+      <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">${body}</div>
+      </main></div></body></html>`;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-content-editor]').forEach((root) => {
+    const textarea = root.querySelector<HTMLTextAreaElement>('[data-source]')!;
+    const iframe = root.querySelector<HTMLIFrameElement>('[data-preview]')!;
+    const form = root.closest('form');
+    const formatSelect = form?.querySelector<HTMLSelectElement>(`[name="${root.dataset.formatField}"]`);
+    const format = () => formatSelect?.value ?? root.dataset.initialFormat ?? 'html';
+
+    let timer: number | undefined;
+    const refresh = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        iframe.srcdoc = preview(textarea.value, format());
+      }, 250);
+    };
+
+    function insert(text: string) {
+      textarea.focus();
+      const { selectionStart: start, selectionEnd: end } = textarea;
+      textarea.setRangeText(text, start, end, 'end');
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-snippet]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const kind = btn.dataset.snippet!;
+        const selected = textarea.value.slice(textarea.selectionStart, textarea.selectionEnd);
+        if (kind === 'image') {
+          openMediaPicker((item) => {
+            const alt = esc(selected);
+            insert(
+              format() === 'markdown'
+                ? `![${alt}](${item.path})`
+                : `<figure class="wp-block-image size-large"><img src="${item.path}" alt="${alt}" loading="lazy"/></figure>\n`,
+            );
+          });
+          return;
+        }
+        const snippet = SNIPPETS[kind](selected);
+        insert(format() === 'markdown' ? snippet.md : snippet.html);
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-mode-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        root.dataset.mode = btn.dataset.modeBtn;
+        refresh();
+      });
+    });
+
+    textarea.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab' && !e.shiftKey) {
+        e.preventDefault();
+        insert('  ');
+      }
+    });
+    textarea.addEventListener('input', refresh);
+    formatSelect?.addEventListener('change', refresh);
+    refresh();
+  });
+
+  // Ctrl/Cmd+S saves the form, and unsaved changes are guarded.
+  document.querySelectorAll<HTMLFormElement>('form[data-editor-form]').forEach((form) => {
+    let dirty = false;
+    form.addEventListener('input', () => (dirty = true));
+    form.addEventListener('submit', () => (dirty = false));
+    window.addEventListener('beforeunload', (e) => {
+      if (dirty) e.preventDefault();
+    });
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        form.requestSubmit(form.querySelector<HTMLButtonElement>('[name="action"][value="save"]') ?? undefined);
+      }
+    });
+  });
+</script>

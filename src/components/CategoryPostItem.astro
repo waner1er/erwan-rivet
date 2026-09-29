@@ -1,0 +1,27 @@
+---
+import { formatDate, postUrl, type Post } from '../lib/content.ts';
+
+interface Props {
+  post: Post;
+  showThumb: boolean;
+  showDate: boolean;
+}
+
+const { post, showThumb, showDate } = Astro.props;
+---
+
+<li class="ca-post">
+  {
+    showThumb && post.cover_image && (
+      <a class="ca-post__thumb" href={postUrl(post)} aria-hidden="true" tabindex="-1">
+        <img src={post.cover_image} alt="" loading="lazy" decoding="async" class="wp-post-image" />
+      </a>
+    )
+  }
+  <div class="ca-post__body">
+    <h5 class="ca-post__title">
+      <a href={postUrl(post)}>{post.title}</a>
+    </h5>
+    {showDate && <time class="ca-post__date" datetime={post.published_at ?? ''}>{formatDate(post.published_at)}</time>}
+  </div>
+</li>

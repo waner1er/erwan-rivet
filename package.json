@@ -1,0 +1,32 @@
+{
+  "name": "erwan-rivet-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
+    "astro": "astro",
+    "import:wp": "node scripts/import-wp.ts ../erwan-rivet.fr",
+    "import:css": "node scripts/extract-css.mjs ../erwan-rivet.fr",
+    "admin:create": "node scripts/create-admin.ts"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.6",
+    "astro": "^7.3.5",
+    "marked": "^18.0.14"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.6.3",
+    "cheerio": "^1.2.0",
+    "typescript": "^6.0.3"
+  }
+}

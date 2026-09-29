@@ -1,0 +1,49 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { listPages, pageUrl, POST_TYPES } from '../../../lib/content.ts';
+
+const TEMPLATES: Record<string, string> = {
+  default: 'Standard',
+  cover: 'Avec bannière',
+  raw: 'Libre',
+  blog: 'Accueil du blog',
+  list: 'Liste',
+};
+
+const pages = listPages();
+const deleted = Astro.url.searchParams.has('deleted');
+---
+
+<AdminLayout title="Pages">
+  {deleted && <div class="alert alert--ok">Page supprimée.</div>}
+  <div class="btn-row" style="margin-bottom:1rem">
+    <a class="btn" href="/admin/pages/new">+ Nouvelle page</a>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th>Titre</th><th>Adresse</th><th>Gabarit</th><th>Statut</th><th>Modifiée</th><th></th></tr>
+      </thead>
+      <tbody>
+        {
+          pages.map((page) => (
+            <tr>
+              <td><a href={`/admin/pages/${page.id}`}><strong>{page.title}</strong></a></td>
+              <td class="muted">{pageUrl(page)}</td>
+              <td class="muted">
+                {TEMPLATES[page.template] ?? page.template}
+                {page.list_type && ` · ${POST_TYPES[page.list_type].plural}`}
+              </td>
+              <td><span class={`pill pill--${page.status}`}>{page.status === 'published' ? 'Publiée' : 'Brouillon'}</span></td>
+              <td class="muted">{page.updated_at.slice(0, 16).replace('T', ' ')}</td>
+              <td class="actions">
+                <a class="btn btn--ghost btn--sm" href={pageUrl(page) + (page.status === 'draft' ? '?preview' : '')} target="_blank">Voir</a>
+                <a class="btn btn--sm" href={`/admin/pages/${page.id}`}>Modifier</a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>

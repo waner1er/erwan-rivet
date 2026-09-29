@@ -1,0 +1,80 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import ImageField from '../../components/admin/ImageField.astro';
+import { getSettings, saveSettings, type MenuItem, type SocialLink } from '../../lib/settings.ts';
+import { text } from '../../lib/forms.ts';
+
+const SERVICES: SocialLink['service'][] = ['linkedin', 'github', 'mail', 'wordpress'];
+
+const parseMenu = (raw: string): MenuItem[] =>
+  raw
+    .split('\n')
+    .map((line) => line.split('|').map((s) => s.trim()))
+    .filter(([label, url]) => label && url)
+    .map(([label, url]) => ({ label, url }));
+
+const parseSocials = (raw: string): SocialLink[] =>
+  raw
+    .split('\n')
+    .map((line) => line.split('|').map((s) => s.trim()))
+    .filter(([service, url]) => SERVICES.includes(service as SocialLink['service']) && url)
+    .map(([service, url, label]) => ({ service: service as SocialLink['service'], url, label: label || service }));
+
+const formatMenu = (items: MenuItem[]) => items.map((i) => `${i.label} | ${i.url}`).join('\n');
+const formatSocials = (items: SocialLink[]) => items.map((i) => `${i.service} | ${i.url} | ${i.label}`).join('\n');
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  saveSettings({
+    siteTitle: text(form, 'siteTitle') || 'Erwan RIVET',
+    tagline: text(form, 'tagline'),
+    logo: text(form, 'logo'),
+    contactEmail: text(form, 'contactEmail'),
+    menu: parseMenu(text(form, 'menu')),
+    headerSocials: parseSocials(text(form, 'headerSocials')),
+    footerSocials: parseSocials(text(form, 'footerSocials')),
+  });
+  return Astro.redirect('/admin/settings?saved', 303);
+}
+
+const s = getSettings();
+---
+
+<AdminLayout title="Réglages du site">
+  {Astro.url.searchParams.has('saved') && <div class="alert alert--ok">Réglages enregistrés.</div>}
+  <form method="post" class="editor">
+    <div>
+      <div class="card">
+        <div class="field"><label for="siteTitle">Titre du site</label><input id="siteTitle" name="siteTitle" type="text" value={s.siteTitle} /></div>
+        <div class="field">
+          <label for="tagline">Slogan</label>
+          <input id="tagline" name="tagline" type="text" value={s.tagline} />
+          <small>Utilisé dans le titre de la page d’accueil : « Titre - Slogan ».</small>
+        </div>
+        <div class="field"><label for="contactEmail">E-mail de contact</label><input id="contactEmail" name="contactEmail" type="email" value={s.contactEmail} /></div>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label for="menu">Menu principal</label>
+          <textarea id="menu" name="menu" rows="9">{formatMenu(s.menu)}</textarea>
+          <small>Une entrée par ligne : <code>Libellé | /adresse/</code></small>
+        </div>
+        <div class="field">
+          <label for="headerSocials">Réseaux (en-tête)</label>
+          <textarea id="headerSocials" name="headerSocials" rows="4">{formatSocials(s.headerSocials)}</textarea>
+          <small>Une entrée par ligne : <code>service | url | libellé</code> — services : {SERVICES.join(', ')}</small>
+        </div>
+        <div class="field">
+          <label for="footerSocials">Réseaux (pied de page)</label>
+          <textarea id="footerSocials" name="footerSocials" rows="4">{formatSocials(s.footerSocials)}</textarea>
+        </div>
+      </div>
+    </div>
+    <aside class="editor__side">
+      <div class="card">
+        <ImageField name="logo" label="Logo / photo (pied de page et favicon)" value={s.logo} />
+        <button class="btn" type="submit">Enregistrer</button>
+      </div>
+    </aside>
+  </form>
+</AdminLayout>

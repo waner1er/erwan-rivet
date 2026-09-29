@@ -1,0 +1,113 @@
+---
+// Blog posts grouped by category, reproducing the "erwan/category-posts" block markup.
+import { categoryUrl, childCategories, listPosts, type Category, type Post } from '../lib/content.ts';
+import CategoryPostItem from './CategoryPostItem.astro';
+
+interface Props {
+  /** Categories to render as top-level terms. */
+  terms: Category[];
+  /** Renders a single category with no sub-categories as a flat grid. */
+  leaf?: boolean;
+  columns?: number;
+  childColumns?: number;
+  postColumns?: number;
+  showTermHeader?: boolean;
+  showThumb?: boolean;
+  showDate?: boolean;
+  showMore?: boolean;
+  tagId?: number;
+}
+
+const {
+  terms,
+  leaf = false,
+  columns = 2,
+  childColumns = 2,
+  postColumns = 3,
+  showTermHeader = true,
+  showThumb = true,
+  showDate = false,
+  showMore = true,
+  tagId,
+} = Astro.props;
+
+const postsOf = (cat: Category): Post[] => listPosts({ type: 'post', categoryIds: [cat.id], tagId });
+
+const groups = terms
+  .map((term) => {
+    const children = childCategories(term.id)
+      .map((child) => ({ child, posts: postsOf(child) }))
+      .filter((g) => g.posts.length > 0);
+    return { term, own: postsOf(term), children };
+  })
+  .filter((g) => leaf || g.own.length > 0 || g.children.length > 0);
+---
+
+{
+  groups.length === 0 ? (
+    <p>Aucun article pour le moment.</p>
+  ) : (
+    <div class={`ca-columns-${columns} ca-taxonomy-category alignwide wp-block-erwan-category-posts`}>
+      {groups.map(({ term, own, children }) =>
+        leaf ? (
+          <section class="ca-leaf">
+            <ul class={`ca-posts ca-posts--leaf ca-posts--cols-${postColumns}`}>
+              {own.map((post) => (
+                <CategoryPostItem post={post} showThumb={showThumb} showDate={showDate} />
+              ))}
+            </ul>
+          </section>
+        ) : (
+          <section class="ca-term">
+            {showTermHeader && (
+              <header class="ca-term__header">
+                <h2 class="ca-term__title">
+                  <a class="ca-term__link" href={categoryUrl(term)}>{term.name}</a>
+                </h2>
+              </header>
+            )}
+            {own.length > 0 && (
+              <ul class={`ca-posts ca-posts--term ca-posts--cols-${postColumns}`}>
+                {own.map((post) => (
+                  <CategoryPostItem post={post} showThumb={showThumb} showDate={showDate} />
+                ))}
+              </ul>
+            )}
+            {children.length > 0 && (
+              <div class={`ca-children ca-children--cols-${childColumns}`}>
+                {children.map(({ child, posts }) => (
+                  <section class="ca-child">
+                    <header class="ca-child__header">
+                      <h3 class="ca-child__title">
+                        <a class="ca-child__link" href={categoryUrl(child)}>{child.name}</a>
+                      </h3>
+                    </header>
+                    <ul class={`ca-posts ca-posts--child ca-posts--cols-${postColumns}`}>
+                      {posts.map((post) => (
+                        <CategoryPostItem post={post} showThumb={showThumb} showDate={showDate} />
+                      ))}
+                    </ul>
+                    {showMore && (
+                      <p class="ca-term__more">
+                        <a class="ca-term__more-link" href={categoryUrl(child)}>
+                          Voir tous les articles <span class="screen-reader-text">— {child.name}</span>
+                        </a>
+                      </p>
+                    )}
+                  </section>
+                ))}
+              </div>
+            )}
+            {showMore && showTermHeader && (
+              <p class="ca-term__more">
+                <a class="ca-term__more-link" href={categoryUrl(term)}>
+                  Voir tous les articles <span class="screen-reader-text">— {term.name}</span>
+                </a>
+              </p>
+            )}
+          </section>
+        ),
+      )}
+    </div>
+  )
+}

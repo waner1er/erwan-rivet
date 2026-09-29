@@ -1,0 +1,41 @@
+---
+import type { TocItem } from '../lib/content.ts';
+
+interface Props {
+  items: TocItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <nav class="wp-block-wan-blocks-summary-block">
+      <details class="wp-block-wan-blocks-summary-block__details">
+        <summary class="wp-block-wan-blocks-summary-block__summary">
+          <span class="wp-block-wan-blocks-summary-block__title">Sommaire</span>
+        </summary>
+        <div class="wp-block-wan-blocks-summary-block__content">
+          <div class="wp-block-wan-blocks-summary-block__content-inner">
+            <ol>
+              {items.map((item) => (
+                <li>
+                  <a href={`#${item.id}`}>{item.text}</a>
+                  {item.children.length > 0 && (
+                    <ol>
+                      {item.children.map((child) => (
+                        <li>
+                          <a href={`#${child.id}`}>{child.text}</a>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </details>
+    </nav>
+  )
+}

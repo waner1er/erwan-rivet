@@ -1,0 +1,53 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getSettings } from '../lib/settings.ts';
+
+interface Props {
+  title?: string;
+  description?: string | null;
+  image?: string | null;
+  type?: 'website' | 'article';
+  bodyClass?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, type = 'website', bodyClass = '', noindex = false } = Astro.props;
+const settings = getSettings();
+const fullTitle = title ? title : `${settings.siteTitle} - ${settings.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const ogImage = image ? new URL(image, Astro.site ?? Astro.url.origin).href : undefined;
+---
+
+<!doctype html>
+<html lang="fr-FR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={settings.siteTitle} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:url" content={canonical} />
+    {description && <meta property="og:description" content={description} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href={settings.logo || '/favicon.svg'} />
+    <link rel="alternate" type="application/rss+xml" title={`${settings.siteTitle} » Flux`} href="/feed/" />
+    <link rel="preload" href="/fonts/FiraCode-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/css/wp.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+  <body class:list={['wp-embed-responsive', bodyClass]}>
+    <a class="skip-link screen-reader-text" href="#wp--skip-link--target">Aller au contenu</a>
+    <div class="wp-site-blocks">
+      <Header settings={settings} />
+      <slot />
+      <Footer settings={settings} />
+    </div>
+  </body>
+</html>

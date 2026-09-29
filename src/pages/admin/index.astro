@@ -1,0 +1,60 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { all, get } from '../../lib/db.ts';
+import { POST_TYPES, postUrl, type Post, type PostType } from '../../lib/content.ts';
+
+const count = (sql: string, params: unknown[] = []) => get<{ n: number }>(sql, params)?.n ?? 0;
+
+const stats = [
+  { href: '/admin/pages', label: 'Pages', n: count('SELECT COUNT(*) AS n FROM pages') },
+  ...(Object.keys(POST_TYPES) as PostType[]).map((type) => ({
+    href: `/admin/posts?type=${type}`,
+    label: POST_TYPES[type].plural,
+    n: count('SELECT COUNT(*) AS n FROM posts WHERE type = ?', [type]),
+  })),
+  { href: '/admin/media', label: 'Médias', n: count('SELECT COUNT(*) AS n FROM media') },
+  { href: '/admin/messages', label: 'Messages non lus', n: count('SELECT COUNT(*) AS n FROM messages WHERE is_read = 0') },
+];
+
+const recent = all<Post>('SELECT * FROM posts ORDER BY updated_at DESC LIMIT 8');
+---
+
+<AdminLayout title="Tableau de bord">
+  <div class="grid grid--stats">
+    {
+      stats.map((s) => (
+        <a class="card stat" href={s.href}>
+          <strong>{s.n}</strong>
+          <span>{s.label}</span>
+        </a>
+      ))
+    }
+  </div>
+
+  <h2>Modifiés récemment</h2>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th>Titre</th><th>Type</th><th>Statut</th><th>Modifié</th><th></th></tr>
+      </thead>
+      <tbody>
+        {
+          recent.map((post) => (
+            <tr>
+              <td><a href={`/admin/posts/${post.id}`}>{post.title}</a></td>
+              <td class="muted">{POST_TYPES[post.type].label}</td>
+              <td><span class={`pill pill--${post.status}`}>{post.status === 'published' ? 'Publié' : 'Brouillon'}</span></td>
+              <td class="muted">{post.updated_at.slice(0, 16).replace('T', ' ')}</td>
+              <td class="actions"><a class="btn btn--ghost btn--sm" href={postUrl(post) + (post.status === 'draft' ? '?preview' : '')} target="_blank">Voir</a></td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="btn-row" style="margin-top:1.5rem">
+    <a class="btn" href="/admin/posts/new?type=post">+ Nouvel article</a>
+    <a class="btn btn--ghost" href="/admin/pages/new">+ Nouvelle page</a>
+  </div>
+</AdminLayout>

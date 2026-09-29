@@ -1,0 +1,103 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { all } from '../../lib/db.ts';
+import { categoryUrl, deleteCategory, getCategory, listCategories, saveCategory, slugify, type Category } from '../../lib/content.ts';
+import { intOrNull, isUniqueViolation, nullable, text } from '../../lib/forms.ts';
+
+let error = '';
+let notice = '';
+const editId = Number(Astro.url.searchParams.get('edit')) || null;
+let editing: Omit<Category, 'id'> & { id?: number } = (editId && getCategory(editId)) || {
+  slug: '',
+  name: '',
+  description: null,
+  parent_id: null,
+  position: 0,
+};
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const id = intOrNull(form, 'id') ?? undefined;
+  if (text(form, 'action') === 'delete' && id) {
+    deleteCategory(id);
+    return Astro.redirect('/admin/categories?deleted', 303);
+  }
+  editing = {
+    id,
+    name: text(form, 'name'),
+    slug: slugify(text(form, 'slug') || text(form, 'name')),
+    description: nullable(form, 'description'),
+    parent_id: intOrNull(form, 'parent_id'),
+    position: intOrNull(form, 'position') ?? 0,
+  };
+  if (editing.parent_id === id) editing.parent_id = null;
+  if (!editing.name || !editing.slug) error = 'Le nom est obligatoire.';
+  else {
+    try {
+      const { id: _id, ...input } = editing;
+      saveCategory(input, id);
+      return Astro.redirect('/admin/categories?saved', 303);
+    } catch (err) {
+      if (!isUniqueViolation(err)) throw err;
+      error = `L’adresse « ${editing.slug} » est déjà utilisée.`;
+    }
+  }
+}
+if (Astro.url.searchParams.has('saved')) notice = 'Catégorie enregistrée.';
+if (Astro.url.searchParams.has('deleted')) notice = 'Catégorie supprimée.';
+
+const categories = listCategories();
+const counts = new Map(all<{ category_id: number; n: number }>('SELECT category_id, COUNT(*) AS n FROM posts GROUP BY category_id').map((r) => [r.category_id, r.n]));
+const roots = categories.filter((c) => !c.parent_id);
+const ordered = roots.flatMap((r) => [r, ...categories.filter((c) => c.parent_id === r.id)]);
+---
+
+<AdminLayout title="Catégories du blog">
+  {notice && <div class="alert alert--ok">{notice}</div>}
+  {error && <div class="alert alert--error" role="alert">{error}</div>}
+  <div class="editor">
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Nom</th><th>Adresse</th><th>Articles</th><th></th></tr></thead>
+        <tbody>
+          {
+            ordered.map((c) => (
+              <tr>
+                <td>{c.parent_id ? '— ' : ''}<strong>{c.name}</strong></td>
+                <td class="muted"><a href={categoryUrl(c)} target="_blank">{categoryUrl(c)}</a></td>
+                <td class="muted">{counts.get(c.id) ?? 0}</td>
+                <td class="actions">
+                  <a class="btn btn--sm" href={`/admin/categories?edit=${c.id}`}>Modifier</a>
+                  <form method="post" style="display:inline">
+                    <input type="hidden" name="id" value={c.id} />
+                    <button class="btn btn--danger btn--sm" name="action" value="delete" onclick="return confirm('Supprimer cette catégorie ? Les articles seront conservés sans catégorie.')">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <form method="post" class="card editor__side">
+      <strong>{editing.id ? 'Modifier la catégorie' : 'Nouvelle catégorie'}</strong>
+      {editing.id && <input type="hidden" name="id" value={editing.id} />}
+      <div class="field"><label for="name">Nom</label><input id="name" name="name" type="text" required value={editing.name} /></div>
+      <div class="field"><label for="slug">Adresse</label><input id="slug" name="slug" type="text" value={editing.slug} placeholder="générée depuis le nom" /></div>
+      <div class="field">
+        <label for="parent_id">Parente</label>
+        <select id="parent_id" name="parent_id">
+          <option value="">— Aucune (racine) —</option>
+          {roots.filter((r) => r.id !== editing.id).map((r) => <option value={r.id} selected={editing.parent_id === r.id}>{r.name}</option>)}
+        </select>
+      </div>
+      <div class="field"><label for="position">Ordre</label><input id="position" name="position" type="number" value={editing.position} /></div>
+      <div class="field"><label for="description">Description</label><textarea id="description" name="description" rows="4">{editing.description ?? ''}</textarea></div>
+      <div class="btn-row">
+        <button class="btn" type="submit" name="action" value="save">Enregistrer</button>
+        {editing.id && <a class="btn btn--ghost" href="/admin/categories">Annuler</a>}
+      </div>
+    </form>
+  </div>
+</AdminLayout>

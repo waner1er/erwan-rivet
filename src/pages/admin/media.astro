@@ -1,0 +1,87 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { ACCEPT, deleteMedia, formatSize, listMedia, saveUpload } from '../../lib/media.ts';
+import { intOrNull, text } from '../../lib/forms.ts';
+
+let error = '';
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  if (text(form, 'action') === 'delete') {
+    const id = intOrNull(form, 'id');
+    if (id) deleteMedia(id);
+    return Astro.redirect('/admin/media?deleted', 303);
+  }
+  const files = form.getAll('file').filter((f): f is File => f instanceof File && f.size > 0);
+  try {
+    for (const file of files) await saveUpload(file);
+    return Astro.redirect(`/admin/media?uploaded=${files.length}`, 303);
+  } catch (err) {
+    error = (err as Error).message;
+  }
+}
+
+const media = listMedia();
+const uploaded = Astro.url.searchParams.get('uploaded');
+---
+
+<AdminLayout title="Médiathèque">
+  {uploaded && <div class="alert alert--ok">{uploaded} fichier(s) envoyé(s).</div>}
+  {Astro.url.searchParams.has('deleted') && <div class="alert alert--ok">Fichier supprimé.</div>}
+  {error && <div class="alert alert--error" role="alert">{error}</div>}
+
+  <form method="post" enctype="multipart/form-data" class="dropzone" data-dropzone style="margin-bottom:1.25rem">
+    <p style="margin-top:0">Glissez des images ici ou</p>
+    <div class="btn-row" style="justify-content:center">
+      <input type="file" name="file" multiple accept={ACCEPT} required style="max-width:320px" />
+      <button class="btn" type="submit">Envoyer</button>
+    </div>
+    <p class="muted" style="margin-bottom:0"><small>JPG, PNG, WebP, GIF, AVIF, SVG ou PDF — 15 Mo max.</small></p>
+  </form>
+
+  <div class="media-grid">
+    {
+      media.map((m) => (
+        <div class="media-item">
+          <a href={m.path} target="_blank">{m.mime.startsWith('image/') ? <img src={m.path} alt="" loading="lazy" /> : <span style="display:block;padding:2rem;text-align:center">📄</span>}</a>
+          <div class="media-item__meta">
+            <span>{m.filename}</span>
+            <span class="muted">{formatSize(m.size)}</span>
+            <div class="btn-row">
+              <button type="button" class="btn btn--ghost btn--sm" data-copy={m.path}>Copier l’URL</button>
+              <form method="post">
+                <input type="hidden" name="id" value={m.id} />
+                <button class="link-btn" name="action" value="delete" onclick="return confirm('Supprimer ce fichier ? Il disparaîtra des contenus qui l’utilisent.')">Supprimer</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</AdminLayout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(btn.dataset.copy!);
+      btn.textContent = 'Copié !';
+      setTimeout(() => (btn.textContent = 'Copier l’URL'), 1500);
+    });
+  });
+
+  const zone = document.querySelector<HTMLFormElement>('[data-dropzone]');
+  const input = zone?.querySelector<HTMLInputElement>('input[type=file]');
+  zone?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    zone.classList.add('is-over');
+  });
+  zone?.addEventListener('dragleave', () => zone.classList.remove('is-over'));
+  zone?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('is-over');
+    if (input && e.dataTransfer?.files.length) {
+      input.files = e.dataTransfer.files;
+      zone.requestSubmit();
+    }
+  });
+</script>

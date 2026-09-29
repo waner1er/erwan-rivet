@@ -1,0 +1,237 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ContentEditor from '../../../components/admin/ContentEditor.astro';
+import ImageField from '../../../components/admin/ImageField.astro';
+import {
+  deletePost,
+  getPost,
+  getPostTags,
+  getTagBySlug,
+  isPostType,
+  listCategories,
+  listTags,
+  POST_TYPES,
+  postUrl,
+  savePost,
+  saveTag,
+  slugify,
+  type Post,
+  type PostInput,
+} from '../../../lib/content.ts';
+import { intOrNull, isUniqueViolation, nullable, oneOf, paramId, text } from '../../../lib/forms.ts';
+
+const id = paramId(Astro.params.id);
+if (id === null) return Astro.redirect('/admin/posts');
+const existing = id === 'new' ? undefined : getPost(id);
+if (id !== 'new' && !existing) return Astro.redirect('/admin/posts');
+
+const typeParam = Astro.url.searchParams.get('type');
+const initialType = existing?.type ?? (isPostType(typeParam) ? typeParam : 'post');
+
+const nowLocal = () => {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 19);
+};
+
+const blank: PostInput = {
+  type: initialType,
+  slug: '',
+  title: '',
+  excerpt: null,
+  content: '',
+  format: initialType === 'post' ? 'markdown' : 'html',
+  template: initialType === 'post' ? 'classic' : 'cover',
+  cover_image: null,
+  category_id: null,
+  show_toc: 1,
+  meta_description: null,
+  status: 'draft',
+  published_at: null,
+  tag_ids: [],
+};
+let values: PostInput = existing ? { ...existing, tag_ids: getPostTags(existing.id).map((t) => t.id) } : blank;
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const action = text(form, 'action');
+
+  if (action === 'delete' && existing) {
+    deletePost(existing.id);
+    return Astro.redirect(`/admin/posts?type=${existing.type}&deleted`, 303);
+  }
+
+  const type = isPostType(text(form, 'type')) ? (text(form, 'type') as PostInput['type']) : initialType;
+  const status = oneOf(form, 'status', ['published', 'draft'] as const, 'draft');
+  const rawDate = text(form, 'published_at');
+
+  // Existing tags ticked + new ones typed as "tag 1, tag 2".
+  const tagIds = form.getAll('tag_ids').map(Number).filter(Number.isInteger);
+  for (const name of text(form, 'new_tags').split(',').map((s) => s.trim()).filter(Boolean)) {
+    const slug = slugify(name);
+    if (!slug) continue;
+    tagIds.push(getTagBySlug(slug)?.id ?? saveTag({ slug, name }));
+  }
+
+  values = {
+    type,
+    title: text(form, 'title'),
+    slug: slugify(text(form, 'slug') || text(form, 'title')),
+    excerpt: nullable(form, 'excerpt'),
+    content: String(form.get('content') ?? ''),
+    format: oneOf(form, 'format', ['html', 'markdown'] as const, 'html'),
+    template: oneOf(form, 'template', ['cover', 'classic'] as const, 'cover'),
+    cover_image: nullable(form, 'cover_image'),
+    category_id: type === 'post' ? intOrNull(form, 'category_id') : null,
+    show_toc: form.has('show_toc') ? 1 : 0,
+    meta_description: nullable(form, 'meta_description'),
+    status,
+    published_at: rawDate ? (rawDate.length === 16 ? `${rawDate}:00` : rawDate.slice(0, 19)) : status === 'published' ? nowLocal() : null,
+    tag_ids: [...new Set(tagIds)],
+  };
+
+  if (!values.title) error = 'Le titre est obligatoire.';
+  else if (!values.slug) error = 'L’adresse est obligatoire.';
+
+  if (!error) {
+    try {
+      const savedId = savePost(values, existing?.id);
+      return Astro.redirect(`/admin/posts/${savedId}?saved`, 303);
+    } catch (err) {
+      if (!isUniqueViolation(err)) throw err;
+      error = `Un contenu de ce type utilise déjà l’adresse « ${values.slug} ».`;
+    }
+  }
+  Astro.response.status = 422;
+}
+
+const post = values as Post & { tag_ids: number[] };
+const def = POST_TYPES[post.type];
+const categories = listCategories();
+const catLabel = (c: (typeof categories)[number]) => (c.parent_id ? `— ${c.name}` : c.name);
+const sortedCats = categories
+  .filter((c) => !c.parent_id)
+  .flatMap((root) => [root, ...categories.filter((c) => c.parent_id === root.id)]);
+const tags = listTags();
+const saved = Astro.url.searchParams.has('saved');
+const urlPrefix = def.base ? `/${def.base}/` : '/';
+---
+
+<AdminLayout title={existing ? `Modifier « ${existing.title} »` : `Ajouter · ${def.label}`}>
+  {saved && <div class="alert alert--ok">Contenu enregistré.</div>}
+  {error && <div class="alert alert--error" role="alert">{error}</div>}
+  <p><a href={`/admin/posts?type=${post.type}`}>← {def.plural}</a></p>
+
+  <form method="post" class="editor" data-editor-form>
+    <input type="hidden" name="type" value={post.type} />
+    <div>
+      <div class="field">
+        <label for="title">Titre</label>
+        <input class="title-input" id="title" name="title" type="text" required value={post.title} />
+      </div>
+      <div class="field">
+        <label for="slug">Adresse</label>
+        <input id="slug" name="slug" type="text" value={post.slug} placeholder="générée depuis le titre" pattern="[a-z0-9\-]*" />
+        <small>Servi sur {urlPrefix}adresse/</small>
+      </div>
+      <div class="field">
+        <span class="label">Contenu</span>
+        <ContentEditor name="content" value={post.content} format={post.format} />
+        <small>Les titres H2/H3 alimentent automatiquement le sommaire. Ctrl+S pour enregistrer.</small>
+      </div>
+      <div class="field">
+        <label for="excerpt">Extrait</label>
+        <textarea id="excerpt" name="excerpt" rows="3">{post.excerpt ?? ''}</textarea>
+        <small>Affiché dans les listes. Laissez vide pour le générer depuis le contenu.</small>
+      </div>
+    </div>
+
+    <aside class="editor__side">
+      <div class="card">
+        <div class="field">
+          <label for="status">Statut</label>
+          <select id="status" name="status">
+            <option value="published" selected={post.status === 'published'}>Publié</option>
+            <option value="draft" selected={post.status === 'draft'}>Brouillon</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="published_at">Date de publication</label>
+          <input id="published_at" name="published_at" type="datetime-local" value={post.published_at?.slice(0, 16) ?? ''} />
+          <small>Une date future programme la publication.</small>
+        </div>
+        <div class="btn-row">
+          <button class="btn" type="submit" name="action" value="save">Enregistrer</button>
+          {existing && <a class="btn btn--ghost" href={postUrl(existing) + '?preview'} target="_blank">Voir</a>}
+        </div>
+      </div>
+
+      <div class="card">
+        <ImageField name="cover_image" label="Image à la une" value={post.cover_image} />
+        <div class="field">
+          <label for="template">Gabarit</label>
+          <select id="template" name="template">
+            <option value="cover" selected={post.template === 'cover'}>Bannière (titre sur l’image)</option>
+            <option value="classic" selected={post.template === 'classic'}>Classique (grand titre + image)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="format">Format du contenu</label>
+          <select id="format" name="format">
+            <option value="html" selected={post.format === 'html'}>HTML</option>
+            <option value="markdown" selected={post.format === 'markdown'}>Markdown</option>
+          </select>
+        </div>
+        <label class="checkbox"><input type="checkbox" name="show_toc" checked={post.show_toc === 1} /> Afficher le sommaire</label>
+      </div>
+
+      <div class="card">
+        {
+          post.type === 'post' && (
+            <div class="field">
+              <label for="category_id">Catégorie</label>
+              <select id="category_id" name="category_id">
+                <option value="">— Aucune —</option>
+                {sortedCats.map((c) => <option value={c.id} selected={post.category_id === c.id}>{catLabel(c)}</option>)}
+              </select>
+            </div>
+          )
+        }
+        <div class="field">
+          <span class="label">Tags</span>
+          <div class="checks">
+            {tags.map((t) => (
+              <label class="checkbox"><input type="checkbox" name="tag_ids" value={t.id} checked={post.tag_ids.includes(t.id)} /> {t.name}</label>
+            ))}
+          </div>
+          <input type="text" name="new_tags" placeholder="Nouveaux tags, séparés par des virgules" />
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <label for="meta_description">Description SEO</label>
+          <textarea id="meta_description" name="meta_description" rows="4" maxlength="320">{post.meta_description ?? ''}</textarea>
+        </div>
+      </div>
+
+      {
+        existing && (
+          <div class="card">
+            <button
+              class="btn btn--danger btn--sm"
+              type="submit"
+              name="action"
+              value="delete"
+              formnovalidate
+              onclick="return confirm('Supprimer définitivement ce contenu ?')"
+            >
+              Supprimer
+            </button>
+          </div>
+        )
+      }
+    </aside>
+  </form>
+</AdminLayout>

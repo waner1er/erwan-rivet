@@ -1,0 +1,41 @@
+---
+interface Props {
+  name: string;
+  label: string;
+  value?: string | null;
+}
+
+const { name, label, value } = Astro.props;
+const id = `image-field-${name}`;
+---
+
+<div class="field" data-image-field>
+  <label for={id}>{label}</label>
+  <img class="cover-preview" src={value || undefined} alt="" hidden={!value} data-image-preview />
+  <input id={id} type="text" name={name} value={value ?? ''} placeholder="/uploads/…" data-image-input />
+  <div class="btn-row">
+    <button type="button" class="btn btn--ghost btn--sm" data-image-pick>Choisir…</button>
+    <button type="button" class="btn btn--ghost btn--sm" data-image-clear>Retirer</button>
+  </div>
+</div>
+
+<script>
+  import { openMediaPicker } from '../../scripts/media-picker.ts';
+
+  document.querySelectorAll<HTMLElement>('[data-image-field]').forEach((root) => {
+    const input = root.querySelector<HTMLInputElement>('[data-image-input]')!;
+    const img = root.querySelector<HTMLImageElement>('[data-image-preview]')!;
+    const sync = () => {
+      img.hidden = !input.value;
+      if (input.value) img.src = input.value;
+    };
+    const set = (value: string) => {
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      sync();
+    };
+    input.addEventListener('change', sync);
+    root.querySelector('[data-image-pick]')!.addEventListener('click', () => openMediaPicker((item) => set(item.path)));
+    root.querySelector('[data-image-clear]')!.addEventListener('click', () => set(''));
+  });
+</script>

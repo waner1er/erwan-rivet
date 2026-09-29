@@ -1,0 +1,55 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { all, run } from '../../lib/db.ts';
+import { intOrNull, text } from '../../lib/forms.ts';
+
+interface Message {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  message: string;
+  is_read: number;
+  created_at: string;
+}
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const id = intOrNull(form, 'id');
+  const action = text(form, 'action');
+  if (id && action === 'delete') run('DELETE FROM messages WHERE id = ?', [id]);
+  if (id && action === 'read') run('UPDATE messages SET is_read = 1 WHERE id = ?', [id]);
+  if (id && action === 'unread') run('UPDATE messages SET is_read = 0 WHERE id = ?', [id]);
+  return Astro.redirect('/admin/messages', 303);
+}
+
+const messages = all<Message>('SELECT * FROM messages ORDER BY created_at DESC');
+---
+
+<AdminLayout title="Messages de contact">
+  {messages.length === 0 && <p class="muted">Aucun message pour le moment. Ils arrivent ici depuis le formulaire de la page Contact.</p>}
+  {
+    messages.map((m) => (
+      <details class:list={['card message', { 'is-unread': !m.is_read }]}>
+        <summary>
+          <span>
+            <strong>{m.first_name} {m.last_name}</strong> <span class="muted">&lt;{m.email}&gt;</span>
+          </span>
+          <span class="muted">{m.created_at.replace('T', ' ').slice(0, 16)} UTC</span>
+        </summary>
+        <div class="message-body">{m.message || '(message vide)'}</div>
+        <div class="btn-row" style="margin-top:0.75rem">
+          <a class="btn btn--sm" href={`mailto:${m.email}?subject=${encodeURIComponent('Re: votre demande sur erwan-rivet.fr')}`}>Répondre</a>
+          <form method="post">
+            <input type="hidden" name="id" value={m.id} />
+            <button class="btn btn--ghost btn--sm" name="action" value={m.is_read ? 'unread' : 'read'}>{m.is_read ? 'Marquer non lu' : 'Marquer lu'}</button>
+          </form>
+          <form method="post">
+            <input type="hidden" name="id" value={m.id} />
+            <button class="btn btn--danger btn--sm" name="action" value="delete" onclick="return confirm('Supprimer ce message ?')">Supprimer</button>
+          </form>
+        </div>
+      </details>
+    ))
+  }
+</AdminLayout>
