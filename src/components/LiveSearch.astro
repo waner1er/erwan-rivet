@@ -2,7 +2,7 @@
 // Live search in the header, same markup as the original "erwan-live-search" block.
 ---
 
-<div class="erwan-live-search wp-block-erwan-live-search" data-live-search>
+<div class="erwan-live-search wp-block-erwan-live-search" data-live-search data-index-url="/search-index.json">
   <form class="erwan-live-search__form" role="search" method="get" action="/recherche/">
     <button aria-expanded="false" type="button" class="erwan-live-search__toggle" aria-controls="live-search-input" data-ls-toggle>
       <span class="screen-reader-text">Ouvrir la recherche</span>
@@ -34,14 +34,7 @@
 </div>
 
 <script>
-  interface Result {
-    id: string;
-    title: string;
-    url: string;
-    excerpt: string;
-    thumbnail: string | null;
-    typeLabel: string;
-  }
+  import { search, type SearchEntry as Result } from '../scripts/search.ts';
 
   const root = document.querySelector<HTMLElement>('[data-live-search]');
   if (root) {
@@ -111,8 +104,7 @@
       const current = ++seq;
       setLoading(true);
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-        const data: Result[] = res.ok ? await res.json() : [];
+        const data = await search(root!.dataset.indexUrl!, query);
         if (current === seq) render(data);
       } finally {
         if (current === seq) setLoading(false);
@@ -128,7 +120,7 @@
         setOpen(false);
         return;
       }
-      timer = window.setTimeout(() => runSearch(query), 200);
+      timer = window.setTimeout(() => runSearch(query), 120);
     });
     input.addEventListener('focus', () => {
       if (list.children.length && input.value.trim().length >= 2) setOpen(true);

@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getSettings } from '../lib/settings.ts';
+import { absoluteUrl } from '../lib/url.ts';
 
 interface Props {
   title?: string;
@@ -15,8 +16,8 @@ interface Props {
 const { title, description, image, type = 'website', bodyClass = '', noindex = false } = Astro.props;
 const settings = getSettings();
 const fullTitle = title ? title : `${settings.siteTitle} - ${settings.tagline}`;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
-const ogImage = image ? new URL(image, Astro.site ?? Astro.url.origin).href : undefined;
+const canonical = absoluteUrl(Astro.url.pathname, Astro.site, Astro.url.origin);
+const ogImage = image ? absoluteUrl(image, Astro.site, Astro.url.origin) : undefined;
 ---
 
 <!doctype html>
@@ -37,7 +38,7 @@ const ogImage = image ? new URL(image, Astro.site ?? Astro.url.origin).href : un
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href={settings.logo || '/favicon.svg'} />
-    <link rel="alternate" type="application/rss+xml" title={`${settings.siteTitle} » Flux`} href="/feed/" />
+    <link rel="alternate" type="application/rss+xml" title={`${settings.siteTitle} » Flux`} href="/feed.xml" />
     <link rel="preload" href="/fonts/FiraCode-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/css/wp.css" />
     <link rel="stylesheet" href="/css/site.css" />

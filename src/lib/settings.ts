@@ -19,6 +19,10 @@ export interface SiteSettings {
   headerSocials: SocialLink[];
   footerSocials: SocialLink[];
   contactEmail: string;
+  /** External form service used on static hosting, e.g. https://api.web3forms.com/submit. Empty = built-in /api/contact. */
+  contactFormEndpoint: string;
+  /** Access key sent as `access_key` (Web3Forms). */
+  contactFormAccessKey: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -45,6 +49,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     { service: 'wordpress', url: 'https://profiles.wordpress.org/waner1er/', label: 'WordPress' },
   ],
   contactEmail: 'riveterwan8@gmail.com',
+  contactFormEndpoint: '',
+  contactFormAccessKey: '',
 };
 
 export function getSettings(): SiteSettings {

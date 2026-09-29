@@ -14,6 +14,21 @@ const MIME: Record<string, string> = {
   '.pdf': 'application/pdf',
 };
 
+/** Every uploaded file, copied into the static export (STATIC_EXPORT=1). */
+export function getStaticPaths() {
+  const files: string[] = [];
+  const walk = (dir: string) => {
+    if (!fs.existsSync(dir)) return;
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const abs = path.join(dir, e.name);
+      if (e.isDirectory()) walk(abs);
+      else files.push(path.relative(UPLOADS_DIR, abs).split(path.sep).join('/'));
+    }
+  };
+  walk(UPLOADS_DIR);
+  return files.map((file) => ({ params: { file } }));
+}
+
 // Uploaded media live outside the build output (data/uploads) so they survive deployments.
 export const GET: APIRoute = async ({ params }) => {
   const rel = params.file ?? '';

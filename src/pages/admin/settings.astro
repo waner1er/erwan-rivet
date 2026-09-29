@@ -30,6 +30,8 @@ if (Astro.request.method === 'POST') {
     tagline: text(form, 'tagline'),
     logo: text(form, 'logo'),
     contactEmail: text(form, 'contactEmail'),
+    contactFormEndpoint: text(form, 'contactFormEndpoint'),
+    contactFormAccessKey: text(form, 'contactFormAccessKey'),
     menu: parseMenu(text(form, 'menu')),
     headerSocials: parseSocials(text(form, 'headerSocials')),
     footerSocials: parseSocials(text(form, 'footerSocials')),
@@ -52,6 +54,12 @@ const s = getSettings();
           <small>Utilisé dans le titre de la page d’accueil : « Titre - Slogan ».</small>
         </div>
         <div class="field"><label for="contactEmail">E-mail de contact</label><input id="contactEmail" name="contactEmail" type="email" value={s.contactEmail} /></div>
+      </div>
+      <div class="card">
+        <strong>Formulaire de contact (site en ligne)</strong>
+        <p class="muted"><small>GitHub Pages n’exécute pas de code serveur : le formulaire envoie les messages via un service externe. Avec <a href="https://web3forms.com" target="_blank" rel="noopener">Web3Forms</a> (gratuit), indiquez <code>https://api.web3forms.com/submit</code> et la clé d’accès reçue par e-mail. Laissez vide pour enregistrer les messages dans Admin → Messages (site local ou hébergement Node).</small></p>
+        <div class="field"><label for="contactFormEndpoint">Adresse d’envoi</label><input id="contactFormEndpoint" name="contactFormEndpoint" type="url" value={s.contactFormEndpoint} placeholder="https://api.web3forms.com/submit" /></div>
+        <div class="field"><label for="contactFormAccessKey">Clé d’accès</label><input id="contactFormAccessKey" name="contactFormAccessKey" type="text" value={s.contactFormAccessKey} autocomplete="off" /></div>
       </div>
       <div class="card">
         <div class="field">

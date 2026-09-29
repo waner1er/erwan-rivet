@@ -13,7 +13,9 @@
     "astro": "astro",
     "import:wp": "node scripts/import-wp.ts ../erwan-rivet.fr",
     "import:css": "node scripts/extract-css.mjs ../erwan-rivet.fr",
-    "admin:create": "node scripts/create-admin.ts"
+    "admin:create": "node scripts/create-admin.ts",
+    "deploy": "node scripts/deploy.mjs",
+    "build:static": "node scripts/deploy.mjs --no-push"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.6",

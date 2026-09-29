@@ -9,7 +9,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const back = (status: 'ok' | 'error') => redirect(`/contact/?contact=${status}#contact-form`, 303);
 
   // Honeypot: bots fill every field. Pretend success.
-  if (field('website', 200)) return back('ok');
+  if (form.has('botcheck')) return back('ok');
 
   const firstName = field('first_name', 100);
   const lastName = field('last_name', 100);

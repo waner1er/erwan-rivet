@@ -7,16 +7,35 @@ import TagView from '../views/TagView.astro';
 import NotFound from '../views/NotFound.astro';
 import {
   POST_TYPES,
+  categoryUrl,
   getCategoryBySlug,
   getPageBySlug,
   getPostBySlug,
   getTagBySlug,
+  listCategories,
+  listPages,
+  listPosts,
+  listTags,
+  pageUrl,
+  postUrl,
+  tagUrl,
   type Category,
   type Page,
   type Post,
   type PostType,
   type Tag,
 } from '../lib/content.ts';
+
+/** Every published URL, used when the site is exported to static HTML (STATIC_EXPORT=1). */
+export function getStaticPaths() {
+  const urls = [
+    ...listPages().filter((p) => p.status === 'published').map(pageUrl),
+    ...listPosts().map(postUrl),
+    ...listCategories().map(categoryUrl),
+    ...listTags().filter((t) => t.count > 0).map(tagUrl),
+  ];
+  return [...new Set(urls)].map((url) => ({ params: { path: url.replace(/^\/|\/$/g, '') || undefined } }));
+}
 
 const raw = Astro.params.path ?? '';
 

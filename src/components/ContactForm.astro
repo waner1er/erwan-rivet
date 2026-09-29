@@ -1,24 +1,32 @@
 ---
 // Contact form reusing the Fluent Forms markup so the original styles apply.
-const status = Astro.url.searchParams.get('contact');
+// On static hosting it posts to an external service (Réglages → Formulaire de contact).
+import { getSettings } from '../lib/settings.ts';
+import { absoluteUrl } from '../lib/url.ts';
+
+const settings = getSettings();
+const external = settings.contactFormEndpoint.trim();
+const redirectUrl = absoluteUrl('/contact/?contact=ok#contact-form', Astro.site, Astro.url.origin);
 ---
 
-<div class="fluentform ff-default fluentform_wrapper_3 ffs_default_wrap" id="contact-form">
-  {
-    status === 'ok' && (
-      <div class="ff-message-success" role="status">
-        <p>Merci pour votre message, je vous répondrai rapidement.</p>
-      </div>
-    )
-  }
-  {
-    status === 'error' && (
-      <div class="ff-errors-in-stack" role="alert">
-        <div class="error text-danger">Merci de remplir correctement les champs obligatoires.</div>
-      </div>
-    )
-  }
-  <form class="frm-fluent-form fluent_form_3 ff-el-form-top ffs_default" method="post" action="/api/contact">
+<div class="fluentform ff-default fluentform_wrapper_3 ffs_default_wrap" id="contact-form" data-contact-form>
+  <div class="ff-message-success" role="status" hidden data-contact-status="ok">
+    <p>Merci pour votre message, je vous répondrai rapidement.</p>
+  </div>
+  <div class="ff-errors-in-stack" role="alert" hidden data-contact-status="error">
+    <div class="error text-danger">Merci de remplir correctement les champs obligatoires.</div>
+  </div>
+  <form class="frm-fluent-form fluent_form_3 ff-el-form-top ffs_default" method="post" action={external || '/api/contact'}>
+    {
+      external && (
+        <>
+          {settings.contactFormAccessKey && <input type="hidden" name="access_key" value={settings.contactFormAccessKey} />}
+          <input type="hidden" name="subject" value={`Nouveau message depuis ${settings.siteTitle}`} />
+          <input type="hidden" name="from_name" value={settings.siteTitle} />
+          <input type="hidden" name="redirect" value={redirectUrl} />
+        </>
+      )
+    }
     <fieldset style="border:none;margin:0;padding:0;min-inline-size:100%">
       <legend class="screen-reader-text">Contact</legend>
       <div class="ff-field_container ff-name-field-wrapper">
@@ -61,13 +69,19 @@ const status = Astro.url.searchParams.get('contact');
           <textarea name="message" class="ff-el-form-control" id="ff_message" rows="4" maxlength="5000"></textarea>
         </div>
       </div>
-      <div class="screen-reader-text" aria-hidden="true">
-        <label for="ff_website">Ne pas remplir</label>
-        <input type="text" name="website" id="ff_website" tabindex="-1" autocomplete="off" />
-      </div>
+      <input type="checkbox" name="botcheck" class="screen-reader-text" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none" />
       <div class="ff-el-group ff-text-left ff_submit_btn_wrapper">
         <button type="submit" class="ff-btn ff-btn-submit ff-btn-md ff_btn_style">Demander une information, un devis</button>
       </div>
     </fieldset>
   </form>
 </div>
+
+<script>
+  // Status comes back as ?contact=ok|error, from /api/contact or the external service redirect.
+  const status = new URLSearchParams(location.search).get('contact');
+  if (status) {
+    const el = document.querySelector<HTMLElement>(`[data-contact-form] [data-contact-status="${status}"]`);
+    if (el) el.hidden = false;
+  }
+</script>

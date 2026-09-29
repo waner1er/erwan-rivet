@@ -7,6 +7,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
   const isAdmin = pathname === '/admin' || pathname.startsWith('/admin/') || pathname.startsWith('/api/admin/');
 
+  // Prerendered (static export) pages have no request: nobody is logged in.
+  if (context.isPrerendered) {
+    context.locals.user = null;
+    return next();
+  }
+
   // Public pages only need the user for draft previews, so skip the lookup without a cookie.
   context.locals.user = isAdmin || context.cookies.has(SESSION_COOKIE) ? getSessionUser(context.cookies) : null;
 
