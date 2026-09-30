@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "key": "contactFormAccessKey",
+    "value": "\"614cf462-4f1f-4a57-a18e-988bf79bb53b\""
+  },
+  {
+    "key": "contactFormEndpoint",
+    "value": "\"https://api.web3forms.com/submit\""
+  }
+]

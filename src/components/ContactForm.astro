@@ -24,6 +24,8 @@ const redirectUrl = absoluteUrl('/contact/?contact=ok#contact-form', Astro.site,
           <input type="hidden" name="subject" value={`Nouveau message depuis ${settings.siteTitle}`} />
           <input type="hidden" name="from_name" value={settings.siteTitle} />
           <input type="hidden" name="redirect" value={redirectUrl} />
+          {/* Sender name shown by the service, filled from first + last name on submit. */}
+          <input type="hidden" name="name" value="" data-contact-fullname />
         </>
       )
     }
@@ -79,6 +81,15 @@ const redirectUrl = absoluteUrl('/contact/?contact=ok#contact-form', Astro.site,
 
 <script>
   // Status comes back as ?contact=ok|error, from /api/contact or the external service redirect.
+  document.querySelectorAll<HTMLFormElement>('[data-contact-form] form').forEach((form) => {
+    const fullName = form.querySelector<HTMLInputElement>('[data-contact-fullname]');
+    if (!fullName) return;
+    form.addEventListener('submit', () => {
+      const value = (name: string) => form.querySelector<HTMLInputElement>(`[name="${name}"]`)?.value.trim() ?? '';
+      fullName.value = `${value('first_name')} ${value('last_name')}`.trim();
+    });
+  });
+
   const status = new URLSearchParams(location.search).get('contact');
   if (status) {
     const el = document.querySelector<HTMLElement>(`[data-contact-form] [data-contact-status="${status}"]`);
