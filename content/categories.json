@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "slug": "wordpress",
+    "name": "Wordpress",
+    "description": "Tous les tutoriels WordPress — thèmes classiques, Gutenberg, plugins, hooks, REST API, WP-CLI, WooCommerce, sécurité. De la configuration de base aux patterns avancés, découvre comment construire et maintenir des sites robustes avec WordPress.",
+    "parent_id": null,
+    "position": 0
+  },
+  {
+    "id": 2,
+    "slug": "plugins-wordpress",
+    "name": "plugins-wordpress",
+    "description": null,
+    "parent_id": 1,
+    "position": 0
+  },
+  {
+    "id": 3,
+    "slug": "wordpress-fse",
+    "name": "wordpress FSE",
+    "description": "Full Site Editing WordPress — construire des thèmes block-first avec theme.json, templates et patterns. Passe de l’approche classique (PHP/CSS) à une philosophie déclarative basée sur les blocs. Idéal pour créer des sites personnalisables sans toucher au code.",
+    "parent_id": 1,
+    "position": 1
+  }
+]

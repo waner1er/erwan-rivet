@@ -1,0 +1,2 @@
+# Versioned content: keep LF so the content hash is identical on every machine.
+content/**/*.json text eol=lf

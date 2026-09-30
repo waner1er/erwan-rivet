@@ -2,16 +2,37 @@
 
 Reproduction du site WordPress erwan-rivet.fr en Astro (SSR, Node) avec un back office.
 
-## Démarrage
+## Démarrage (nouveau poste)
 
 Node 22.13 ou plus récent est requis (`node:sqlite` intégré).
 
 ```sh
+git clone https://github.com/waner1er/erwan-rivet.git && cd erwan-rivet
 npm install
-npm run import:css      # extrait le CSS d'origine depuis ../erwan-rivet.fr vers public/css/wp.css
-npm run import:wp -- --reset   # importe pages, contenus, taxonomies et médias dans data/
 npm run admin:create -- vous@exemple.fr "un-mot-de-passe-long" "Erwan RIVET"
 npm run dev             # http://localhost:4321 — back office sur /admin
+```
+
+La base locale est créée et remplie automatiquement depuis `content/` au premier lancement.
+
+## Où est le contenu ?
+
+| Dossier | Versionné | Contient |
+| --- | --- | --- |
+| `content/*.json` | oui | pages, articles, réalisations, travaux, projets, catégories, tags, réglages, liste des médias |
+| `content/uploads/` | oui | images et fichiers |
+| `data/site.db` | non | copie locale du contenu, comptes admin, sessions, messages de contact |
+
+- Chaque enregistrement dans l'admin met à jour `content/` : il suffit ensuite de `git add content && git commit && git push`.
+- Après un `git pull`, le site recharge `content/` tout seul, même si le serveur tourne déjà.
+- `npm run content:export` / `npm run content:import` forcent la synchronisation dans un sens ou dans l'autre.
+- Le compte admin est propre à chaque poste (`npm run admin:create`).
+
+Réimporter depuis le scrap WordPress (écrase le contenu) :
+
+```sh
+npm run import:css
+npm run import:wp -- --reset
 ```
 
 ## Mise en ligne sur GitHub Pages
@@ -35,7 +56,7 @@ Sur un hébergement statique :
 - le formulaire de contact passe par un service externe (Web3Forms), à configurer dans Admin → Réglages ;
 - les brouillons et le back office ne sont pas publiés.
 
-`data/` (base SQLite et médias) n'est pas versionné : pensez à le sauvegarder.
+Le contenu publié est celui de `content/` sur le poste qui lance le déploiement : commitez-le pour le partager.
 
 ## Hébergement Node (alternative)
 
@@ -44,7 +65,7 @@ npm run build
 SITE_URL=https://erwan-rivet.fr DATA_DIR=/chemin/persistant npm start
 ```
 
-`DATA_DIR` (par défaut `./data`) contient la base SQLite `site.db` et le dossier `uploads/`. Il doit être persistant et sauvegardé.
+`DATA_DIR` (par défaut `./data`) contient la base SQLite `site.db` ; `CONTENT_DIR` (par défaut `./content`) le contenu versionné et les médias.
 
 ## Organisation
 

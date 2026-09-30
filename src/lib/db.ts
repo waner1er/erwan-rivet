@@ -1,9 +1,12 @@
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
+import { CONTENT_DIR, exportContent, syncContent } from './sync.ts';
 
+/** Private, not versioned: SQLite cache of the content + users, sessions and messages. */
 export const DATA_DIR = path.resolve(process.env.DATA_DIR ?? 'data');
-export const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
+/** Media are versioned with the content. */
+export const UPLOADS_DIR = path.join(CONTENT_DIR, 'uploads');
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS users (
@@ -90,6 +93,10 @@ CREATE TABLE IF NOT EXISTS settings (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS meta (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);
 `;
 
 declare global {
@@ -99,13 +106,25 @@ declare global {
 
 export function getDb(): DatabaseSync {
   if (!globalThis.__erwanDb) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
     const db = new DatabaseSync(path.join(DATA_DIR, 'site.db'));
     db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;');
     db.exec(SCHEMA);
+    syncContent(db);
     globalThis.__erwanDb = db;
   }
   return globalThis.__erwanDb;
+}
+
+/** Reloads content/ into the database if it changed on disk (e.g. after a git pull). */
+export function syncFromDisk() {
+  syncContent(getDb());
+}
+
+/** Writes the content tables to content/*.json after a back-office change. */
+export function saveToDisk() {
+  exportContent(getDb());
 }
 
 type Params = Record<string, unknown> | unknown[];

@@ -1,0 +1,306 @@
+[
+  {
+    "id": 1,
+    "path": "/uploads/2025/11/o5pj34njugay8omksrgy.jpeg",
+    "filename": "o5pj34njugay8omksrgy.jpeg",
+    "mime": "image/jpeg",
+    "size": 21136,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 2,
+    "path": "/uploads/2026/01/agence_dernier_cri_logo.jpeg",
+    "filename": "agence_dernier_cri_logo.jpeg",
+    "mime": "image/jpeg",
+    "size": 5357,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 3,
+    "path": "/uploads/2026/01/anne.jpg",
+    "filename": "anne.jpg",
+    "mime": "image/jpeg",
+    "size": 109891,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 4,
+    "path": "/uploads/2026/01/bem.png",
+    "filename": "bem.png",
+    "mime": "image/png",
+    "size": 3245,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 5,
+    "path": "/uploads/2026/01/cache.png",
+    "filename": "cache.png",
+    "mime": "image/png",
+    "size": 3433,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 6,
+    "path": "/uploads/2026/01/ChatGPT-Image-19-janv.-2026-11_06_57.png",
+    "filename": "ChatGPT-Image-19-janv.-2026-11_06_57.png",
+    "mime": "image/png",
+    "size": 1795322,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 7,
+    "path": "/uploads/2026/01/galerie-reading.jpg",
+    "filename": "galerie-reading.jpg",
+    "mime": "image/jpeg",
+    "size": 171799,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 8,
+    "path": "/uploads/2026/01/granderouge.jpg",
+    "filename": "granderouge.jpg",
+    "mime": "image/jpeg",
+    "size": 113130,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 9,
+    "path": "/uploads/2026/01/images.png",
+    "filename": "images.png",
+    "mime": "image/png",
+    "size": 4581,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 10,
+    "path": "/uploads/2026/01/jira.jpeg",
+    "filename": "jira.jpeg",
+    "mime": "image/jpeg",
+    "size": 6992,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 11,
+    "path": "/uploads/2026/01/laravel.png",
+    "filename": "laravel.png",
+    "mime": "image/png",
+    "size": 3516,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 12,
+    "path": "/uploads/2026/01/livewire.png",
+    "filename": "livewire.png",
+    "mime": "image/png",
+    "size": 3621,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 13,
+    "path": "/uploads/2026/01/logo-sylius.webp",
+    "filename": "logo-sylius.webp",
+    "mime": "image/webp",
+    "size": 4268,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 14,
+    "path": "/uploads/2026/01/nqt.jpg",
+    "filename": "nqt.jpg",
+    "mime": "image/jpeg",
+    "size": 122480,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 15,
+    "path": "/uploads/2026/01/nuxt.png",
+    "filename": "nuxt.png",
+    "mime": "image/png",
+    "size": 3819,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 16,
+    "path": "/uploads/2026/01/php-bare-stack.png",
+    "filename": "php-bare-stack.png",
+    "mime": "image/png",
+    "size": 186412,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 17,
+    "path": "/uploads/2026/01/PHP_ecosystem.png",
+    "filename": "PHP_ecosystem.png",
+    "mime": "image/png",
+    "size": 17283,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 18,
+    "path": "/uploads/2026/01/seomix.jpeg",
+    "filename": "seomix.jpeg",
+    "mime": "image/jpeg",
+    "size": 4085,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 19,
+    "path": "/uploads/2026/01/so-bio.jpg",
+    "filename": "so-bio.jpg",
+    "mime": "image/jpeg",
+    "size": 194867,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 20,
+    "path": "/uploads/2026/01/sobiocomp.jpg",
+    "filename": "sobiocomp.jpg",
+    "mime": "image/jpeg",
+    "size": 158085,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 21,
+    "path": "/uploads/2026/01/syliuslogo.png",
+    "filename": "syliuslogo.png",
+    "mime": "image/png",
+    "size": 3272,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 22,
+    "path": "/uploads/2026/01/symfony.png",
+    "filename": "symfony.png",
+    "mime": "image/png",
+    "size": 2142,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 23,
+    "path": "/uploads/2026/01/undraw_accomplishments_tb6k.png",
+    "filename": "undraw_accomplishments_tb6k.png",
+    "mime": "image/png",
+    "size": 111059,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 24,
+    "path": "/uploads/2026/01/undraw_building-websites_k2zp.png",
+    "filename": "undraw_building-websites_k2zp.png",
+    "mime": "image/png",
+    "size": 146418,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 25,
+    "path": "/uploads/2026/01/undraw_database-tables_yft5.png",
+    "filename": "undraw_database-tables_yft5.png",
+    "mime": "image/png",
+    "size": 53639,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 26,
+    "path": "/uploads/2026/01/undraw_designer_efwz.png",
+    "filename": "undraw_designer_efwz.png",
+    "mime": "image/png",
+    "size": 97286,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 27,
+    "path": "/uploads/2026/01/undraw_email_b5yu.png",
+    "filename": "undraw_email_b5yu.png",
+    "mime": "image/png",
+    "size": 83338,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 28,
+    "path": "/uploads/2026/01/undraw_product-demo_9d4i.png",
+    "filename": "undraw_product-demo_9d4i.png",
+    "mime": "image/png",
+    "size": 95985,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 29,
+    "path": "/uploads/2026/01/undraw_product-iteration_r2wg.png",
+    "filename": "undraw_product-iteration_r2wg.png",
+    "mime": "image/png",
+    "size": 109769,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 30,
+    "path": "/uploads/2026/01/undraw_programming_j1zw1.png",
+    "filename": "undraw_programming_j1zw1.png",
+    "mime": "image/png",
+    "size": 93909,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 31,
+    "path": "/uploads/2026/01/undraw_progress-tracking_9m3o.png",
+    "filename": "undraw_progress-tracking_9m3o.png",
+    "mime": "image/png",
+    "size": 74318,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 32,
+    "path": "/uploads/2026/01/undraw_scrum-board_7bgh.png",
+    "filename": "undraw_scrum-board_7bgh.png",
+    "mime": "image/png",
+    "size": 113554,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 33,
+    "path": "/uploads/2026/01/undraw_stand-out_9j2q.png",
+    "filename": "undraw_stand-out_9j2q.png",
+    "mime": "image/png",
+    "size": 135495,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 34,
+    "path": "/uploads/2026/01/v4-whats-new.png",
+    "filename": "v4-whats-new.png",
+    "mime": "image/png",
+    "size": 270581,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 35,
+    "path": "/uploads/2026/01/woodbrasssite.jpg",
+    "filename": "woodbrasssite.jpg",
+    "mime": "image/jpeg",
+    "size": 243540,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 36,
+    "path": "/uploads/2026/01/wp.png",
+    "filename": "wp.png",
+    "mime": "image/png",
+    "size": 4556,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 37,
+    "path": "/uploads/2026/08/Capture-decran-2026-08-26-093431.png",
+    "filename": "Capture-decran-2026-08-26-093431.png",
+    "mime": "image/png",
+    "size": 314843,
+    "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 38,
+    "path": "/uploads/2026/09/image.png",
+    "filename": "image.png",
+    "mime": "image/png",
+    "size": 125049,
+    "created_at": "2026-09-29 14:54:39"
+  }
+]

@@ -15,7 +15,9 @@
     "import:css": "node scripts/extract-css.mjs ../erwan-rivet.fr",
     "admin:create": "node scripts/create-admin.ts",
     "deploy": "node scripts/deploy.mjs",
-    "build:static": "node scripts/deploy.mjs --no-push"
+    "build:static": "node scripts/deploy.mjs --no-push",
+    "content:export": "node scripts/content.ts export",
+    "content:import": "node scripts/content.ts import"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.6",

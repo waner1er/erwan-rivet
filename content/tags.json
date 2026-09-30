@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "slug": "clean-architecture",
+    "name": "clean architecture"
+  },
+  {
+    "id": 2,
+    "slug": "custom",
+    "name": "custom"
+  },
+  {
+    "id": 3,
+    "slug": "from-scratch",
+    "name": "from-scratch"
+  },
+  {
+    "id": 4,
+    "slug": "javascript",
+    "name": "javascript"
+  },
+  {
+    "id": 5,
+    "slug": "php",
+    "name": "php"
+  },
+  {
+    "id": 6,
+    "slug": "plugin-wordpress",
+    "name": "plugin-wordpress"
+  },
+  {
+    "id": 7,
+    "slug": "wordpress",
+    "name": "wordpress"
+  }
+]

@@ -20,6 +20,12 @@ function sh(cmd, args, opts = {}) {
   return execFileSync(cmd, args, { stdio: 'inherit', shell: process.platform === 'win32', ...opts });
 }
 
+// Content edited in the back office lives in content/ and must be committed to reach the other machines.
+try {
+  const pending = execFileSync('git', ['status', '--porcelain', '--', 'content'], { encoding: 'utf8' }).trim();
+  if (pending) console.warn('\n⚠ content/ contient des modifications non commitées : pensez à `git add content && git commit && git push`.');
+} catch {}
+
 // 1. Static build
 console.log(`\n▶ Build statique pour ${SITE_URL}\n`);
 fs.rmSync('dist', { recursive: true, force: true });

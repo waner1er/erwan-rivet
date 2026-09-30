@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as cheerio from 'cheerio';
 import type { CheerioAPI } from 'cheerio';
-import { getDb, run, get, UPLOADS_DIR } from '../src/lib/db.ts';
+import { getDb, run, get, saveToDisk, UPLOADS_DIR } from '../src/lib/db.ts';
 import {
   saveCategory,
   savePage,
@@ -398,4 +398,5 @@ importPages();
 importCategories();
 importTags();
 importPosts();
-console.log('Import done.');
+saveToDisk();
+console.log('Import done, content/ updated.');
