@@ -1,0 +1,36 @@
+# Erwan RIVET
+
+> Développeur web. Site professionnel présentant les prestations, réalisations et articles techniques.
+
+## Pages
+- [Blog](https://waner1er.github.io/erwan-rivet/blog/): Si vous avez déjà tapé quelque chose dans le champ de recherche d’un site WordPress et attendu trois secondes pour obtenir des résultats à côté de la […]
+- [Contact](https://waner1er.github.io/erwan-rivet/contact/): Vous avez un projet web, une idée à concrétiser ou besoin d’un accompagnement technique ?Que ce soit pour la création d’un site, l’évolution
+- [Développement web](https://waner1er.github.io/erwan-rivet/developpement-web/): De la conception back-end à l’interface utilisateur, je crée des applications et sites web performants, évolutifs et maintenables, pensés pour
+- [Gestion de projet & produit digital](https://waner1er.github.io/erwan-rivet/gestion-de-projet-produit-digital/): J’accompagne les entreprises dans la gestion de projet et de produit digital en apportant une vision structurée, orientée résultats et centrée sur
+- [Mon Parcours](https://waner1er.github.io/erwan-rivet/mon-parcours/): 2000 – 2018 · Animation, jeunesse et premiers pas dans le web Pendant près de vingt ans, j’ai évolué dans le secteur de l’animation et de la
+- [Politique de confidentialité](https://waner1er.github.io/erwan-rivet/politique-de-confidentialite/): Qui sommes-nous ? Texte suggéré : L’adresse de notre site est : . Commentaires Texte suggéré : Quand vous laissez un commentaire sur notre site,…
+- [Projets personnels](https://waner1er.github.io/erwan-rivet/projets-personnels/): Projets personnels
+- [Réalisations](https://waner1er.github.io/erwan-rivet/realisations/): Réalisations
+- [Travaux en entreprise](https://waner1er.github.io/erwan-rivet/travaux-en-entreprise/): Travaux en entreprise
+
+## Articles du blog
+- [J’ai remplacé la recherche WordPress par un index MySQL FULLTEXT (et je vous donne le plugin)](https://waner1er.github.io/erwan-rivet/jai-remplace-la-recherche-wordpress-par-un-index-mysql-fulltext-et-je-vous-donne-le-plugin/): Si vous avez déjà tapé quelque chose dans le champ de recherche d'un site WordPress et attendu trois secondes pour obtenir des résultats à
+- [Créer un Thème FSE WordPress en 2026](https://waner1er.github.io/erwan-rivet/creer-un-theme-fse-wordpress-en-2026/): Un guide complet pour maîtriser le Full Site Editing et devenir un vrai thémeur moderne Commencer la lecture Qu'est-ce que le Full
+
+## Réalisations
+- [Anne Thierrée](https://waner1er.github.io/erwan-rivet/realisation/anne-thierree/): Anne Thierrée — Artiste peintre et sculptrice contemporaine (annethierree.art) Anne Thierrée est une artiste contemporaine française dont le
+- [GalerieReading](https://waner1er.github.io/erwan-rivet/realisation/galeriereading/): GalerieReading est une solution dédiée au suivi, à l’enregistrement et à la gestion des données environnementales (température, hygrométrie,
+- [La grande rouge](https://waner1er.github.io/erwan-rivet/realisation/la-grande-rouge/): La Grande Rouge — Créatrice textile & ateliers de couture (Nantes) La Grande Rouge est une entreprise artisanale de création textile et
+
+## Travaux en entreprise
+- [Woodbrass.com](https://waner1er.github.io/erwan-rivet/travail-en-entrepris/woodbrass-com/): Développeur Fullstack chez Woodbrass.com Lors de mon expérience chez Woodbrass.com, j’ai travaillé en tant que développeur fullstack, intervenant
+- [Projet NQT](https://waner1er.github.io/erwan-rivet/travail-en-entrepris/projet-nqt/): Lors de mon expérience chez Dernier Cri, j’ai participé au développement du back-office de l’application mobile NQT, ainsi qu’à la mise en place
+- [Front-end So-Bio](https://waner1er.github.io/erwan-rivet/travail-en-entrepris/front-end-so-bio/): Au cours de mon expérience chez dernier cri J’ai participé au développement du frontend du site So.bio – Boutique de produits bio en ligne
+
+## Projets personnels
+- [CPT Craft](https://waner1er.github.io/erwan-rivet/projets-personnels/cpt-craft/): CPT‑Craft : Crée et gérez vos types de contenus personnalisés sur WordPress La gestion de contenus sur WordPress peut parfois être limitée si
+- [Bare PHP stack](https://waner1er.github.io/erwan-rivet/projets-personnels/bare-php-stack/): Framework PHP from scratch basé sur la Clean Architecture Bare PHP Stack est un framework PHP minimaliste développé from scratch, sans framework
+
+## Flux
+- [Sitemap](https://waner1er.github.io/erwan-rivet/sitemap.xml)
+- [Flux RSS](https://waner1er.github.io/erwan-rivet/feed.xml)

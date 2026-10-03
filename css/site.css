@@ -1,0 +1,55 @@
+/* Additions on top of the extracted WordPress styles (public/css/wp.css). */
+
+.skip-link:focus {
+  clip: auto !important;
+  clip-path: none;
+  height: auto;
+  width: auto;
+  left: 8px;
+  top: 8px;
+  padding: 8px 16px;
+  background: var(--wp--preset--color--base);
+  z-index: 100000;
+}
+
+html {
+  scroll-padding-top: 120px;
+}
+
+/* Classic blog single: the title is a real h1 styled like the original big paragraph. */
+h1.wp-block-wan-blocks-paragraph-main-title {
+  letter-spacing: -0.96px;
+  line-height: 1.125;
+}
+
+/* Contact form feedback */
+.fluentform .ff-message-success {
+  border: 1px solid currentColor;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.fluentform .ff-errors-in-stack {
+  color: #b00020;
+  margin-bottom: 1rem;
+}
+
+/* No-JS search page */
+.search-page__form {
+  display: flex;
+  gap: 0.75rem;
+  margin: var(--wp--preset--spacing--40) 0;
+}
+.search-page__form input {
+  flex: 1;
+  font: inherit;
+  padding: 0.75rem 1rem;
+  border: 1px solid currentColor;
+}
+.search-page__results {
+  list-style: none;
+  padding: 0;
+}
+.search-page__results li {
+  border-bottom: 1px solid var(--wp--preset--color--accent-6);
+  padding: 1rem 0;
+}
