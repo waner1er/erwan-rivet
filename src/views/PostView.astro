@@ -4,7 +4,8 @@ import Cover from '../components/Cover.astro';
 import Content from '../components/Content.astro';
 import Toc from '../components/Toc.astro';
 import PostNav from '../components/PostNav.astro';
-import { excerptOf, getAdjacentPosts, getPostTags, renderWithToc, tagUrl, type Post } from '../lib/content.ts';
+import { excerptOf, firstImage, getAdjacentPosts, getPostTags, POST_TYPES, postUrl, renderWithToc, tagUrl, type Post } from '../lib/content.ts';
+import { articleSchema, breadcrumbSchema } from '../lib/jsonld.ts';
 
 interface Props {
   post: Post;
@@ -15,66 +16,85 @@ const { html, toc } = renderWithToc(post.content, post.format);
 const tags = getPostTags(post.id);
 const { prev, next } = getAdjacentPosts(post);
 const description = post.meta_description ?? excerptOf(post);
+const ogImage = post.cover_image ?? firstImage(html);
+const jsonLd = [
+  articleSchema(post, { tags, description, image: ogImage, site: Astro.site, origin: Astro.url.origin }),
+  breadcrumbSchema(
+    [
+      { name: 'Accueil', path: '/' },
+      { name: POST_TYPES[post.type].plural, path: POST_TYPES[post.type].base ? `/${POST_TYPES[post.type].base}/` : '/blog/' },
+      { name: post.title, path: postUrl(post) },
+    ],
+    Astro.site,
+    Astro.url.origin,
+  ),
+];
 ---
 
-<BaseLayout title={post.title} description={description} image={post.cover_image} type="article">
+<BaseLayout title={post.title} description={description} image={ogImage} type="article" jsonLd={jsonLd}>
   {
     post.template === 'classic' ? (
       <main
         id="wp--skip-link--target"
-        class="wp-block-group is-style-section-1 has-global-padding is-layout-constrained wp-container-core-group-is-layout-6d423960 wp-block-group-is-layout-constrained is-style-section-1--3"
+        class="wp-block-group is-style-section-1 has-global-padding is-layout-constrained wan-bleed-40 wp-block-group-is-layout-constrained is-style-section-1--3"
         style="margin-top:0;margin-bottom:var(--wp--preset--spacing--50);padding-top:0;padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)"
       >
-        <h1 class="wp-block-wan-blocks-paragraph-main-title has-x-large-font-size">{post.title}</h1>
-        {post.cover_image && (
-          <figure class="wp-block-post-featured-image">
-            <img src={post.cover_image} class="wp-post-image" alt="" style="object-fit:cover;" decoding="async" fetchpriority="high" />
-          </figure>
-        )}
-        {post.show_toc === 1 && <Toc items={toc} />}
-        <div
-          class="wp-block-group alignwide has-base-background-color has-background has-global-padding is-layout-constrained wp-container-core-group-is-layout-0ef3ac8c wp-block-group-is-layout-constrained"
-          style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--40);padding:var(--wp--preset--spacing--20)"
-        >
-          <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
-            <Content html={html} />
+        <article>
+          <h1 class="wp-block-wan-blocks-paragraph-main-title has-x-large-font-size">{post.title}</h1>
+          <time datetime={post.published_at ?? post.created_at} class="screen-reader-text">{post.published_at ?? post.created_at}</time>
+          {post.cover_image && (
+            <figure class="wp-block-post-featured-image">
+              <img src={post.cover_image} class="wp-post-image" alt="" style="object-fit:cover;" decoding="async" fetchpriority="high" />
+            </figure>
+          )}
+          {post.show_toc === 1 && <Toc items={toc} />}
+          <div
+            class="wp-block-group alignwide has-base-background-color has-background has-global-padding is-layout-constrained wan-bleed-20 wan-stack-gap-30 wp-block-group-is-layout-constrained"
+            style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--40);padding:var(--wp--preset--spacing--20)"
+          >
+            <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+              <Content html={html} />
+            </div>
           </div>
-          <PostNav prev={prev} next={next} variant="classic" />
-        </div>
+        </article>
+        <PostNav prev={prev} next={next} variant="classic" />
       </main>
     ) : (
       <main
         id="wp--skip-link--target"
-        class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-3dbf1c72 wp-block-group-is-layout-constrained"
+        class="wp-block-group has-global-padding is-layout-constrained wan-bleed-0 wp-block-group-is-layout-constrained"
         style="margin-top:0;padding:0"
       >
-        <Cover title={post.title} image={post.cover_image} />
-        {post.show_toc === 1 && <Toc items={toc} />}
-        <div
-          class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-ca1e0ab3 wp-block-group-is-layout-constrained"
-          style="padding:0"
-        >
+        <article>
+          <Cover title={post.title} image={post.cover_image} />
+          <time datetime={post.published_at ?? post.created_at} class="screen-reader-text">{post.published_at ?? post.created_at}</time>
+          {post.show_toc === 1 && <Toc items={toc} />}
           <div
-            class="wp-block-group has-link-color has-accent-4-color has-text-color has-small-font-size is-content-justification-center is-layout-flex wp-container-core-group-is-layout-c2ce2058 wp-block-group-is-layout-flex"
-            style="margin-bottom:0"
+            class="wp-block-group alignfull has-global-padding is-layout-constrained wan-bleed-0 wp-block-group-is-layout-constrained"
+            style="padding:0"
           >
-            {tags.length > 0 && (
-              <div class="taxonomy-post_tag is-style-post-terms-1 is-style-post-terms-1--3 wp-block-post-terms">
-                {tags.map((tag, i) => (
-                  <>
-                    {i > 0 && <span class="wp-block-post-terms__separator" />}
-                    <a href={tagUrl(tag)} rel="tag">{tag.name}</a>
-                  </>
-                ))}
+            <div
+              class="wp-block-group has-link-color has-accent-4-color has-text-color has-small-font-size is-content-justification-center is-layout-flex wan-row-center-50 wp-block-group-is-layout-flex"
+              style="margin-bottom:0"
+            >
+              {tags.length > 0 && (
+                <div class="taxonomy-post_tag is-style-post-terms-1 is-style-post-terms-1--3 wp-block-post-terms">
+                  {tags.map((tag, i) => (
+                    <>
+                      {i > 0 && <span class="wp-block-post-terms__separator" />}
+                      <a href={tagUrl(tag)} rel="tag">{tag.name}</a>
+                    </>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div class="wp-block-group alignwide is-vertical is-layout-flex wan-stack-start wp-block-group-is-layout-flex">
+              <div class="entry-content alignfull wp-block-post-content is-layout-flow wp-block-post-content-is-layout-flow">
+                <Content html={html} />
               </div>
-            )}
-          </div>
-          <div class="wp-block-group alignwide is-vertical is-layout-flex wp-container-core-group-is-layout-831b2db5 wp-block-group-is-layout-flex">
-            <div class="entry-content alignfull wp-block-post-content is-layout-flow wp-block-post-content-is-layout-flow">
-              <Content html={html} />
             </div>
           </div>
-        </div>
+        </article>
         <div
           class="wp-block-group alignwide is-layout-flow wp-block-group-is-layout-flow"
           style="margin-top:var(--wp--preset--spacing--60);margin-bottom:var(--wp--preset--spacing--60)"

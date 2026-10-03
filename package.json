@@ -13,6 +13,7 @@
     "astro": "astro",
     "import:wp": "node scripts/import-wp.ts ../erwan-rivet.fr",
     "import:css": "node scripts/extract-css.mjs ../erwan-rivet.fr",
+    "theme:build": "node scripts/build-theme-css.mjs",
     "admin:create": "node scripts/create-admin.ts",
     "deploy": "node scripts/deploy.mjs",
     "build:static": "node scripts/deploy.mjs --no-push",
@@ -21,8 +22,23 @@
   },
   "dependencies": {
     "@astrojs/node": "^11.1.6",
+    "@astrojs/react": "^7.0.0",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@wordpress/block-editor": "^18.0.0",
+    "@wordpress/block-library": "^11.1.0",
+    "@wordpress/blocks": "^16.1.0",
+    "@wordpress/components": "^41.0.0",
+    "@wordpress/data": "^10.56.0",
+    "@wordpress/element": "^8.8.0",
+    "@wordpress/format-library": "^5.56.0",
+    "@wordpress/keyboard-shortcuts": "^5.56.0",
+    "@wordpress/notices": "^5.56.0",
     "astro": "^7.3.5",
-    "marked": "^18.0.14"
+    "marked": "^18.0.14",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sanitize-html": "^2.18.0"
   },
   "allowScripts": {
     "esbuild": true
@@ -30,6 +46,9 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/node": "^26.6.3",
+    "@types/sanitize-html": "^2.16.2",
+    "@types/wordpress__block-editor": "^15.0.6",
+    "@types/wordpress__block-library": "^2.6.3",
     "cheerio": "^1.2.0",
     "typescript": "^6.0.3"
   }

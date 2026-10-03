@@ -2,6 +2,7 @@
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import ContentEditor from '../../../components/admin/ContentEditor.astro';
 import ImageField from '../../../components/admin/ImageField.astro';
+import SeoPanel from '../../../components/admin/SeoPanel.astro';
 import {
   deletePost,
   getPost,
@@ -215,6 +216,15 @@ const urlPrefix = def.base ? `/${def.base}/` : '/';
           <textarea id="meta_description" name="meta_description" rows="4" maxlength="320">{post.meta_description ?? ''}</textarea>
         </div>
       </div>
+
+      <SeoPanel
+        titleFieldId="title"
+        slugFieldId="slug"
+        metaDescriptionFieldId="meta_description"
+        excerptFieldId="excerpt"
+        contentFieldName="content"
+        currentUrl={existing ? postUrl(existing) : undefined}
+      />
 
       {
         existing && (

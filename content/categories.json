@@ -22,5 +22,21 @@
     "description": "Full Site Editing WordPress — construire des thèmes block-first avec theme.json, templates et patterns. Passe de l’approche classique (PHP/CSS) à une philosophie déclarative basée sur les blocs. Idéal pour créer des sites personnalisables sans toucher au code.",
     "parent_id": 1,
     "position": 1
+  },
+  {
+    "id": 4,
+    "slug": "formation-wordpress-debutant",
+    "name": "Formation wordpress débutant",
+    "description": "<p dir=\"ltr\">Vous rêvez d'avoir votre propre site WordPress mais l'écran d'installation vous fait déjà un peu peur ? On a tous été là. Cette catégorie est faite pour vous : un parcours complet, sans jargon inutile, qui vous prend par la main depuis l'installation sur votre ordinateur jusqu'au jour où votre site est vraiment en ligne, visible par le monde entier.</p>\r\n<p dir=\"ltr\">Pas besoin de savoir coder, promis. On installe, on personnalise un thème sans toucher une ligne de code, on rédige, on vend en ligne si vous voulez, on choisit un hébergeur, et surtout, on apprend à s'occuper de son site une fois qu'il est publié (parce qu'un site qu'on abandonne dans un coin, ça finit toujours mal).</p>\r\n<p dir=\"ltr\">Suivez les articles dans l'ordre, ils s'enchaînent comme les épisodes d'une série. À la fin, vous aurez un vrai site, en ligne, et vous saurez vous en occuper tout seul.</p>\r\n<p dir=\"ltr\"><em>Et si un jour l'envie de mettre les mains dans le code vous prend, la catégorie <strong>Formation WordPress développeur</strong></em> <em>vous attend pour créer vos propres plugins et blocs sur mesure.</em></p>",
+    "parent_id": null,
+    "position": 0
+  },
+  {
+    "id": 5,
+    "slug": "seo-referencement-naturel",
+    "name": "SEO -référencement naturel",
+    "description": null,
+    "parent_id": null,
+    "position": 0
   }
 ]

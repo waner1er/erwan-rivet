@@ -1,0 +1,27 @@
+---
+import SeoPanel from './SeoPanel.tsx';
+
+interface Props {
+  titleFieldId: string;
+  slugFieldId: string;
+  metaDescriptionFieldId: string;
+  excerptFieldId?: string;
+  contentFieldName: string;
+  currentUrl?: string;
+}
+
+const { titleFieldId, slugFieldId, metaDescriptionFieldId, excerptFieldId, contentFieldName, currentUrl } = Astro.props;
+---
+
+<div class="card">
+  <span class="label">Référencement (SEO)</span>
+  <SeoPanel
+    client:only="react"
+    titleFieldId={titleFieldId}
+    slugFieldId={slugFieldId}
+    metaDescriptionFieldId={metaDescriptionFieldId}
+    excerptFieldId={excerptFieldId}
+    contentFieldName={contentFieldName}
+    currentUrl={currentUrl}
+  />
+</div>

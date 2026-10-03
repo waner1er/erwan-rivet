@@ -1,0 +1,16 @@
+---
+import ThemeEditor from './ThemeEditor.tsx';
+import type { Theme } from '../../lib/theme.ts';
+
+interface Props {
+  colors: Pick<Theme['colors'][number], 'slug' | 'name' | 'color'>[];
+  fontSizes: Theme['fontSizes'];
+  spacing: Theme['spacing'];
+  fontFamilies: Theme['fontFamilies'];
+  fontRoles: { slug: string; label: string; fontFamilySlug: string }[];
+}
+
+const { colors, fontSizes, spacing, fontFamilies, fontRoles } = Astro.props;
+---
+
+<ThemeEditor client:only="react" colors={colors} fontSizes={fontSizes} spacing={spacing} fontFamilies={fontFamilies} fontRoles={fontRoles} />

@@ -1,0 +1,13 @@
+---
+import MenuEditor from './MenuEditor.tsx';
+import type { MenuItem } from '../../lib/settings.ts';
+
+interface Props {
+  name: string;
+  items: MenuItem[];
+}
+
+const { name, items } = Astro.props;
+---
+
+<MenuEditor client:only="react" fieldName={name} initialItems={items} />

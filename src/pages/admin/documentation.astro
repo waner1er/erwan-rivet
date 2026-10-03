@@ -1,0 +1,16 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { marked } from 'marked';
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { sanitizeContentHtml } from '../../lib/sanitize.ts';
+
+const markdown = fs.readFileSync(path.resolve('DOCUMENTATION.md'), 'utf8');
+const html = sanitizeContentHtml(marked.parse(markdown, { async: false }) as string);
+---
+
+<AdminLayout title="Documentation">
+  <div class="docs-content">
+    <Fragment set:html={html} />
+  </div>
+</AdminLayout>

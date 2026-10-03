@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import { all, get, run, transaction } from './db.ts';
+import { sanitizeContentHtml } from './sanitize.ts';
 
 export type Status = 'published' | 'draft';
 export type Format = 'html' | 'markdown';
@@ -124,6 +125,21 @@ export function excerptOf(post: Post, words = 25): string {
   return truncateWords(stripHtml(renderBody(post.content, post.format)), words);
 }
 
+export function wordCount(html: string): number {
+  const text = stripHtml(html).trim();
+  return text ? text.split(/\s+/).length : 0;
+}
+
+/** Rough reading time at 200 words/minute, rounded up, minimum 1. */
+export function readingTimeMinutes(html: string): number {
+  return Math.max(1, Math.ceil(wordCount(html) / 200));
+}
+
+/** First <img src> found in rendered HTML, used as an image fallback when no cover is set. */
+export function firstImage(html: string): string | null {
+  return /<img[^>]+src=["']([^"']+)["']/i.exec(html)?.[1] ?? null;
+}
+
 export function formatDate(iso: string | null): string {
   if (!iso) return '';
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -138,7 +154,8 @@ export interface TocItem {
 }
 
 export function renderBody(content: string, format: Format): string {
-  return format === 'markdown' ? (marked.parse(content, { async: false }) as string) : content;
+  const html = format === 'markdown' ? (marked.parse(content, { async: false }) as string) : content;
+  return sanitizeContentHtml(html);
 }
 
 /** Renders content, adds ids on h2/h3 that lack one and builds a table of contents. */

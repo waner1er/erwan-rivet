@@ -62,5 +62,9 @@
   {
     "post_id": 10,
     "tag_id": 7
+  },
+  {
+    "post_id": 12,
+    "tag_id": 7
   }
 ]

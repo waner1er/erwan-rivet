@@ -1,0 +1,12 @@
+---
+import GutenbergEditor from './GutenbergEditor.tsx';
+
+interface Props {
+  name: string;
+  value: string;
+}
+
+const { name, value } = Astro.props;
+---
+
+<GutenbergEditor client:only="react" fieldName={name} initialValue={value} />

@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
+import react from '@astrojs/react';
 
 /**
  * STATIC_EXPORT=1 prerenders every public route to plain HTML (dist/client) for GitHub Pages.
@@ -23,7 +24,7 @@ export default defineConfig({
   site: process.env.SITE_URL ?? 'https://erwan-rivet.fr',
   output: 'server',
   adapter: node({ mode: 'standalone' }),
-  integrations: [staticExport],
+  integrations: [staticExport, react()],
   trailingSlash: 'ignore',
   security: { checkOrigin: true },
   vite: {

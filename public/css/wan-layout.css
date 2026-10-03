@@ -1,0 +1,33 @@
+/* Theme-agnostic layout utilities, replacing WordPress' auto-generated
+   `wp-container-core-*-is-layout-<hash>` classes (each one a one-off
+   snapshot of a specific flex/grid/spacing combination, meaningless outside
+   the WordPress instance that generated it). Same rules, stable semantic
+   names — a future theme can redefine these without touching templates. */
+
+.wan-tight > * { margin-block-start: 0; margin-block-end: 0; }
+
+.wan-stack-center { gap: var(--wp--preset--spacing--40); flex-direction: column; align-items: center; justify-content: center; }
+.wan-stack-start { flex-direction: column; align-items: flex-start; }
+.wan-stack-start-center { flex-direction: column; align-items: flex-start; justify-content: center; }
+.wan-stack-items-center { flex-direction: column; align-items: center; }
+
+.wan-stack-gap-30 > * { margin-block-start: 0; margin-block-end: 0; }
+.wan-stack-gap-30 > * + * { margin-block-start: var(--wp--preset--spacing--30); margin-block-end: 0; }
+.wan-stack-gap-40 > * { margin-block-start: 0; margin-block-end: 0; }
+.wan-stack-gap-40 > * + * { margin-block-start: var(--wp--preset--spacing--40); margin-block-end: 0; }
+
+.wan-bleed-0 > .alignfull { margin-right: calc(0px * -1); margin-left: calc(0px * -1); }
+.wan-bleed-20 > .alignfull { margin-right: calc(var(--wp--preset--spacing--20) * -1); margin-left: calc(var(--wp--preset--spacing--20) * -1); }
+.wan-bleed-30 > .alignfull { margin-right: calc(var(--wp--preset--spacing--30) * -1); margin-left: calc(var(--wp--preset--spacing--30) * -1); }
+.wan-bleed-40 > .alignfull { margin-right: calc(var(--wp--preset--spacing--40) * -1); margin-left: calc(var(--wp--preset--spacing--40) * -1); }
+
+.wan-justify-between { justify-content: space-between; }
+.wan-row-between { flex-wrap: nowrap; justify-content: space-between; }
+.wan-row-between-40 { flex-wrap: nowrap; gap: var(--wp--preset--spacing--40); justify-content: space-between; }
+.wan-row-center-50 { gap: var(--wp--preset--spacing--50); justify-content: center; }
+.wan-row-end-40 { gap: var(--wp--preset--spacing--40); justify-content: flex-end; }
+.wan-row-start-40 { gap: var(--wp--preset--spacing--40); justify-content: flex-start; }
+.wan-row-tight { flex-wrap: nowrap; gap: 12px 12px; }
+
+.wan-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.wan-grid-auto { grid-template-columns: repeat(auto-fill, minmax(max(min(2px, 100%), (100% - (var(--wp--preset--spacing--30) * (2 - 1))) / 2), 1fr)); container-type: inline-size; gap: var(--wp--preset--spacing--30); }

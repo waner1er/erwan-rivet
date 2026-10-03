@@ -1,17 +1,11 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import ImageField from '../../components/admin/ImageField.astro';
+import MenuEditor from '../../components/admin/MenuEditor.astro';
 import { getSettings, saveSettings, type MenuItem, type SocialLink } from '../../lib/settings.ts';
 import { text } from '../../lib/forms.ts';
 
 const SERVICES: SocialLink['service'][] = ['linkedin', 'github', 'mail', 'wordpress'];
-
-const parseMenu = (raw: string): MenuItem[] =>
-  raw
-    .split('\n')
-    .map((line) => line.split('|').map((s) => s.trim()))
-    .filter(([label, url]) => label && url)
-    .map(([label, url]) => ({ label, url }));
 
 const parseSocials = (raw: string): SocialLink[] =>
   raw
@@ -20,11 +14,11 @@ const parseSocials = (raw: string): SocialLink[] =>
     .filter(([service, url]) => SERVICES.includes(service as SocialLink['service']) && url)
     .map(([service, url, label]) => ({ service: service as SocialLink['service'], url, label: label || service }));
 
-const formatMenu = (items: MenuItem[]) => items.map((i) => `${i.label} | ${i.url}`).join('\n');
 const formatSocials = (items: SocialLink[]) => items.map((i) => `${i.service} | ${i.url} | ${i.label}`).join('\n');
 
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
+  const menuJson: MenuItem[] = JSON.parse(text(form, 'menu') || '[]');
   saveSettings({
     siteTitle: text(form, 'siteTitle') || 'Erwan RIVET',
     tagline: text(form, 'tagline'),
@@ -32,7 +26,7 @@ if (Astro.request.method === 'POST') {
     contactEmail: text(form, 'contactEmail'),
     contactFormEndpoint: text(form, 'contactFormEndpoint'),
     contactFormAccessKey: text(form, 'contactFormAccessKey'),
-    menu: parseMenu(text(form, 'menu')),
+    menu: menuJson.filter((item) => item.label && item.url),
     headerSocials: parseSocials(text(form, 'headerSocials')),
     footerSocials: parseSocials(text(form, 'footerSocials')),
   });
@@ -63,9 +57,9 @@ const s = getSettings();
       </div>
       <div class="card">
         <div class="field">
-          <label for="menu">Menu principal</label>
-          <textarea id="menu" name="menu" rows="9">{formatMenu(s.menu)}</textarea>
-          <small>Une entrée par ligne : <code>Libellé | /adresse/</code></small>
+          <span class="label">Menu principal</span>
+          <MenuEditor name="menu" items={s.menu} />
+          <small>Ajoutez, réorganisez ou supprimez des liens comme des blocs.</small>
         </div>
         <div class="field">
           <label for="headerSocials">Réseaux (en-tête)</label>

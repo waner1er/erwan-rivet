@@ -4,7 +4,8 @@ import Cover from '../components/Cover.astro';
 import Content from '../components/Content.astro';
 import CategoryPosts from '../components/CategoryPosts.astro';
 import PostGrid from '../components/PostGrid.astro';
-import { listCategories, listPosts, renderBody, stripHtml, truncateWords, type Page } from '../lib/content.ts';
+import { firstImage, listCategories, listPosts, renderBody, stripHtml, truncateWords, type Page } from '../lib/content.ts';
+import { pageSchema } from '../lib/jsonld.ts';
 
 interface Props {
   page: Page;
@@ -14,9 +15,11 @@ const { page } = Astro.props;
 const html = renderBody(page.content, page.format);
 const description = page.meta_description ?? truncateWords(stripHtml(html), 25);
 const isHome = page.slug === '';
+const ogImage = page.cover_image ?? firstImage(html);
+const jsonLd = pageSchema(page, { description, image: ogImage, site: Astro.site, origin: Astro.url.origin });
 ---
 
-<BaseLayout title={isHome ? undefined : page.title} description={description} image={page.cover_image}>
+<BaseLayout title={isHome ? undefined : page.title} description={description} image={ogImage} jsonLd={jsonLd}>
   {
     page.template === 'default' && (
       <main id="wp--skip-link--target" class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
@@ -44,7 +47,7 @@ const isHome = page.slug === '';
       >
         <Cover title={page.title} image={page.cover_image} />
         <div
-          class="wp-block-group alignwide has-base-background-color has-background has-global-padding is-layout-constrained wp-container-core-group-is-layout-47ad3899 wp-block-group-is-layout-constrained"
+          class="wp-block-group alignwide has-base-background-color has-background has-global-padding is-layout-constrained wan-bleed-30 wp-block-group-is-layout-constrained"
           style="margin-bottom:var(--wp--preset--spacing--30);padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--30)"
         >
           <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
@@ -59,7 +62,7 @@ const isHome = page.slug === '';
     page.template === 'blog' && (
       <main
         id="wp--skip-link--target"
-        class="wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-bab00dd7 wp-block-group-is-layout-constrained"
+        class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
         style="margin-top:var(--wp--preset--spacing--60)"
       >
         <h1

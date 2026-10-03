@@ -1,0 +1,58 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import ThemeEditor from '../../components/admin/ThemeEditor.astro';
+import { buildThemeCss, readTheme, writeTheme } from '../../lib/theme.ts';
+import { text } from '../../lib/forms.ts';
+
+const EDITABLE_COLOR_SLUGS = ['base', 'contrast', 'accent-1', 'accent-2', 'accent-3', 'accent-4', 'accent-5'];
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const theme = readTheme();
+
+  const editedColors: { slug: string; color: string }[] = JSON.parse(text(form, 'colors') || '[]');
+  for (const { slug, color } of editedColors) {
+    const entry = theme.colors.find((c) => c.slug === slug);
+    if (entry && EDITABLE_COLOR_SLUGS.includes(slug)) entry.color = color;
+  }
+
+  const editedFontSizes: { slug: string; size: string }[] = JSON.parse(text(form, 'fontSizes') || '[]');
+  for (const { slug, size } of editedFontSizes) {
+    const entry = theme.fontSizes.find((f) => f.slug === slug);
+    if (entry) entry.size = size;
+  }
+
+  const editedSpacing: { slug: string; size: string }[] = JSON.parse(text(form, 'spacing') || '[]');
+  for (const { slug, size } of editedSpacing) {
+    const entry = theme.spacing.find((s) => s.slug === slug);
+    if (entry) entry.size = size;
+  }
+
+  const editedRoles: { slug: string; fontFamilySlug: string }[] = JSON.parse(text(form, 'fontRoles') || '[]');
+  const validFontSlug = (slug: string) => theme.fontFamilies.some((f) => f.slug === slug);
+  for (const { slug, fontFamilySlug } of editedRoles) {
+    if (!validFontSlug(fontFamilySlug)) continue;
+    if (slug === 'body') theme.body.fontFamilySlug = fontFamilySlug;
+    if (slug === 'headings') theme.headings.fontFamilySlug = fontFamilySlug;
+  }
+
+  writeTheme(theme);
+  buildThemeCss(theme);
+  return Astro.redirect('/admin/theme?saved', 303);
+}
+
+const theme = readTheme();
+const saved = Astro.url.searchParams.has('saved');
+const editableColors = theme.colors.filter((c) => EDITABLE_COLOR_SLUGS.includes(c.slug));
+const fontRoles = [
+  { slug: 'body', label: 'Texte courant', fontFamilySlug: theme.body.fontFamilySlug },
+  { slug: 'headings', label: 'Titres', fontFamilySlug: theme.headings.fontFamilySlug },
+];
+---
+
+<AdminLayout title="Thème">
+  {saved && <div class="alert alert--ok">Thème enregistré.</div>}
+  <p class="muted"><small>Les couleurs sont celles utilisées par le thème actuel. D’autres couleurs proposées dans l’éditeur de contenu restent disponibles mais ne sont pas réglables ici.</small></p>
+
+  <ThemeEditor colors={editableColors} fontSizes={theme.fontSizes} spacing={theme.spacing} fontFamilies={theme.fontFamilies} fontRoles={fontRoles} />
+</AdminLayout>

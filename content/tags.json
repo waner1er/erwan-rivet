@@ -33,5 +33,40 @@
     "id": 7,
     "slug": "wordpress",
     "name": "wordpress"
+  },
+  {
+    "id": 8,
+    "slug": "api-rest",
+    "name": "api rest"
+  },
+  {
+    "id": 9,
+    "slug": "filament",
+    "name": "filament"
+  },
+  {
+    "id": 10,
+    "slug": "laravel",
+    "name": "laravel"
+  },
+  {
+    "id": 11,
+    "slug": "livewire",
+    "name": "livewire"
+  },
+  {
+    "id": 12,
+    "slug": "php-2",
+    "name": "php$"
+  },
+  {
+    "id": 13,
+    "slug": "sql",
+    "name": "sql"
+  },
+  {
+    "id": 14,
+    "slug": "symfony",
+    "name": "symfony"
   }
 ]

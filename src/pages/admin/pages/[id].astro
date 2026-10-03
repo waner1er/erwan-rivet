@@ -2,6 +2,7 @@
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import ContentEditor from '../../../components/admin/ContentEditor.astro';
 import ImageField from '../../../components/admin/ImageField.astro';
+import SeoPanel from '../../../components/admin/SeoPanel.astro';
 import {
   deletePage,
   getPage,
@@ -162,6 +163,14 @@ const isHome = existing?.slug === '';
           <small>Laissez vide pour générer depuis le contenu.</small>
         </div>
       </div>
+
+      <SeoPanel
+        titleFieldId="title"
+        slugFieldId="slug"
+        metaDescriptionFieldId="meta_description"
+        contentFieldName="content"
+        currentUrl={existing ? pageUrl(existing) : undefined}
+      />
 
       {
         existing && !isHome && (

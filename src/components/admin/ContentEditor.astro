@@ -1,5 +1,6 @@
 ---
 import type { Format } from '../../lib/content.ts';
+import GutenbergEditor from './GutenbergEditor.astro';
 
 interface Props {
   name: string;
@@ -12,7 +13,8 @@ interface Props {
 const { name, value, format, formatField = 'format' } = Astro.props;
 ---
 
-<div class="content-editor" data-content-editor data-mode="split" data-format-field={formatField} data-initial-format={format}>
+{format === 'markdown' ? (
+  <div class="content-editor" data-content-editor data-mode="split" data-format-field={formatField} data-initial-format={format}>
   <div class="content-editor__toolbar" role="toolbar" aria-label="Mise en forme">
     <button type="button" data-snippet="h2" title="Titre de section">H2</button>
     <button type="button" data-snippet="h3" title="Sous-titre">H3</button>
@@ -36,7 +38,10 @@ const { name, value, format, formatField = 'format' } = Astro.props;
     <textarea name={name} spellcheck="false" aria-label="Contenu" data-source>{value}</textarea>
     <iframe title="Aperçu du contenu" sandbox="allow-same-origin" data-preview></iframe>
   </div>
-</div>
+  </div>
+) : (
+  <GutenbergEditor name={name} value={value} />
+)}
 
 <script>
   import { marked } from 'marked';

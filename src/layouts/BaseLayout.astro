@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getSettings } from '../lib/settings.ts';
 import { absoluteUrl } from '../lib/url.ts';
+import { jsonLdGraph, personSchema, websiteSchema } from '../lib/jsonld.ts';
 
 interface Props {
   title?: string;
@@ -11,13 +12,22 @@ interface Props {
   type?: 'website' | 'article';
   bodyClass?: string;
   noindex?: boolean;
+  /** schema.org node(s) specific to this page, wrapped into a `@graph` alongside the site-wide WebSite/Person nodes. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description, image, type = 'website', bodyClass = '', noindex = false } = Astro.props;
+const { title, description, image, type = 'website', bodyClass = '', noindex = false, jsonLd } = Astro.props;
 const settings = getSettings();
 const fullTitle = title ? title : `${settings.siteTitle} - ${settings.tagline}`;
 const canonical = absoluteUrl(Astro.url.pathname, Astro.site, Astro.url.origin);
 const ogImage = image ? absoluteUrl(image, Astro.site, Astro.url.origin) : undefined;
+
+const pageNodes = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const graph = jsonLdGraph(
+  websiteSchema(Astro.site, Astro.url.origin, settings),
+  personSchema(Astro.site, Astro.url.origin, settings),
+  ...pageNodes,
+);
 ---
 
 <!doctype html>
@@ -37,10 +47,16 @@ const ogImage = image ? absoluteUrl(image, Astro.site, Astro.url.origin) : undef
     {description && <meta property="og:description" content={description} />}
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    {description && <meta name="twitter:description" content={description} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />
     <link rel="icon" href={settings.logo || '/favicon.svg'} />
     <link rel="alternate" type="application/rss+xml" title={`${settings.siteTitle} » Flux`} href="/feed.xml" />
     <link rel="preload" href="/fonts/FiraCode-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/css/theme-vars.css" />
     <link rel="stylesheet" href="/css/wp.css" />
+    <link rel="stylesheet" href="/css/wan-layout.css" />
     <link rel="stylesheet" href="/css/site.css" />
   </head>
   <body class:list={['wp-embed-responsive', bodyClass]}>
