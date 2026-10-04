@@ -6,5 +6,9 @@
   {
     "key": "contactFormEndpoint",
     "value": "\"https://api.web3forms.com/submit\""
+  },
+  {
+    "key": "tagline",
+    "value": "\"Développeur web full-stack PHP & WordPress\""
   }
 ]
