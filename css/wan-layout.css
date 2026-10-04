@@ -1,0 +1,65 @@
+/* Theme-agnostic layout utilities, replacing WordPress' auto-generated
+   `wp-container-core-*-is-layout-<hash>` classes (each one a one-off
+   snapshot of a specific flex/grid/spacing combination, meaningless outside
+   the WordPress instance that generated it). Same rules, stable semantic
+   names — a future theme can redefine these without touching templates. */
+
+.wan-tight > * { margin-block-start: 0; margin-block-end: 0; }
+
+.wan-stack-center { gap: var(--wp--preset--spacing--40); flex-direction: column; align-items: center; justify-content: center; }
+.wan-stack-start { flex-direction: column; align-items: flex-start; }
+.wan-stack-start-center { flex-direction: column; align-items: flex-start; justify-content: center; }
+.wan-stack-items-center { flex-direction: column; align-items: center; }
+
+.wan-stack-gap-30 > * { margin-block-start: 0; margin-block-end: 0; }
+.wan-stack-gap-30 > * + * { margin-block-start: var(--wp--preset--spacing--30); margin-block-end: 0; }
+.wan-stack-gap-40 > * { margin-block-start: 0; margin-block-end: 0; }
+.wan-stack-gap-40 > * + * { margin-block-start: var(--wp--preset--spacing--40); margin-block-end: 0; }
+
+.wan-bleed-0 > .alignfull { margin-right: calc(0px * -1); margin-left: calc(0px * -1); }
+.wan-bleed-20 > .alignfull { margin-right: calc(var(--wp--preset--spacing--20) * -1); margin-left: calc(var(--wp--preset--spacing--20) * -1); }
+.wan-bleed-30 > .alignfull { margin-right: calc(var(--wp--preset--spacing--30) * -1); margin-left: calc(var(--wp--preset--spacing--30) * -1); }
+.wan-bleed-40 > .alignfull { margin-right: calc(var(--wp--preset--spacing--40) * -1); margin-left: calc(var(--wp--preset--spacing--40) * -1); }
+
+.wan-justify-between { justify-content: space-between; }
+.wan-row-between { flex-wrap: nowrap; justify-content: space-between; }
+.wan-row-between-40 { flex-wrap: nowrap; gap: var(--wp--preset--spacing--40); justify-content: space-between; }
+.wan-row-center-50 { gap: var(--wp--preset--spacing--50); justify-content: center; }
+.wan-row-end-40 { gap: var(--wp--preset--spacing--40); justify-content: flex-end; }
+.wan-row-start-40 { gap: var(--wp--preset--spacing--40); justify-content: flex-start; }
+.wan-row-tight { flex-wrap: nowrap; gap: 12px 12px; }
+
+.wan-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.wan-grid-auto { grid-template-columns: repeat(auto-fill, minmax(max(min(2px, 100%), (100% - (var(--wp--preset--spacing--30) * (2 - 1))) / 2), 1fr)); container-type: inline-size; gap: var(--wp--preset--spacing--30); }
+
+/* Per-instance block values. The block renderer (src/lib/blocks/supports.ts) puts each value
+   in a custom property on the element (style="--wan-gap:…") and adds the matching class
+   below — the stable equivalent of WordPress' generated `wp-container-*-<hash>` rules. */
+
+/* Flex/grid containers */
+.wan-gap { gap: var(--wan-gap); }
+.wan-justify { justify-content: var(--wan-justify); }
+.wan-align { align-items: var(--wan-align); }
+.wan-vertical { flex-direction: column; }
+.wan-nowrap { flex-wrap: nowrap; }
+.wan-grid-cols { grid-template-columns: repeat(var(--wan-cols), minmax(0, 1fr)); }
+.wan-grid-min { grid-template-columns: repeat(auto-fill, minmax(min(var(--wan-min), 100%), 1fr)); container-type: inline-size; }
+.wan-grid-fit { grid-template-columns: repeat(auto-fill, minmax(max(min(var(--wan-min), 100%), (100% - (var(--wan-gap, 1.2rem) * (var(--wan-cols) - 1))) / var(--wan-cols)), 1fr)); container-type: inline-size; }
+
+/* Flow/constrained containers */
+.wan-flow-gap > * { margin-block-start: 0; margin-block-end: 0; }
+.wan-flow-gap > * + * { margin-block-start: var(--wan-gap); }
+.wan-content-size > :where(:not(.alignleft):not(.alignright):not(.alignfull)) { max-width: var(--wan-content-size); }
+.wan-wide-size > .alignwide { max-width: var(--wan-wide-size); }
+.wan-constrained-left > :where(:not(.alignleft):not(.alignright):not(.alignfull)) { margin-left: 0 !important; }
+.wan-constrained-right > :where(:not(.alignleft):not(.alignright):not(.alignfull)) { margin-right: 0 !important; }
+
+/* Children of flex/grid containers */
+.wan-grow { flex-grow: 1; }
+.wan-basis { flex-basis: var(--wan-basis); box-sizing: border-box; }
+.wan-col-span { grid-column: span var(--wan-col-span); }
+.wan-row-span { grid-row: span var(--wan-row-span); }
+
+/* Link color set on a block (Couleur → Lien) */
+.wan-link-color a:where(:not(.wp-element-button)) { color: var(--wan-link-color); }
+.wan-link-hover a:where(:not(.wp-element-button)):hover { color: var(--wan-link-hover); }
