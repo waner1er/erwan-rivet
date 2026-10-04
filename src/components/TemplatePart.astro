@@ -1,0 +1,27 @@
+---
+// A site-wide area (header, footer) written in blocks — see src/lib/template-parts.ts.
+import type { SiteSettings } from '../lib/settings.ts';
+import { renderBlocks } from '../lib/blocks/render.ts';
+import { getTemplatePart, TEMPLATE_PARTS, type TemplatePartSlug } from '../lib/template-parts.ts';
+
+interface Props {
+  slug: TemplatePartSlug;
+  settings: SiteSettings;
+}
+
+const { slug, settings } = Astro.props;
+const Tag = TEMPLATE_PARTS[slug].tag;
+const html = renderBlocks(getTemplatePart(slug).content, {
+  settings,
+  currentPath: Astro.url.pathname,
+  // Shared by every part of the page, so two search blocks never get the same element ids.
+  uid: () => (Astro.locals.blockUid = (Astro.locals.blockUid ?? 0) + 1),
+});
+---
+
+<Tag class="wp-block-template-part" set:html={html} />
+
+<script>
+  import '../scripts/navigation.ts';
+  import '../scripts/live-search.ts';
+</script>

@@ -53,3 +53,9 @@ h1.wp-block-wan-blocks-paragraph-main-title {
   border-bottom: 1px solid var(--wp--preset--color--accent-6);
   padding: 1rem 0;
 }
+
+/* A separator has no intrinsic width: in a Stack (vertical flex) not set to stretch, it would
+   collapse to 0px. Span the stack instead, as in the editor. */
+.is-layout-flex.is-vertical > .wp-block-separator {
+  align-self: stretch;
+}

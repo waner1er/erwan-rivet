@@ -4,6 +4,8 @@ import { SlotFillProvider, Popover } from '@wordpress/components';
 import { registerCoreBlocks } from '@wordpress/block-library';
 import { parse, rawHandler, serialize, type Block } from '@wordpress/blocks';
 import { uploadFiles } from '../../scripts/media-picker.ts';
+import { MENU_ITEM_BLOCKS, registerSiteBlocks, SITE_BLOCK_NAMES } from './blocks/site-blocks.tsx';
+import { fetchLinkSuggestions } from './link-suggestions.ts';
 
 import '@wordpress/components/build-style/style.css';
 import '@wordpress/block-editor/build-style/style.css';
@@ -17,7 +19,24 @@ let coreBlocksRegistered = false;
 function ensureCoreBlocks() {
   if (coreBlocksRegistered) return;
   registerCoreBlocks();
+  registerSiteBlocks();
   coreBlocksRegistered = true;
+}
+
+// Core blocks the public site can display: static blocks (their saved HTML is the output) that
+// survive src/lib/sanitize.ts, children included (list item, button, column). Left out of the
+// inserter, though existing ones still open: WordPress' dynamic blocks (rendered by PHP there),
+// media the sanitizer strips (iframe, video, audio, svg, MathML), and blocks relying on
+// WordPress itself (accordion and tabs scripts, classic editor, more/page break markers).
+const CONTENT_BLOCKS = [
+  'core/paragraph', 'core/heading', 'core/list', 'core/list-item', 'core/quote', 'core/pullquote',
+  'core/code', 'core/preformatted', 'core/verse', 'core/details', 'core/table', 'core/html', 'core/shortcode',
+  'core/image', 'core/gallery', 'core/cover', 'core/media-text', 'core/file',
+  'core/buttons', 'core/button', 'core/columns', 'core/column', 'core/group', 'core/separator', 'core/spacer',
+];
+
+function allowedBlockTypes(mode: 'content' | 'site'): string[] {
+  return mode === 'site' ? [...CONTENT_BLOCKS, ...SITE_BLOCK_NAMES, ...MENU_ITEM_BLOCKS] : CONTENT_BLOCKS;
 }
 
 // `content` may hold either the native Gutenberg format (HTML with
@@ -68,7 +87,10 @@ function useThemeEditorStyles() {
 interface ThemeJson {
   colors: { slug: string; name: string; color: string }[];
   gradients: { slug: string; name: string; gradient: string }[];
+  fontFamilies: { slug: string; name: string; fontFamily: string }[];
   fontSizes: { slug: string; name?: string; size: string }[];
+  spacing: { slug: string; name?: string; size: string }[];
+  layout: { contentSize: string; wideSize: string };
 }
 
 // So the block inserter/inspector offer the theme's actual palette and type
@@ -93,9 +115,11 @@ interface Props {
   /** Name of the hidden <textarea> kept in sync, so the surrounding <form> submits unchanged. */
   fieldName: string;
   initialValue: string;
+  /** "site" (template parts) also offers the site blocks: title, logo, menu, social links, search. */
+  mode?: 'content' | 'site';
 }
 
-export default function GutenbergEditor({ fieldName, initialValue }: Props) {
+export default function GutenbergEditor({ fieldName, initialValue, mode = 'content' }: Props) {
   ensureCoreBlocks();
   const [blocks, setBlocks] = useState<Block[]>(() => blocksFromContent(initialValue));
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -103,6 +127,8 @@ export default function GutenbergEditor({ fieldName, initialValue }: Props) {
   const settings = useMemo(
     () => ({
       mediaUpload,
+      __experimentalFetchLinkSuggestions: fetchLinkSuggestions,
+      allowedBlockTypes: allowedBlockTypes(mode),
       ...(theme && {
         // The modern block-editor reads per-block color/typography panels from
         // `__experimentalFeatures.color.palette.theme` (theme.json's own shape),
@@ -110,21 +136,35 @@ export default function GutenbergEditor({ fieldName, initialValue }: Props) {
         // consumed by a different, narrower set of components. Without this,
         // blocks render with no Color panel at all. See
         // store/get-block-settings.js's PATHS_WITH_OVERRIDE handling.
+        // Layout, gap and link color are applied at render time by src/lib/blocks/supports.ts.
         __experimentalFeatures: {
+          useRootPaddingAwareAlignments: true,
+          layout: { contentSize: theme.layout.contentSize, wideSize: theme.layout.wideSize },
           color: {
             palette: { theme: theme.colors.map(({ slug, name, color }) => ({ slug, name, color })) },
             gradients: { theme: theme.gradients.map(({ slug, name, gradient }) => ({ slug, name, gradient })) },
             custom: true,
             customGradient: true,
+            link: true,
           },
           typography: {
             fontSizes: { theme: theme.fontSizes.map(({ slug, name, size }) => ({ slug, name: name ?? slug, size })) },
+            fontFamilies: { theme: theme.fontFamilies.map(({ slug, name, fontFamily }) => ({ slug, name, fontFamily })) },
             customFontSize: true,
+            lineHeight: true,
           },
+          spacing: {
+            padding: true,
+            margin: true,
+            blockGap: true,
+            units: ['px', 'em', 'rem', 'vh', 'vw', '%'],
+            spacingSizes: { theme: theme.spacing.map(({ slug, name, size }) => ({ slug, name: name ?? slug, size })) },
+          },
+          dimensions: { minHeight: true },
         },
       }),
     }),
-    [theme],
+    [theme, mode],
   );
   const themeStyles = useThemeEditorStyles();
 

@@ -1,6 +1,8 @@
 import { marked } from 'marked';
 import { all, get, run, transaction } from './db.ts';
 import { sanitizeContentHtml } from './sanitize.ts';
+import { renderBlocks } from './blocks/render.ts';
+import { getSettings } from './settings.ts';
 
 export type Status = 'published' | 'draft';
 export type Format = 'html' | 'markdown';
@@ -154,8 +156,13 @@ export interface TocItem {
 }
 
 export function renderBody(content: string, format: Format): string {
-  const html = format === 'markdown' ? (marked.parse(content, { async: false }) as string) : content;
-  return sanitizeContentHtml(html);
+  if (format === 'markdown') return sanitizeContentHtml(marked.parse(content, { async: false }) as string);
+  // Gutenberg markup goes through the block renderer for its render-time supports (layout, gap...).
+  if (content.includes('<!-- wp:')) {
+    let n = 0;
+    return renderBlocks(content, { settings: getSettings(), currentPath: '', uid: () => ++n });
+  }
+  return sanitizeContentHtml(content);
 }
 
 /** Renders content, adds ids on h2/h3 that lack one and builds a table of contents. */

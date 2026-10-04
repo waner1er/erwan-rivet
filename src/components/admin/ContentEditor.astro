@@ -8,9 +8,11 @@ interface Props {
   format: Format;
   /** Name of the <select> holding the format, in the same form. */
   formatField?: string;
+  /** "site" offers the site blocks (template parts). */
+  mode?: 'content' | 'site';
 }
 
-const { name, value, format, formatField = 'format' } = Astro.props;
+const { name, value, format, formatField = 'format', mode = 'content' } = Astro.props;
 ---
 
 {format === 'markdown' ? (
@@ -40,7 +42,7 @@ const { name, value, format, formatField = 'format' } = Astro.props;
   </div>
   </div>
 ) : (
-  <GutenbergEditor name={name} value={value} />
+  <GutenbergEditor name={name} value={value} mode={mode} />
 )}
 
 <script>

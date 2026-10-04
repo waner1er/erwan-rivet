@@ -4,9 +4,10 @@ import GutenbergEditor from './GutenbergEditor.tsx';
 interface Props {
   name: string;
   value: string;
+  mode?: 'content' | 'site';
 }
 
-const { name, value } = Astro.props;
+const { name, value, mode = 'content' } = Astro.props;
 ---
 
-<GutenbergEditor client:only="react" fieldName={name} initialValue={value} />
+<GutenbergEditor client:only="react" fieldName={name} initialValue={value} mode={mode} />

@@ -1,0 +1,30 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getTemplatePart, TEMPLATE_PARTS, type TemplatePartSlug } from '../../../lib/template-parts.ts';
+
+const parts = (Object.keys(TEMPLATE_PARTS) as TemplatePartSlug[]).map((slug) => ({ slug, ...TEMPLATE_PARTS[slug], ...getTemplatePart(slug) }));
+---
+
+<AdminLayout title="Éditeur de site">
+  <p class="muted"><small>Les parties de modèle sont les zones communes à toutes les pages. Elles se construisent avec les blocs, comme une page, plus les blocs de la catégorie « Thème » : titre du site, logo, menu, réseaux sociaux, recherche.</small></p>
+  <h2>Parties de modèle</h2>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr><th>Nom</th><th>Rôle</th><th>État</th><th></th></tr>
+      </thead>
+      <tbody>
+        {
+          parts.map((part) => (
+            <tr>
+              <td><a href={`/admin/site/${part.slug}`}><strong>{part.title}</strong></a></td>
+              <td class="muted">{part.description}</td>
+              <td class="muted">{part.updated_at ? `Modifié le ${part.updated_at.slice(0, 16).replace('T', ' ')}` : 'Modèle par défaut'}</td>
+              <td class="actions"><a class="btn btn--sm" href={`/admin/site/${part.slug}`}>Modifier</a></td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</AdminLayout>

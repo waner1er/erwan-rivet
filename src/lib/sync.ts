@@ -10,8 +10,11 @@ import type { DatabaseSync } from 'node:sqlite';
 
 export const CONTENT_DIR = path.resolve(process.env.CONTENT_DIR ?? 'content');
 
-/** Content tables in import order, with the column used to sort exports (stable diffs). */
-const TABLES: { name: string; order: string }[] = [
+/**
+ * Content tables in import order, with the column used to sort exports (stable diffs).
+ * An optional table's file may be missing (content/ predating it): it is read as empty.
+ */
+const TABLES: { name: string; order: string; optional?: boolean }[] = [
   { name: 'settings', order: 'key' },
   { name: 'pages', order: 'id' },
   { name: 'categories', order: 'id' },
@@ -19,15 +22,20 @@ const TABLES: { name: string; order: string }[] = [
   { name: 'posts', order: 'id' },
   { name: 'post_tags', order: 'post_id, tag_id' },
   { name: 'media', order: 'id' },
+  { name: 'template_parts', order: 'slug', optional: true },
 ];
 
 const fileOf = (table: string) => path.join(CONTENT_DIR, `${table}.json`);
 
 function readFiles(): Map<string, string> | null {
   const files = new Map<string, string>();
-  for (const { name } of TABLES) {
+  for (const { name, optional } of TABLES) {
     const file = fileOf(name);
-    if (!fs.existsSync(file)) return null;
+    if (!fs.existsSync(file)) {
+      if (!optional) return null;
+      files.set(name, '[]\n');
+      continue;
+    }
     // Line endings may differ between machines (git autocrlf).
     files.set(name, fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n'));
   }

@@ -89,6 +89,11 @@ CREATE TABLE IF NOT EXISTS messages (
   is_read INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+CREATE TABLE IF NOT EXISTS template_parts (
+  slug TEXT PRIMARY KEY,
+  content TEXT NOT NULL,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
 CREATE TABLE IF NOT EXISTS settings (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL
@@ -102,9 +107,16 @@ CREATE TABLE IF NOT EXISTS meta (
 declare global {
   // eslint-disable-next-line no-var
   var __erwanDb: DatabaseSync | undefined;
+  // eslint-disable-next-line no-var
+  var __erwanDbSchema: string | undefined;
 }
 
 export function getDb(): DatabaseSync {
+  // The dev server keeps the connection across hot reloads: apply schema changes to it too.
+  if (globalThis.__erwanDb && globalThis.__erwanDbSchema !== SCHEMA) {
+    globalThis.__erwanDb.exec(SCHEMA);
+    globalThis.__erwanDbSchema = SCHEMA;
+  }
   if (!globalThis.__erwanDb) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -113,6 +125,7 @@ export function getDb(): DatabaseSync {
     db.exec(SCHEMA);
     syncContent(db);
     globalThis.__erwanDb = db;
+    globalThis.__erwanDbSchema = SCHEMA;
   }
   return globalThis.__erwanDb;
 }

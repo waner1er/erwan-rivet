@@ -1,8 +1,7 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import ImageField from '../../components/admin/ImageField.astro';
-import MenuEditor from '../../components/admin/MenuEditor.astro';
-import { getSettings, saveSettings, type MenuItem, type SocialLink } from '../../lib/settings.ts';
+import { getSettings, saveSettings, type SocialLink } from '../../lib/settings.ts';
 import { text } from '../../lib/forms.ts';
 
 const SERVICES: SocialLink['service'][] = ['linkedin', 'github', 'mail', 'wordpress'];
@@ -18,7 +17,6 @@ const formatSocials = (items: SocialLink[]) => items.map((i) => `${i.service} | 
 
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData();
-  const menuJson: MenuItem[] = JSON.parse(text(form, 'menu') || '[]');
   saveSettings({
     siteTitle: text(form, 'siteTitle') || 'Erwan RIVET',
     tagline: text(form, 'tagline'),
@@ -26,7 +24,6 @@ if (Astro.request.method === 'POST') {
     contactEmail: text(form, 'contactEmail'),
     contactFormEndpoint: text(form, 'contactFormEndpoint'),
     contactFormAccessKey: text(form, 'contactFormAccessKey'),
-    menu: menuJson.filter((item) => item.label && item.url),
     headerSocials: parseSocials(text(form, 'headerSocials')),
     footerSocials: parseSocials(text(form, 'footerSocials')),
   });
@@ -56,11 +53,7 @@ const s = getSettings();
         <div class="field"><label for="contactFormAccessKey">Clé d’accès</label><input id="contactFormAccessKey" name="contactFormAccessKey" type="text" value={s.contactFormAccessKey} autocomplete="off" /></div>
       </div>
       <div class="card">
-        <div class="field">
-          <span class="label">Menu principal</span>
-          <MenuEditor name="menu" items={s.menu} />
-          <small>Ajoutez, réorganisez ou supprimez des liens comme des blocs.</small>
-        </div>
+        <p class="muted"><small>Les menus se modifient dans l’<a href="/admin/site">Éditeur de site</a> : ouvrez l’en-tête ou le pied de page et cliquez sur le bloc Menu.</small></p>
         <div class="field">
           <label for="headerSocials">Réseaux (en-tête)</label>
           <textarea id="headerSocials" name="headerSocials" rows="4">{formatSocials(s.headerSocials)}</textarea>

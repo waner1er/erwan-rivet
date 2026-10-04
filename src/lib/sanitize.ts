@@ -4,11 +4,12 @@ import sanitizeHtml from 'sanitize-html';
 // blocks (wp-block-*), so admin-authored content keeps rendering as-is while
 // script/iframe/event-handler injection is stripped.
 const ALLOWED_TAGS = [
-  'a', 'abbr', 'b', 'blockquote', 'br', 'caption', 'cite', 'code', 'del',
-  'details', 'div', 'em', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4',
-  'h5', 'h6', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'mark', 'ol', 'p', 'pre',
-  'q', 's', 'small', 'span', 'strong', 'sub', 'summary', 'sup', 'table',
-  'tbody', 'td', 'tfoot', 'th', 'thead', 'time', 'tr', 'u', 'ul',
+  'a', 'abbr', 'article', 'aside', 'b', 'blockquote', 'br', 'caption', 'cite',
+  'code', 'del', 'details', 'div', 'em', 'figcaption', 'figure', 'footer',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hr', 'i', 'img', 'ins', 'kbd',
+  'li', 'main', 'mark', 'nav', 'ol', 'p', 'pre', 'q', 's', 'section', 'small',
+  'span', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'tfoot',
+  'th', 'thead', 'time', 'tr', 'u', 'ul',
 ];
 
 const GLOBAL_ATTRS = ['class', 'id', 'style', 'title', 'aria-hidden', 'aria-label', 'aria-expanded', 'role'];

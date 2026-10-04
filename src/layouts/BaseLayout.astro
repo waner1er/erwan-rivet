@@ -1,6 +1,5 @@
 ---
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import TemplatePart from '../components/TemplatePart.astro';
 import { getSettings } from '../lib/settings.ts';
 import { absoluteUrl } from '../lib/url.ts';
 import { jsonLdGraph, personSchema, websiteSchema } from '../lib/jsonld.ts';
@@ -62,9 +61,9 @@ const graph = jsonLdGraph(
   <body class:list={['wp-embed-responsive', bodyClass]}>
     <a class="skip-link screen-reader-text" href="#wp--skip-link--target">Aller au contenu</a>
     <div class="wp-site-blocks">
-      <Header settings={settings} />
+      <TemplatePart slug="header" settings={settings} />
       <slot />
-      <Footer settings={settings} />
+      <TemplatePart slug="footer" settings={settings} />
     </div>
   </body>
 </html>

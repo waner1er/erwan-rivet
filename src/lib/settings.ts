@@ -15,6 +15,7 @@ export interface SiteSettings {
   siteTitle: string;
   tagline: string;
   logo: string;
+  /** Initial links of the header's Menu block (src/lib/template-parts.ts); edited in the site editor since. */
   menu: MenuItem[];
   headerSocials: SocialLink[];
   footerSocials: SocialLink[];

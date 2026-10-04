@@ -1,0 +1,54 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ContentEditor from '../../../components/admin/ContentEditor.astro';
+import { getTemplatePart, isTemplatePartSlug, resetTemplatePart, saveTemplatePart, TEMPLATE_PARTS } from '../../../lib/template-parts.ts';
+import { text } from '../../../lib/forms.ts';
+
+const slug = Astro.params.slug;
+if (!isTemplatePartSlug(slug)) return Astro.redirect('/admin/site');
+const def = TEMPLATE_PARTS[slug];
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  if (text(form, 'action') === 'reset') {
+    resetTemplatePart(slug);
+    return Astro.redirect(`/admin/site/${slug}?reset`, 303);
+  }
+  saveTemplatePart(slug, String(form.get('content') ?? ''));
+  return Astro.redirect(`/admin/site/${slug}?saved`, 303);
+}
+
+const part = getTemplatePart(slug);
+const notice = Astro.url.searchParams.has('saved') ? `${def.title} enregistré.` : Astro.url.searchParams.has('reset') ? `${def.title} rétabli par défaut.` : '';
+---
+
+<AdminLayout title={`Éditeur de site · ${def.title}`}>
+  {notice && <div class="alert alert--ok">{notice}</div>}
+  <p><a href="/admin/site">← Éditeur de site</a></p>
+
+  <form method="post" class="editor editor--full" data-editor-form>
+    <div class="field">
+      <span class="label">{def.title}</span>
+      <ContentEditor name="content" value={part.content} format="html" mode="site" />
+      <small>{def.description} Les blocs de la catégorie « Thème » (titre, logo, menu, réseaux, recherche) reprennent les valeurs des Réglages. Ctrl+S pour enregistrer.</small>
+    </div>
+    <div class="btn-row">
+      <button class="btn" type="submit" name="action" value="save">Enregistrer</button>
+      <a class="btn btn--ghost" href="/" target="_blank">Voir le site</a>
+      {
+        part.updated_at && (
+          <button
+            class="btn btn--danger btn--sm"
+            type="submit"
+            name="action"
+            value="reset"
+            formnovalidate
+            onclick="return confirm('Remplacer cette partie par le modèle par défaut ? Vos modifications seront perdues.')"
+          >
+            Rétablir le modèle par défaut
+          </button>
+        )
+      }
+    </div>
+  </form>
+</AdminLayout>
