@@ -1,13 +1,15 @@
 ---
-import { excerptOf, postUrl, truncateWords, type Post } from '../lib/content.ts';
+import { excerptOf, getPostTags, postUrl, SECTION_TAGS, truncateWords, type Post } from '../lib/content.ts';
 
 interface Props {
   posts: Post[];
-  /** "cards": bordered 3-column cards (réalisations, travaux). "square": 2-column square thumbnails (projets). */
+  /** "cards": bordered 3-column cards (réalisations, projets). "square": 2-column square thumbnails. */
   variant?: 'cards' | 'square';
 }
 
 const { posts, variant = 'cards' } = Astro.props;
+/** Technology tags shown on a card (section tags such as "freelance" only sort the listing). */
+const techTags = (post: Post) => getPostTags(post.id).filter((t) => !SECTION_TAGS.has(t.slug));
 ---
 
 {
@@ -17,21 +19,32 @@ const { posts, variant = 'cards' } = Astro.props;
         {posts.map((post) => (
           <li class="wp-block-post">
             <div
-              class="wp-block-group has-global-padding is-layout-constrained wan-bleed-30 wan-stack-gap-40 wp-block-group-is-layout-constrained"
+              class="wp-block-group has-global-padding is-layout-constrained wan-bleed-30 wan-stack-gap-40 wp-block-group-is-layout-constrained wan-card"
               style="border-width:2px;border-radius:6px;padding:var(--wp--preset--spacing--30)"
             >
-              <h2 class="wp-block-post-title">{post.title}</h2>
+              <h3 class="wp-block-post-title">
+                <a href={postUrl(post)}>{post.title}</a>
+              </h3>
               {post.cover_image && (
                 <figure class="alignwide wp-block-post-featured-image">
-                  <a href={postUrl(post)}>
-                    <img src={post.cover_image} class="wp-post-image" alt={post.title} style="height:150px;width:100%;object-fit:cover;" decoding="async" loading="lazy" />
+                  <a href={postUrl(post)} tabindex="-1" aria-hidden="true">
+                    <img src={post.cover_image} class="wp-post-image" alt="" style="height:150px;width:100%;object-fit:cover;" decoding="async" loading="lazy" />
                   </a>
                 </figure>
+              )}
+              {techTags(post).length > 0 && (
+                <ul class="wan-chips" aria-label="Technologies">
+                  {techTags(post).map((tag) => (
+                    <li>{tag.name}</li>
+                  ))}
+                </ul>
               )}
               <div class="wp-block-post-excerpt">
                 <p class="wp-block-post-excerpt__excerpt">{truncateWords(excerptOf(post), 25)}</p>
                 <p class="wp-block-post-excerpt__more-text">
-                  <a class="wp-block-post-excerpt__more-link" href={postUrl(post)}>lire la suite</a>
+                  <a class="wp-block-post-excerpt__more-link" href={postUrl(post)}>
+                    lire la suite<span class="screen-reader-text"> : {post.title}</span>
+                  </a>
                 </p>
               </div>
             </div>

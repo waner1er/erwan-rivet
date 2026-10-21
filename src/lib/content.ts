@@ -66,6 +66,45 @@ export const POST_TYPES: Record<PostType, { label: string; plural: string; base:
   projet: { label: 'Projet personnel', plural: 'Projets personnels', base: 'projets-personnels' },
 };
 
+/**
+ * Sections of a listing page (template "list"): each one shows the posts carrying its tag, in this order.
+ * Posts matching no section are shown last, under "Autres".
+ */
+export const LIST_SECTIONS: Partial<Record<PostType, { tag: string; title: string; intro: string }[]>> = {
+  realisation: [
+    {
+      tag: 'freelance',
+      title: 'En freelance',
+      intro: 'Sites conçus, développés ou maintenus pour mes clients en direct : du cadrage à la mise en ligne, puis le suivi.',
+    },
+    {
+      tag: 'en-entreprise',
+      title: 'En agence et en entreprise',
+      intro: 'Projets menés en CDI, au sein d’équipes produit : Dernier Cri, Algam (Woodbrass.com) et Luneos.',
+    },
+  ],
+  projet: [
+    {
+      tag: 'frameworks-php',
+      title: 'Frameworks et outils PHP',
+      intro: 'Des briques PHP que je construis pour comprendre, outiller mes clients ou mes propres besoins : framework maison, extensions WordPress, applications Laravel et Filament.',
+    },
+    {
+      tag: 'jeux-vigilante',
+      title: 'Les jeux pour Vigilante',
+      intro: 'Vigilante, c’est mon groupe de punk hardcore. Pour la sortie de l’album Behind the Mask, je lui ai fabriqué des jeux d’arcade jouables dans le navigateur.',
+    },
+    {
+      tag: 'experimentations',
+      title: 'Expérimentations',
+      intro: 'Des projets pour tester une stack, un langage ou une idée : Go, Gutenberg hors de WordPress, starters, jeux.',
+    },
+  ],
+};
+
+/** Tag slugs used to sort posts into listing sections (not shown as technology chips). */
+export const SECTION_TAGS = new Set(Object.values(LIST_SECTIONS).flatMap((sections) => sections.map((s) => s.tag)));
+
 export function isPostType(value: unknown): value is PostType {
   return typeof value === 'string' && value in POST_TYPES;
 }
@@ -330,6 +369,11 @@ export function getCategoryBySlug(slug: string): Category | undefined {
 
 export function childCategories(parentId: number): Category[] {
   return all<Category>('SELECT * FROM categories WHERE parent_id = ? ORDER BY position, name', [parentId]);
+}
+
+/** Whether a category (or one of its children) has published posts: empty archives are not exported. */
+export function categoryHasPosts(cat: Category): boolean {
+  return listPosts({ categoryIds: [cat.id, ...childCategories(cat.id).map((c) => c.id)], limit: 1 }).length > 0;
 }
 
 export function saveCategory(input: Omit<Category, 'id'>, id?: number): number {

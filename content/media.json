@@ -302,5 +302,125 @@
     "mime": "image/png",
     "size": 125049,
     "created_at": "2026-09-29 14:54:39"
+  },
+  {
+    "id": 39,
+    "path": "/uploads/2026/10/behind-the-mask-v2.jpg",
+    "filename": "behind-the-mask-v2.jpg",
+    "mime": "image/jpeg",
+    "size": 67397,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 40,
+    "path": "/uploads/2026/10/behind-the-mask.jpg",
+    "filename": "behind-the-mask.jpg",
+    "mime": "image/jpeg",
+    "size": 171735,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 41,
+    "path": "/uploads/2026/10/boulette-et-la-crotte-d-or.jpg",
+    "filename": "boulette-et-la-crotte-d-or.jpg",
+    "mime": "image/jpeg",
+    "size": 190575,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 42,
+    "path": "/uploads/2026/10/cover-absys.svg",
+    "filename": "cover-absys.svg",
+    "mime": "image/svg+xml",
+    "size": 489,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 43,
+    "path": "/uploads/2026/10/cover-cv-generator.svg",
+    "filename": "cover-cv-generator.svg",
+    "mime": "image/svg+xml",
+    "size": 480,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 44,
+    "path": "/uploads/2026/10/cover-goginshop.svg",
+    "filename": "cover-goginshop.svg",
+    "mime": "image/svg+xml",
+    "size": 488,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 45,
+    "path": "/uploads/2026/10/cover-momentum-conseil.svg",
+    "filename": "cover-momentum-conseil.svg",
+    "mime": "image/svg+xml",
+    "size": 484,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 46,
+    "path": "/uploads/2026/10/cover-portfolio-astro.svg",
+    "filename": "cover-portfolio-astro.svg",
+    "mime": "image/svg+xml",
+    "size": 477,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 47,
+    "path": "/uploads/2026/10/cover-punk-booking.svg",
+    "filename": "cover-punk-booking.svg",
+    "mime": "image/svg+xml",
+    "size": 492,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 48,
+    "path": "/uploads/2026/10/cover-vigicorp-discount-engine.svg",
+    "filename": "cover-vigicorp-discount-engine.svg",
+    "mime": "image/svg+xml",
+    "size": 488,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 49,
+    "path": "/uploads/2026/10/cover-voyagerberg.svg",
+    "filename": "cover-voyagerberg.svg",
+    "mime": "image/svg+xml",
+    "size": 481,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 50,
+    "path": "/uploads/2026/10/cover-wan-carbon-fields-blocks.svg",
+    "filename": "cover-wan-carbon-fields-blocks.svg",
+    "mime": "image/svg+xml",
+    "size": 487,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 51,
+    "path": "/uploads/2026/10/cover-wancommerce.svg",
+    "filename": "cover-wancommerce.svg",
+    "mime": "image/svg+xml",
+    "size": 492,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 52,
+    "path": "/uploads/2026/10/cover-woo-product-image-associate.svg",
+    "filename": "cover-woo-product-image-associate.svg",
+    "mime": "image/svg+xml",
+    "size": 480,
+    "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 53,
+    "path": "/uploads/2026/10/cover-working-time-tool.svg",
+    "filename": "cover-working-time-tool.svg",
+    "mime": "image/svg+xml",
+    "size": 490,
+    "created_at": "2026-10-21 10:00:00"
   }
 ]

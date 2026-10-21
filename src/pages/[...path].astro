@@ -7,6 +7,7 @@ import TagView from '../views/TagView.astro';
 import NotFound from '../views/NotFound.astro';
 import {
   POST_TYPES,
+  categoryHasPosts,
   categoryUrl,
   getCategoryBySlug,
   getPageBySlug,
@@ -31,8 +32,8 @@ export function getStaticPaths() {
   const urls = [
     ...listPages().filter((p) => p.status === 'published').map(pageUrl),
     ...listPosts().map(postUrl),
-    ...listCategories().map(categoryUrl),
-    ...listTags().filter((t) => t.count > 0).map(tagUrl),
+    ...listCategories().filter(categoryHasPosts).map(categoryUrl),
+    ...listTags().filter((t) => listPosts({ tagId: t.id, limit: 1 }).length > 0).map(tagUrl),
   ];
   return [...new Set(urls)].map((url) => ({ params: { path: url.replace(/^\/|\/$/g, '') || undefined } }));
 }
@@ -64,7 +65,7 @@ if (segments.length === 0) {
   post = page ? undefined : getPostBySlug('post', slug, drafts);
   if (!page && !post) {
     const cat = getCategoryBySlug(slug);
-    if (cat && !cat.parent_id) category = cat;
+    if (cat && !cat.parent_id && categoryHasPosts(cat)) category = cat;
   }
 } else if (segments.length === 2) {
   const [first, second] = segments;

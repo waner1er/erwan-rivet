@@ -59,3 +59,107 @@ h1.wp-block-wan-blocks-paragraph-main-title {
 .is-layout-flex.is-vertical > .wp-block-separator {
   align-self: stretch;
 }
+
+/* Technology chips on listing cards and on the home page */
+.wan-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.wan-chips li {
+  border: 1px solid var(--wp--preset--color--accent-6);
+  border-radius: 999px;
+  font-size: var(--wp--preset--font-size--small);
+  line-height: 1.4;
+  padding: 0.1rem 0.6rem;
+}
+.wan-card .wp-block-post-title a {
+  text-decoration: none;
+}
+.wan-card .wp-block-post-title a:hover,
+.wan-card .wp-block-post-title a:focus-visible {
+  text-decoration: underline;
+}
+
+/* Listing pages split into sections (LIST_SECTIONS) */
+.wan-list-section + .wan-list-section {
+  margin-top: var(--wp--preset--spacing--60);
+}
+.wan-list-section__intro {
+  max-width: 70ch;
+  margin-bottom: var(--wp--preset--spacing--40);
+}
+
+/* Home page: offer cards, technologies, references */
+.wan-offer-grid,
+.wan-tech-grid,
+.wan-ref-grid {
+  display: grid;
+  gap: var(--wp--preset--spacing--30);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.wan-offer-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+.wan-tech-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+.wan-ref-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+.wan-offer-grid > li,
+.wan-tech-grid > li {
+  border: 2px solid currentColor;
+  border-radius: 6px;
+  padding: var(--wp--preset--spacing--30);
+}
+.wan-offer-grid h3,
+.wan-tech-grid h3 {
+  margin-top: 0;
+}
+.wan-offer-grid ul {
+  padding-left: 1.2em;
+}
+.wan-tech-grid p {
+  font-size: var(--wp--preset--font-size--small);
+  margin-bottom: 0;
+}
+.wan-ref-grid a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  border: 1px solid var(--wp--preset--color--accent-6);
+  border-radius: 6px;
+  padding: var(--wp--preset--spacing--30);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+}
+.wan-ref-grid a:hover,
+.wan-ref-grid a:focus-visible {
+  border-color: currentColor;
+}
+.wan-ref-grid strong {
+  font-size: var(--wp--preset--font-size--large);
+  font-family: var(--wp--preset--font-family--vollkorn);
+  font-weight: 400;
+}
+.wan-ref-grid span {
+  font-size: var(--wp--preset--font-size--small);
+}
+.wan-badge {
+  align-self: flex-start;
+  background: var(--wp--preset--color--accent-1);
+  color: var(--wp--preset--color--contrast);
+  border-radius: 999px;
+  padding: 0.05rem 0.6rem;
+}
+.wan-badge--cdi {
+  background: var(--wp--preset--color--accent-2);
+}

@@ -55,11 +55,6 @@
     "name": "livewire"
   },
   {
-    "id": 12,
-    "slug": "php-2",
-    "name": "php$"
-  },
-  {
     "id": 13,
     "slug": "sql",
     "name": "sql"
@@ -68,5 +63,80 @@
     "id": 14,
     "slug": "symfony",
     "name": "symfony"
+  },
+  {
+    "id": 15,
+    "slug": "freelance",
+    "name": "freelance"
+  },
+  {
+    "id": 16,
+    "slug": "en-entreprise",
+    "name": "en entreprise"
+  },
+  {
+    "id": 17,
+    "slug": "frameworks-php",
+    "name": "frameworks PHP"
+  },
+  {
+    "id": 18,
+    "slug": "jeux-vigilante",
+    "name": "jeux Vigilante"
+  },
+  {
+    "id": 19,
+    "slug": "experimentations",
+    "name": "expérimentations"
+  },
+  {
+    "id": 20,
+    "slug": "woocommerce",
+    "name": "woocommerce"
+  },
+  {
+    "id": 21,
+    "slug": "sylius",
+    "name": "sylius"
+  },
+  {
+    "id": 22,
+    "slug": "astro",
+    "name": "astro"
+  },
+  {
+    "id": 23,
+    "slug": "react",
+    "name": "react"
+  },
+  {
+    "id": 24,
+    "slug": "gutenberg",
+    "name": "gutenberg"
+  },
+  {
+    "id": 25,
+    "slug": "angularjs",
+    "name": "angularjs"
+  },
+  {
+    "id": 26,
+    "slug": "go",
+    "name": "go"
+  },
+  {
+    "id": 27,
+    "slug": "phaser",
+    "name": "phaser"
+  },
+  {
+    "id": 28,
+    "slug": "scss",
+    "name": "scss"
+  },
+  {
+    "id": 29,
+    "slug": "integration",
+    "name": "intégration"
   }
 ]
