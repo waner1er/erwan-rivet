@@ -104,6 +104,63 @@ header.wp-block-template-part {
   text-decoration: none;
 }
 
+/* Burger menu on phones and tablets (up to 900px): the menu opens full screen.
+   wp.css switches at 600px; these rules move the switch to 900px. */
+.wan-site-header .wp-block-navigation__responsive-container-open,
+.wan-site-header .wp-block-navigation__responsive-container-close {
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  color: var(--wp--preset--color--contrast);
+  transition: background 0.2s ease;
+}
+.wan-site-header .wp-block-navigation__responsive-container-open:hover,
+.wan-site-header .wp-block-navigation__responsive-container-close:hover {
+  background: var(--wp--preset--color--line);
+}
+@media (max-width: 900px) {
+  .wan-site-header .wp-block-navigation__responsive-container-open:not(.always-shown) {
+    display: flex;
+  }
+  .wan-site-header .wp-block-navigation__responsive-container:not(.is-menu-open) {
+    display: none;
+  }
+}
+@media (min-width: 901px) {
+  .wan-site-header .wp-block-navigation__responsive-container-open:not(.always-shown) {
+    display: none;
+  }
+}
+.wan-site-header .wp-block-navigation__responsive-container.is-menu-open {
+  padding: 1.4rem max(16px, env(safe-area-inset-right, 0px)) 2rem max(16px, env(safe-area-inset-left, 0px));
+}
+.wan-site-header .is-menu-open .wp-block-navigation__responsive-container-close {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.wan-site-header .is-menu-open .wp-block-navigation__responsive-container-content {
+  padding-top: 4.5rem;
+}
+.wan-site-header .is-menu-open .wp-block-navigation__container {
+  gap: 1.4rem;
+}
+.wan-site-header .is-menu-open .wp-block-navigation-item__content {
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 0.2rem 0;
+  background-size: 0 3px;
+}
+.wan-site-header .is-menu-open .wp-block-navigation-item__content:hover,
+.wan-site-header .is-menu-open .wp-block-navigation-item__content[aria-current='page'],
+.wan-site-header .is-menu-open .current-menu-item > .wp-block-navigation-item__content {
+  background-size: 100% 3px;
+}
+
 /* ---------- Footer ---------- */
 
 .wan-site-footer {

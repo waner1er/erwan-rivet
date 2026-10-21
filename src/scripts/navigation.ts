@@ -5,24 +5,32 @@ document.querySelectorAll<HTMLElement>('[data-nav]').forEach((nav) => {
   const closeBtn = nav.querySelector<HTMLButtonElement>('[data-nav-close]');
   if (!container) return;
 
-  function setOpen(open: boolean) {
+  function setOpen(open: boolean, moveFocus = true) {
     container!.classList.toggle('has-modal-open', open);
     container!.classList.toggle('is-menu-open', open);
     document.documentElement.classList.toggle('has-modal-open', open);
+    openBtn?.setAttribute('aria-expanded', String(open));
     const dialog = container!.querySelector('.wp-block-navigation__responsive-dialog');
     if (open) {
       dialog?.setAttribute('role', 'dialog');
       dialog?.setAttribute('aria-modal', 'true');
-      closeBtn?.focus();
+      if (moveFocus) closeBtn?.focus();
     } else {
       dialog?.removeAttribute('role');
       dialog?.removeAttribute('aria-modal');
-      openBtn?.focus();
+      if (moveFocus) openBtn?.focus();
     }
   }
 
   openBtn?.addEventListener('click', () => setOpen(true));
+  container.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setOpen(false)));
   closeBtn?.addEventListener('click', () => setOpen(false));
+  // The burger is shown up to 900px (site.css): widening past it while the menu is open brings
+  // back the classic menu, so the full-screen one closes and the page scrolls again.
+  const desktop = window.matchMedia('(min-width: 901px)');
+  desktop.addEventListener('change', (e) => {
+    if (e.matches && container.classList.contains('is-menu-open')) setOpen(false, false);
+  });
   container.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && container.classList.contains('is-menu-open')) setOpen(false);
   });

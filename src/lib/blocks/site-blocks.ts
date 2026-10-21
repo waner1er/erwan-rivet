@@ -76,6 +76,11 @@ function safeUrl(raw: unknown): string {
 const SUBMENU_ICON =
   '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"></path></svg>';
 
+const BURGER_ICON =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"></path></svg>';
+const CLOSE_ICON =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"></path></svg>';
+
 /** Menu entries: the core/navigation-link and core/navigation-submenu blocks inside a `wan/menu`. */
 function menuItems(blocks: ParsedBlock[], currentPath: string): string {
   return blocks
@@ -129,9 +134,9 @@ const menu: Renderer = (attrs, { currentPath, uid }, innerBlocks) => {
     .filter(Boolean)
     .join(' ');
   return nav(
-    `<button aria-haspopup="dialog" class="wp-block-navigation__responsive-container-open${overlay === 'always' ? ' always-shown' : ''}" data-nav-open>Menu</button>` +
+    `<button aria-haspopup="dialog" aria-expanded="false" aria-controls="${modal}" class="wp-block-navigation__responsive-container-open${overlay === 'always' ? ' always-shown' : ''}" data-nav-open>${BURGER_ICON}<span class="screen-reader-text">Ouvrir le menu</span></button>` +
       `<div class="${container}" id="${modal}" data-nav-container><div class="wp-block-navigation__responsive-close" tabindex="-1"><div class="wp-block-navigation__responsive-dialog">` +
-      `<button class="wp-block-navigation__responsive-container-close" data-nav-close>Fermer</button>` +
+      `<button class="wp-block-navigation__responsive-container-close" data-nav-close>${CLOSE_ICON}<span class="screen-reader-text">Fermer le menu</span></button>` +
       `<div class="wp-block-navigation__responsive-container-content" id="${modal}-content">${list}</div></div></div></div>`,
   );
 };

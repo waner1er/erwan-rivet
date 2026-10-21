@@ -37,7 +37,7 @@ const menuLinks = (items: MenuItem[]) =>
 const header = () => `<!-- wp:group {"className":"wan-site-header","layout":{"type":"flex","justifyContent":"space-between"}} -->
 <div class="wp-block-group wan-site-header"><!-- wp:wan/site-title /-->
 
-<!-- wp:wan/menu {"overlayMenu":"never","ariaLabel":"Menu principal","layout":{"type":"flex","justifyContent":"left"}} -->
+<!-- wp:wan/menu {"overlayMenu":"mobile","overlayBackgroundColor":"base","overlayTextColor":"contrast","ariaLabel":"Menu principal","layout":{"type":"flex","justifyContent":"left"}} -->
 ${menuLinks(getSettings().menu)}
 <!-- /wp:wan/menu --></div>
 <!-- /wp:group -->`;
