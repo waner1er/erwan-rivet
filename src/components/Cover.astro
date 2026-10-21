@@ -1,38 +1,39 @@
 ---
+// Page / post hero of the theme: eyebrow, title, optional lead (slot) and illustration on the right.
 interface Props {
   title: string;
   image?: string | null;
-  /** "archive" reproduces the query-title cover used on listing pages. */
-  variant?: 'single' | 'archive';
+  /** Small label above the title (e.g. "Réalisation"), linked when `eyebrowUrl` is set. */
+  eyebrow?: string;
+  eyebrowUrl?: string;
 }
 
-const { title, image, variant = 'single' } = Astro.props;
-const archive = variant === 'archive';
+const { title, image, eyebrow, eyebrowUrl } = Astro.props;
+const hasLead = Astro.slots.has('default');
 ---
 
-<div
-  class="wp-block-cover alignfull wan-object-fit-contain-force box-shadowed"
-  style={`border-style:none;border-width:0px;${archive ? 'margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;' : ''}min-height:250px;aspect-ratio:unset;`}
->
-  <span aria-hidden="true" class="wp-block-cover__background has-contrast-background-color has-background-dim-60 has-background-dim"></span>
-  {image && <img class="wp-block-cover__image-background wp-post-image" alt="" src={image} data-object-fit="cover" decoding="async" fetchpriority="high" />}
-  <div
-    class:list={[
-      'wp-block-cover__inner-container has-global-padding is-layout-constrained wp-block-cover-is-layout-constrained',
-      { 'wan-tight': archive },
-    ]}
-  >
-    {
-      archive ? (
-        <h1 class="has-text-align-center wp-block-query-title">{title}</h1>
-      ) : (
-        <h1
-          style="padding-right:0;padding-left:0;padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0"
-          class="has-text-align-center alignwide wp-block-post-title"
-        >
-          {title}
-        </h1>
-      )
-    }
-  </div>
-</div>
+<section class="wan-hero alignwide is-layout-flow">
+  {
+    image ? (
+      <div class="wp-block-columns wan-split">
+        <div class="wp-block-column is-layout-flow">
+          {eyebrow && <p class="wan-eyebrow wan-rise">{eyebrowUrl ? <a href={eyebrowUrl}>{eyebrow}</a> : eyebrow}</p>}
+          <h1 class="wan-rise-2">{title}</h1>
+          {hasLead && <slot />}
+        </div>
+        <div class="wp-block-column">
+          <figure class="wan-photo wan-illus wan-float">
+            <img src={image} alt="" decoding="async" fetchpriority="high" />
+          </figure>
+        </div>
+      </div>
+    ) : (
+      <>
+        {eyebrow && <p class="wan-eyebrow wan-rise">{eyebrowUrl ? <a href={eyebrowUrl}>{eyebrow}</a> : eyebrow}</p>}
+        <h1 class="wan-rise-2">{title}</h1>
+        {hasLead && <slot />}
+      </>
+    )
+  }
+</section>
+

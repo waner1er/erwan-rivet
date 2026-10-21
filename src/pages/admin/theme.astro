@@ -4,7 +4,7 @@ import ThemeEditor from '../../components/admin/ThemeEditor.astro';
 import { buildThemeCss, readTheme, writeTheme } from '../../lib/theme.ts';
 import { text } from '../../lib/forms.ts';
 
-const EDITABLE_COLOR_SLUGS = ['base', 'contrast', 'accent-1', 'accent-2', 'accent-3', 'accent-4', 'accent-5'];
+const EDITABLE_COLOR_SLUGS = ['base', 'surface', 'contrast', 'muted', 'line', 'accent', 'accent-ink', 'navy'];
 
 if (Astro.request.method === 'POST') {
   const form = await Astro.request.formData();

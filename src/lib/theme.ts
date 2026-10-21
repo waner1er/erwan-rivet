@@ -43,6 +43,8 @@ export interface HeadingSize {
 
 export interface Theme {
   colors: ThemeColor[];
+  /** Dark mode value of a color, by slug (applied with prefers-color-scheme: dark, or data-theme="dark" on <html>). */
+  darkColors?: Record<string, string>;
   gradients: ThemeGradient[];
   fontFamilies: ThemeFontFamily[];
   fontSizes: ThemeSize[];
@@ -108,6 +110,13 @@ export function renderThemeCss(theme: Theme): string {
   const lines: string[] = [];
   lines.push('/* Generated from src/theme/theme.json by src/lib/theme.ts. Do not edit by hand. */');
   lines.push(`:root{${rootDecls}}`);
+  const dark = Object.entries(theme.darkColors ?? {});
+  if (dark.length) {
+    const darkDecls = dark.map(([slug, color]) => `--wp--preset--color--${slug}: ${color};`).join('') + 'color-scheme: dark;';
+    lines.push(':root{color-scheme: light;}');
+    lines.push(`@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){${darkDecls}}}`);
+    lines.push(`:root[data-theme="dark"]{${darkDecls}}`);
+  }
   lines.push(`.wp-block-button{${presetDecls('dimension', theme.buttonDimensions, 'size')}}`);
   lines.push(`:root { --wp--style--global--content-size: ${theme.layout.contentSize};--wp--style--global--wide-size: ${theme.layout.wideSize}; }`);
   lines.push(`:root { --wp--style--block-gap: ${theme.layout.blockGap}; }`);

@@ -34,10 +34,8 @@ const jsonLd = pageSchema(page, { description, image: ogImage, site: Astro.site,
 <BaseLayout title={isHome ? undefined : page.title} description={description} image={ogImage} jsonLd={jsonLd}>
   {
     page.template === 'default' && (
-      <main id="wp--skip-link--target" class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-        <div class="entry-content alignfull wp-block-post-content is-layout-flow wp-block-post-content-is-layout-flow">
-          <Content html={html} />
-        </div>
+      <main id="wp--skip-link--target" class="entry-content has-global-padding is-layout-constrained">
+        <Content html={html} />
       </main>
     )
   }
@@ -52,17 +50,10 @@ const jsonLd = pageSchema(page, { description, image: ogImage, site: Astro.site,
 
   {
     page.template === 'cover' && (
-      <main
-        id="wp--skip-link--target"
-        class="wp-block-group is-style-default has-base-background-color has-background has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
-        style="margin-top:0;padding-top:0;padding-bottom:var(--wp--preset--spacing--50)"
-      >
-        <Cover title={page.title} image={page.cover_image} />
-        <div
-          class="wp-block-group alignwide has-base-background-color has-background has-global-padding is-layout-constrained wan-bleed-30 wp-block-group-is-layout-constrained"
-          style="margin-bottom:var(--wp--preset--spacing--30);padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--30)"
-        >
-          <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+      <main id="wp--skip-link--target" class="has-global-padding is-layout-constrained">
+        <Cover title={page.title} image={page.cover_image} eyebrow={page.title} />
+        <div class="wan-section alignwide is-layout-constrained wan-constrained-left">
+          <div class="entry-content is-layout-flow">
             <Content html={html} />
           </div>
         </div>
@@ -72,44 +63,31 @@ const jsonLd = pageSchema(page, { description, image: ogImage, site: Astro.site,
 
   {
     page.template === 'blog' && (
-      <main
-        id="wp--skip-link--target"
-        class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
-        style="margin-top:var(--wp--preset--spacing--60)"
-      >
-        <h1
-          class="wp-block-heading has-text-align-center alignwide is-style-default"
-          style="padding-top:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50)"
-        >
-          {page.title}
-        </h1>
-        <Content html={html} />
-        <CategoryPosts terms={listCategories().filter((c) => !c.parent_id)} />
+      <main id="wp--skip-link--target" class="has-global-padding is-layout-constrained">
+        <Cover title={page.title} eyebrow={page.title}>
+          <Content html={html} />
+        </Cover>
+        <div class="wan-section alignwide">
+          <CategoryPosts terms={listCategories().filter((c) => !c.parent_id)} />
+        </div>
       </main>
     )
   }
 
   {
     page.template === 'list' && (
-      <>
-        <Cover title={page.title} image={page.cover_image} variant="archive" />
-        <div class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+      <main id="wp--skip-link--target" class="has-global-padding is-layout-constrained">
+        <Cover title={page.title} eyebrow={page.title}>
           <Content html={html} />
-        </div>
-        <main
-          id="wp--skip-link--target"
-          class="wp-block-group is-style-default has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
-          style="margin-top:var(--wp--preset--spacing--50);margin-bottom:var(--wp--preset--spacing--60)"
-        >
-          {sections.map((section) => (
-            <section class="alignwide wan-list-section" id={section.tag}>
-              {section.title && <h2 class="wp-block-heading">{section.title}</h2>}
-              {section.intro && <p class="wan-list-section__intro">{section.intro}</p>}
-              <PostGrid posts={section.posts} />
-            </section>
-          ))}
-        </main>
-      </>
+        </Cover>
+        {sections.map((section) => (
+          <section class="wan-section alignwide wan-list-section is-layout-flow" id={section.tag}>
+            {section.title && <h2>{section.title}</h2>}
+            {section.intro && <p class="wan-list-section__intro">{section.intro}</p>}
+            <PostGrid posts={section.posts} headingLevel={section.title ? 3 : 2} />
+          </section>
+        ))}
+      </main>
     )
   }
 </BaseLayout>

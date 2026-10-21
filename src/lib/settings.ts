@@ -31,13 +31,12 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   tagline: 'Développeur web',
   logo: '/uploads/2025/11/o5pj34njugay8omksrgy.jpeg',
   menu: [
-    { label: 'Mon Parcours', url: '/mon-parcours/' },
-    { label: 'Développement web', url: '/developpement-web/' },
+    { label: 'Accueil', url: '/' },
+    { label: 'Mon parcours', url: '/mon-parcours/' },
     { label: 'Réalisations', url: '/realisations/' },
-    { label: 'Travaux-en-entreprise', url: '/travaux-en-entreprise/' },
+    { label: 'Développement web', url: '/developpement-web/' },
     { label: 'Projets personnels', url: '/projets-personnels/' },
     { label: 'Contact', url: '/contact/' },
-    { label: 'Blog', url: '/blog/' },
   ],
   headerSocials: [
     { service: 'linkedin', url: 'https://www.linkedin.com/in/erwan-rivet/', label: 'LinkedIn' },

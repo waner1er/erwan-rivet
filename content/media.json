@@ -422,5 +422,45 @@
     "mime": "image/svg+xml",
     "size": 490,
     "created_at": "2026-10-21 10:00:00"
+  },
+  {
+    "id": 54,
+    "path": "/uploads/2026/10/logo-astro.svg",
+    "filename": "logo-astro.svg",
+    "mime": "image/svg+xml",
+    "size": 817,
+    "created_at": "2026-10-21 12:00:00"
+  },
+  {
+    "id": 55,
+    "path": "/uploads/2026/10/logo-react.svg",
+    "filename": "logo-react.svg",
+    "mime": "image/svg+xml",
+    "size": 2964,
+    "created_at": "2026-10-21 12:00:00"
+  },
+  {
+    "id": 56,
+    "path": "/uploads/2026/10/momentum-conseil.jpg",
+    "filename": "momentum-conseil.jpg",
+    "mime": "image/jpeg",
+    "size": 111299,
+    "created_at": "2026-10-21 12:30:00"
+  },
+  {
+    "id": 57,
+    "path": "/uploads/2026/10/absys-logo.png",
+    "filename": "absys-logo.png",
+    "mime": "image/png",
+    "size": 49947,
+    "created_at": "2026-10-21 13:00:00"
+  },
+  {
+    "id": 58,
+    "path": "/uploads/2026/10/portfolio-astro-wordmark.png",
+    "filename": "portfolio-astro-wordmark.png",
+    "mime": "image/png",
+    "size": 26351,
+    "created_at": "2026-10-21 13:00:00"
   }
 ]

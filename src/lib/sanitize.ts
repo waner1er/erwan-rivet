@@ -18,6 +18,7 @@ const ALLOWED_ATTRS: sanitizeHtml.IOptions['allowedAttributes'] = {
   '*': [...GLOBAL_ATTRS, 'data-*'],
   a: ['href', 'target', 'rel', 'download'],
   img: ['src', 'srcset', 'sizes', 'alt', 'width', 'height', 'loading', 'decoding', 'fetchpriority'],
+  details: ['open'],
   time: ['datetime'],
   td: ['colspan', 'rowspan'],
   th: ['colspan', 'rowspan', 'scope'],

@@ -63,44 +63,127 @@
     {
       "slug": "base",
       "name": "Fond",
+      "color": "#f6f4ee"
+    },
+    {
+      "slug": "surface",
+      "name": "Surface (cartes)",
       "color": "#ffffff"
     },
     {
       "slug": "contrast",
-      "name": "Contraste (texte)",
-      "color": "#111111"
+      "name": "Texte",
+      "color": "#161a22"
+    },
+    {
+      "slug": "muted",
+      "name": "Texte secondaire",
+      "color": "#4d5563"
+    },
+    {
+      "slug": "line",
+      "name": "Filets et bordures",
+      "color": "#d9d5ca"
+    },
+    {
+      "slug": "accent",
+      "name": "Accent",
+      "color": "#c8432a"
+    },
+    {
+      "slug": "accent-ink",
+      "name": "Texte sur accent",
+      "color": "#ffffff"
+    },
+    {
+      "slug": "navy",
+      "name": "Bandeau sombre",
+      "color": "#1f2a3a"
+    },
+    {
+      "slug": "wordmark",
+      "name": "Fond des visuels texte",
+      "color": "#e7e5df"
+    },
+    {
+      "slug": "wordmark-ink",
+      "name": "Texte des visuels texte",
+      "color": "#1f2a3a"
+    },
+    {
+      "slug": "on-navy",
+      "name": "Texte sur bandeau sombre",
+      "color": "#eeeae1"
+    },
+    {
+      "slug": "on-navy-heading",
+      "name": "Titre sur bandeau sombre",
+      "color": "#ffffff"
+    },
+    {
+      "slug": "on-navy-muted",
+      "name": "Texte secondaire sur bandeau sombre",
+      "color": "#c9ced8"
+    },
+    {
+      "slug": "on-navy-accent",
+      "name": "Accent sur bandeau sombre",
+      "color": "#ff7a5c"
+    },
+    {
+      "slug": "on-navy-accent-ink",
+      "name": "Texte sur accent du bandeau sombre",
+      "color": "#111418"
     },
     {
       "slug": "accent-1",
-      "name": "Accent 1",
-      "color": "#ffee58"
+      "name": "Accent 1 (hérité)",
+      "color": "#c8432a"
     },
     {
       "slug": "accent-2",
-      "name": "Accent 2",
-      "color": "#f6cff4"
+      "name": "Accent 2 (hérité)",
+      "color": "#f3ddd6"
     },
     {
       "slug": "accent-3",
-      "name": "Accent 3",
-      "color": "#503aa8"
+      "name": "Accent 3 (hérité)",
+      "color": "#1f2a3a"
     },
     {
       "slug": "accent-4",
-      "name": "Accent 4",
-      "color": "#686868"
+      "name": "Accent 4 (hérité)",
+      "color": "#4d5563"
     },
     {
       "slug": "accent-5",
-      "name": "Accent 5",
-      "color": "#fbfaf3"
+      "name": "Accent 5 (hérité)",
+      "color": "#ffffff"
     },
     {
       "slug": "accent-6",
-      "name": "Accent 6",
-      "color": "color-mix(in srgb, currentColor 20%, transparent)"
+      "name": "Accent 6 (hérité)",
+      "color": "#d9d5ca"
     }
   ],
+  "darkColors": {
+    "base": "#111418",
+    "surface": "#1a1f27",
+    "contrast": "#eeeae1",
+    "muted": "#aab2bf",
+    "line": "#2c333e",
+    "accent": "#ff7a5c",
+    "accent-ink": "#111418",
+    "navy": "#0b0e13",
+    "accent-1": "#ff7a5c",
+    "accent-2": "#3a2620",
+    "accent-3": "#0b0e13",
+    "accent-4": "#aab2bf",
+    "accent-5": "#1a1f27",
+    "accent-6": "#2c333e",
+    "wordmark": "#232a35",
+    "wordmark-ink": "#eeeae1"
+  },
   "gradients": [
     {
       "slug": "vivid-cyan-blue-to-vivid-purple",
@@ -167,12 +250,12 @@
     {
       "slug": "manrope",
       "name": "Manrope",
-      "fontFamily": "Manrope, sans-serif"
+      "fontFamily": "Manrope, system-ui, -apple-system, \"Segoe UI\", sans-serif"
     },
     {
       "slug": "fira-code",
       "name": "Fira Code",
-      "fontFamily": "\"Fira Code\", monospace"
+      "fontFamily": "\"Fira Code\", ui-monospace, Menlo, Consolas, monospace"
     },
     {
       "slug": "vollkorn",
@@ -189,22 +272,22 @@
     {
       "slug": "medium",
       "name": "Moyen",
-      "size": "1.125rem"
+      "size": "1.0625rem"
     },
     {
       "slug": "large",
       "name": "Grand",
-      "size": "1.375rem"
+      "size": "clamp(1.1rem, 1.8vw, 1.3rem)"
     },
     {
       "slug": "x-large",
       "name": "Très grand",
-      "size": "2rem"
+      "size": "clamp(1.7rem, 3.4vw, 2.6rem)"
     },
     {
       "slug": "xx-large",
       "name": "Extra grand",
-      "size": "3rem"
+      "size": "clamp(2.3rem, 5.2vw, 4.4rem)"
     }
   ],
   "spacing": [
@@ -295,14 +378,14 @@
     }
   ],
   "layout": {
-    "contentSize": "960px",
-    "wideSize": "1340px",
-    "blockGap": "1.2rem",
+    "contentSize": "780px",
+    "wideSize": "1180px",
+    "blockGap": "1rem",
     "rootPadding": {
       "top": "0px",
-      "right": "var(--wp--preset--spacing--20)",
+      "right": "max(16px, env(safe-area-inset-right, 0px))",
       "bottom": "0px",
-      "left": "var(--wp--preset--spacing--20)"
+      "left": "max(16px, env(safe-area-inset-left, 0px))"
     }
   },
   "buttonDimensions": [
@@ -328,40 +411,38 @@
     "textColorSlug": "contrast",
     "fontFamilySlug": "fira-code",
     "fontSizeSlug": "medium",
-    "fontWeight": "300",
-    "letterSpacing": "-0.18px",
-    "lineHeight": "1.5"
+    "fontWeight": "400",
+    "letterSpacing": "0",
+    "lineHeight": "1.6"
   },
   "headings": {
-    "fontFamilySlug": "vollkorn",
-    "fontWeight": "400",
-    "letterSpacing": "-0.1px",
-    "lineHeight": "1.125",
+    "fontFamilySlug": "fira-code",
+    "fontWeight": "700",
+    "letterSpacing": "-0.01em",
+    "lineHeight": "1.12",
     "sizes": {
       "h1": {
-        "size": "clamp(27.894px, 1.743rem + ((1vw - 3.2px) * 1.971), 48px)",
-        "letterSpacing": "-0.96px"
+        "sizeSlug": "xx-large"
       },
       "h2": {
-        "size": "clamp(23.043px, 1.44rem + ((1vw - 3.2px) * 1.466), 38px)",
-        "letterSpacing": "-0.96px"
+        "sizeSlug": "x-large"
       },
       "h3": {
-        "size": "clamp(20px, 1.25rem + ((1vw - 3.2px) * 1.176), 32px)",
-        "letterSpacing": "-0.64px"
+        "size": "clamp(1.2rem, 2vw, 1.4rem)",
+        "fontWeight": "700"
       },
       "h4": {
-        "size": "clamp(17.905px, 1.119rem + ((1vw - 3.2px) * 0.99), 28px)",
-        "letterSpacing": "-0.56px"
+        "size": "1.125rem",
+        "fontWeight": "700"
       },
       "h5": {
-        "size": "clamp(15.747px, 0.984rem + ((1vw - 3.2px) * 0.809), 24px)",
-        "letterSpacing": "-0.48px"
+        "size": "1rem",
+        "fontWeight": "700"
       },
       "h6": {
         "sizeSlug": "small",
         "fontWeight": "700",
-        "letterSpacing": "1.4px",
+        "letterSpacing": "0.08em",
         "textTransform": "uppercase"
       }
     }

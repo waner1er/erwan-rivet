@@ -14,6 +14,7 @@ import {
   getPostBySlug,
   getTagBySlug,
   listCategories,
+  listingPageOf,
   listPages,
   listPosts,
   listTags,
@@ -56,6 +57,13 @@ let page: Page | undefined;
 let post: Post | undefined;
 let category: Category | undefined;
 let tag: Tag | undefined;
+
+// The base of a post type (/realisation/) is not a page: send it to the page listing that type (/realisations/).
+const listingBase = segments.length === 1 ? baseToType.get(segments[0]) : undefined;
+if (listingBase && !getPageBySlug(segments[0])) {
+  const listing = listingPageOf(listingBase);
+  if (listing) return Astro.redirect(pageUrl(listing), 301);
+}
 
 if (segments.length === 0) {
   page = getPageBySlug('', drafts);

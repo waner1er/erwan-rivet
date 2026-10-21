@@ -1,7 +1,7 @@
 ---
 import TemplatePart from '../components/TemplatePart.astro';
 import { getSettings } from '../lib/settings.ts';
-import { absoluteUrl } from '../lib/url.ts';
+import { absoluteUrl, ASSET_VERSION } from '../lib/url.ts';
 import { jsonLdGraph, personSchema, websiteSchema } from '../lib/jsonld.ts';
 
 interface Props {
@@ -53,10 +53,10 @@ const graph = jsonLdGraph(
     <link rel="icon" href={settings.logo || '/favicon.svg'} />
     <link rel="alternate" type="application/rss+xml" title={`${settings.siteTitle} » Flux`} href="/feed.xml" />
     <link rel="preload" href="/fonts/FiraCode-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/css/theme-vars.css" />
-    <link rel="stylesheet" href="/css/wp.css" />
-    <link rel="stylesheet" href="/css/wan-layout.css" />
-    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href={`/css/theme-vars.css?v=${ASSET_VERSION}`} />
+    <link rel="stylesheet" href={`/css/wp.css?v=${ASSET_VERSION}`} />
+    <link rel="stylesheet" href={`/css/wan-layout.css?v=${ASSET_VERSION}`} />
+    <link rel="stylesheet" href={`/css/site.css?v=${ASSET_VERSION}`} />
   </head>
   <body class:list={['wp-embed-responsive', bodyClass]}>
     <a class="skip-link screen-reader-text" href="#wp--skip-link--target">Aller au contenu</a>

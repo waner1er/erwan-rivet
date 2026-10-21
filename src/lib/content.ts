@@ -241,6 +241,24 @@ export function getPageBySlug(slug: string, includeDrafts = false): Page | undef
   );
 }
 
+/**
+ * Public page listing the posts of a type: the published "list" page set to that type
+ * (/realisations/ for réalisations), or the blog page for articles. Undefined when there is none.
+ */
+export function listingPageOf(type: PostType): Page | undefined {
+  return type === 'post'
+    ? get<Page>("SELECT * FROM pages WHERE template = 'blog' AND status = 'published' ORDER BY id LIMIT 1")
+    : get<Page>("SELECT * FROM pages WHERE template = 'list' AND list_type = ? AND status = 'published' ORDER BY id LIMIT 1", [type]);
+}
+
+/**
+ * Generic covers generated as placeholders (/uploads/…/cover-<slug>.svg): post pages and
+ * listing cards show the post title as a wordmark instead.
+ */
+export function isPlaceholderCover(path: string | null | undefined): boolean {
+  return !!path && /\/cover-[^/]+\.svg$/.test(path);
+}
+
 export function getPage(id: number): Page | undefined {
   return get<Page>('SELECT * FROM pages WHERE id = ?', [id]);
 }

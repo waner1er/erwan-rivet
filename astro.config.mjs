@@ -29,5 +29,7 @@ export default defineConfig({
   security: { checkOrigin: true },
   vite: {
     ssr: { external: ['node:sqlite'] },
+    // Local dev is reached through a Valet proxy (`valet proxy erwan-rivet http://localhost:4321`).
+    server: { allowedHosts: ['erwan-rivet.test'] },
   },
 });

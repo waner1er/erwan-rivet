@@ -1,56 +1,39 @@
 ---
-import { excerptOf, getPostTags, postUrl, SECTION_TAGS, truncateWords, type Post } from '../lib/content.ts';
+import { excerptOf, isPlaceholderCover, postUrl, truncateWords, type Post } from '../lib/content.ts';
 
 interface Props {
   posts: Post[];
-  /** "cards": bordered 3-column cards (réalisations, projets). "square": 2-column square thumbnails. */
+  /** "cards": project cards, 3 columns (réalisations, projets). "square": 2-column square thumbnails. */
   variant?: 'cards' | 'square';
+  /** Level of the card titles, one below the heading introducing the grid. */
+  headingLevel?: 2 | 3;
 }
 
-const { posts, variant = 'cards' } = Astro.props;
-/** Technology tags shown on a card (section tags such as "freelance" only sort the listing). */
-const techTags = (post: Post) => getPostTags(post.id).filter((t) => !SECTION_TAGS.has(t.slug));
+const { posts, variant = 'cards', headingLevel = 3 } = Astro.props;
+const Heading = `h${headingLevel}`;
 ---
 
 {
   variant === 'cards' ? (
-    <div class="wp-block-query alignwide is-layout-flow wp-block-query-is-layout-flow">
-      <ul class="columns-3 wp-block-post-template is-layout-grid wan-grid-3 wp-block-post-template-is-layout-grid">
-        {posts.map((post) => (
-          <li class="wp-block-post">
-            <div
-              class="wp-block-group has-global-padding is-layout-constrained wan-bleed-30 wan-stack-gap-40 wp-block-group-is-layout-constrained wan-card"
-              style="border-width:2px;border-radius:6px;padding:var(--wp--preset--spacing--30)"
-            >
-              <h3 class="wp-block-post-title">
-                <a href={postUrl(post)}>{post.title}</a>
-              </h3>
-              {post.cover_image && (
-                <figure class="alignwide wp-block-post-featured-image">
-                  <a href={postUrl(post)} tabindex="-1" aria-hidden="true">
-                    <img src={post.cover_image} class="wp-post-image" alt="" style="height:150px;width:100%;object-fit:cover;" decoding="async" loading="lazy" />
-                  </a>
-                </figure>
-              )}
-              {techTags(post).length > 0 && (
-                <ul class="wan-chips" aria-label="Technologies">
-                  {techTags(post).map((tag) => (
-                    <li>{tag.name}</li>
-                  ))}
-                </ul>
-              )}
-              <div class="wp-block-post-excerpt">
-                <p class="wp-block-post-excerpt__excerpt">{truncateWords(excerptOf(post), 25)}</p>
-                <p class="wp-block-post-excerpt__more-text">
-                  <a class="wp-block-post-excerpt__more-link" href={postUrl(post)}>
-                    lire la suite<span class="screen-reader-text"> : {post.title}</span>
-                  </a>
-                </p>
+    <div class="wan-cards alignwide is-layout-grid wan-grid-fit" style="--wan-cols:3;--wan-min:16rem">
+      {posts.map((post) => (
+        <article class="wan-card wan-card--link">
+          {post.cover_image &&
+            (isPlaceholderCover(post.cover_image) ? (
+              <div class="wan-card__thumb wan-wordmark" aria-hidden="true">
+                <strong>{post.title}</strong>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
+            ) : (
+              <figure class="wan-card__thumb">
+                <img src={post.cover_image} alt="" decoding="async" loading="lazy" />
+              </figure>
+            ))}
+          <Heading>
+            <a href={postUrl(post)}>{post.title}</a>
+          </Heading>
+          <p>{truncateWords(excerptOf(post), 30)}</p>
+        </article>
+      ))}
     </div>
   ) : (
     <div class="wp-block-query alignwide is-layout-flow wp-block-query-is-layout-flow">
