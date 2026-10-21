@@ -3,6 +3,7 @@
 // applies unchanged. Their editor counterparts live in src/components/admin/blocks/site-blocks.tsx.
 import type { SiteSettings, SocialLink } from '../settings.ts';
 import { sanitizeContentHtml } from '../sanitize.ts';
+import { ASSET_VERSION } from '../url.ts';
 import { escapeAttr, registerLayoutSupport, wrapperAttributes, type Attrs } from './supports.ts';
 
 /** A block as returned by @wordpress/block-serialization-default-parser. */
@@ -138,7 +139,7 @@ const menu: Renderer = (attrs, { currentPath, uid }, innerBlocks) => {
 const search: Renderer = (attrs, { uid }) => {
   const s = idSuffix(uid());
   return (
-    `<div${wrapperAttributes(attrs, ['erwan-live-search wp-block-erwan-live-search'])} data-live-search data-index-url="/search-index.json">` +
+    `<div${wrapperAttributes(attrs, ['erwan-live-search wp-block-erwan-live-search'])} data-live-search data-index-url="/search-index.json?v=${ASSET_VERSION}">` +
     `<form class="erwan-live-search__form" role="search" method="get" action="/recherche/">` +
     `<button aria-expanded="false" type="button" class="erwan-live-search__toggle" aria-controls="live-search-input${s}" data-ls-toggle><span class="screen-reader-text">Ouvrir la recherche</span>` +
     `<svg class="erwan-live-search__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line></svg></button>` +

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { ASSET_VERSION } from '../lib/url.ts';
 ---
 
 <BaseLayout title="Recherche" noindex>
@@ -8,7 +9,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained"
     style="margin-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)"
     data-search-page
-    data-index-url="/search-index.json"
+    data-index-url={`/search-index.json?v=${ASSET_VERSION}`}
   >
     <h1 class="wp-block-query-title has-text-align-center" data-search-title>Recherche</h1>
     <form method="get" action="/recherche/" class="search-page__form">
