@@ -1,0 +1,42 @@
+# Erwan RIVET
+
+> Développeur web full-stack PHP & WordPress. Site professionnel présentant les prestations, réalisations et articles techniques.
+
+## Pages
+- [Contact](https://waner1er.github.io/erwan-rivet/contact/): Contactez Erwan RIVET, développeur PHP freelance : maintenance WordPress, Laravel ou Symfony, reprise de projet, développement sur mesure ou atelier numérique.
+- [Développement web](https://waner1er.github.io/erwan-rivet/developpement-web/): Développement web PHP sur mesure : sites WordPress (Custom Post Types, blocs Gutenberg, performance, SEO), applications Laravel et Symfony, API REST et back-offices Filament.
+- [Mon Parcours](https://waner1er.github.io/erwan-rivet/mon-parcours/): Parcours d’Erwan RIVET : vingt ans d’animation jeunesse, reconversion en 2018, puis développeur WordPress chez SEOMix, full-stack chez Dernier Cri et Algam (Woodbrass.com) et freelance PHP.
+- [Politique de confidentialité](https://waner1er.github.io/erwan-rivet/politique-de-confidentialite/): Politique de confidentialité du site d’Erwan RIVET : données collectées, cookies, contenus embarqués et droits sur vos données personnelles.
+- [Projets personnels](https://waner1er.github.io/erwan-rivet/projets-personnels/): Projets personnels d’Erwan RIVET : frameworks et outils PHP (Laravel, Filament, WordPress), jeux d’arcade pour le groupe Vigilante et expérimentations (Go, Gutenberg).
+- [Réalisations](https://waner1er.github.io/erwan-rivet/realisations/): Réalisations d’Erwan RIVET en freelance et en entreprise : WordPress, WooCommerce, Laravel, Symfony, Sylius, Astro. Contexte, problématiques et choix techniques de chaque projet.
+
+## Réalisations
+- [Ce portfolio en Astro](https://waner1er.github.io/erwan-rivet/realisation/portfolio-astro/): Mon portfolio, migré de WordPress vers Astro : un site statique publié sur GitHub Pages, un éditeur Gutenberg réutilisé hors de WordPress et des contenus versionnés dans Git.
+- [Momentum Conseil](https://waner1er.github.io/erwan-rivet/realisation/momentum-conseil/): Site vitrine d’un cabinet de conseil, réalisé en freelance : une présentation claire de l’offre, pensée pour le référencement et la prise de contact.
+- [Absys](https://waner1er.github.io/erwan-rivet/realisation/absys/): Refonte du site d’Absys, spécialiste de l’accueil téléphonique externalisé, menée au sein de l’agence nantaise Luneos à partir des maquettes Figma.
+- [Anne Thierrée](https://waner1er.github.io/erwan-rivet/realisation/anne-thierree/): Site WordPress de l’artiste peintre et sculptrice Anne Thierrée : des galeries par technique, des œuvres mises en valeur et une artiste autonome sur ses contenus.
+- [GalerieReading](https://waner1er.github.io/erwan-rivet/realisation/galeriereading/): Site WordPress de GalerieReading, solution de suivi climatique (température, hygrométrie, alertes) pour les musées, galeries, bibliothèques et archives.
+- [La Grande Rouge](https://waner1er.github.io/erwan-rivet/realisation/la-grande-rouge/): Site WordPress et boutique WooCommerce de La Grande Rouge, créatrice textile et formatrice en couture à Nantes : patrons PDF, ateliers, cours et cartes cadeaux.
+- [Woodbrass.com](https://waner1er.github.io/erwan-rivet/realisation/woodbrass-com/): Développeur full-stack chez Algam pour Woodbrass.com, grand site e-commerce d’instruments de musique : maintenance, ERP et refonte progressive d’un code legacy vers la Clean Architecture.
+- [So.bio](https://waner1er.github.io/erwan-rivet/realisation/front-end-so-bio/): Chez Dernier Cri, développement du front-end de la boutique en ligne So.bio, construite avec Sylius (Symfony) : thème sur mesure, Twig et SCSS en composants BEM.
+- [NQT](https://waner1er.github.io/erwan-rivet/realisation/projet-nqt/): Chez Dernier Cri, développement du back-office Laravel et des API REST de l’application mobile NQT.
+
+## Projets personnels
+- [Behind the Mask II : le run’n’gun](https://waner1er.github.io/erwan-rivet/projets-personnels/behind-the-mask-v2/): La suite façon Metal Slug, en Phaser 4 : les quatre membres de Vigilante, neuf niveaux pour les neuf morceaux de l’album, à un ou deux joueurs.
+- [Vigilante : Behind the Mask](https://waner1er.github.io/erwan-rivet/projets-personnels/behind-the-mask/): Beat’em up façon borne d’arcade sur l’album Behind the Mask de Vigilante : un niveau par morceau, un boss par niveau, et tout le pixel art généré en PHP.
+- [Boulette et la Crotte d’Or](https://waner1er.github.io/erwan-rivet/projets-personnels/boulette-et-la-crotte-d-or/): Beat’em up cartoon façon Amiga : une carline part à la recherche de la Crotte d’Or à travers 20 niveaux de légumes mutants. Même moteur que Behind the Mask, avec une musique composée en PHP.
+- [Punk Booking](https://waner1er.github.io/erwan-rivet/projets-personnels/punk-booking/): Outil de booking de concerts pour un groupe DIY : lieux, contacts, tournées, relances, avec un back-office Filament 5 et une intégration Slack dans les deux sens.
+- [Bare PHP Stack](https://waner1er.github.io/erwan-rivet/projets-personnels/bare-php-stack/): Mon framework PHP from scratch : architecture DDD, routing par attributs PHP 8, CLI de génération, Blade, Vite et Tracy. Pour comprendre ce que font Laravel et Symfony sous le capot.
+- [Moteur de règles tarifaires](https://waner1er.github.io/erwan-rivet/projets-personnels/vigicorp-discount-engine/): Test technique : un moteur de remises pour panier e-commerce en PHP 8.2, exécutable en CLI, où chaque règle est une classe indépendante.
+- [GoGinShop](https://waner1er.github.io/erwan-rivet/projets-personnels/goginshop/): Une API REST de boutique en Go avec Gin, GORM, JWT et SQLite : mon terrain d’apprentissage du Go, vu par un développeur PHP.
+- [CV Generator](https://waner1er.github.io/erwan-rivet/projets-personnels/cv-generator/): Application Laravel et Livewire 4 pour composer ses CV à partir d’une banque d’expériences et de compétences, choisir un modèle et exporter en PDF.
+- [Woo Product Image Associate](https://waner1er.github.io/erwan-rivet/projets-personnels/woo-product-image-associate/): Extension WooCommerce qui associe automatiquement les images aux produits d’après le préfixe de leur référence (SKU).
+- [CPT Craft](https://waner1er.github.io/erwan-rivet/projets-personnels/cpt-craft/): Extension WordPress pour créer des types de contenus et des taxonomies personnalisés depuis l’administration, sans écrire de code.
+- [Wancommerce](https://waner1er.github.io/erwan-rivet/projets-personnels/wancommerce/): Un e-commerce complet en Laravel 12, Filament 4 et Livewire : catalogue, panier, tunnel de commande, frais de port, TVA et paiement PayPal.
+- [Working Time Tool](https://waner1er.github.io/erwan-rivet/projets-personnels/working-time-tool/): Plateforme Laravel, Livewire et Filament de suivi des heures de travail : saisie quotidienne, historique et suivi pour chaque utilisateur inscrit.
+- [Carbon Fields Blocks](https://waner1er.github.io/erwan-rivet/projets-personnels/wan-carbon-fields-blocks/): Extension WordPress pour déclarer types de contenus, taxonomies et blocs Gutenberg en PHP avec Carbon Fields, sans écrire de React.
+- [Voyagerberg](https://waner1er.github.io/erwan-rivet/projets-personnels/voyagerberg/): L’éditeur Gutenberg branché sur l’admin Laravel Voyager : une première expérience d’éditeur de blocs hors de WordPress.
+
+## Flux
+- [Sitemap](https://waner1er.github.io/erwan-rivet/sitemap.xml)
+- [Flux RSS](https://waner1er.github.io/erwan-rivet/feed.xml)
