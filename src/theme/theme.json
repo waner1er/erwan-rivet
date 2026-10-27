@@ -63,32 +63,32 @@
     {
       "slug": "base",
       "name": "Fond",
-      "color": "#f6f4ee"
+      "color": "#ffffff"
     },
     {
       "slug": "surface",
-      "name": "Surface (cartes)",
-      "color": "#ffffff"
+      "name": "Surface",
+      "color": "#f5f5f5"
     },
     {
       "slug": "contrast",
       "name": "Texte",
-      "color": "#161a22"
+      "color": "#141414"
     },
     {
       "slug": "muted",
       "name": "Texte secondaire",
-      "color": "#4d5563"
+      "color": "#555555"
     },
     {
       "slug": "line",
       "name": "Filets et bordures",
-      "color": "#d9d5ca"
+      "color": "#dedede"
     },
     {
       "slug": "accent",
-      "name": "Accent",
-      "color": "#c8432a"
+      "name": "Accent (encre)",
+      "color": "#141414"
     },
     {
       "slug": "accent-ink",
@@ -96,93 +96,122 @@
       "color": "#ffffff"
     },
     {
+      "slug": "accent-strong",
+      "name": "Accent au survol",
+      "color": "#000000"
+    },
+    {
+      "slug": "accent-soft",
+      "name": "Fond discret",
+      "color": "#f2f2f2"
+    },
+    {
+      "slug": "grey",
+      "name": "Gris console",
+      "color": "#bdbdbd"
+    },
+    {
+      "slug": "grey-text",
+      "name": "Gris lisible (texte)",
+      "color": "#555555"
+    },
+    {
       "slug": "navy",
-      "name": "Bandeau sombre",
-      "color": "#1f2a3a"
+      "name": "Bandeau contrasté",
+      "color": "#141414"
     },
     {
       "slug": "wordmark",
       "name": "Fond des visuels texte",
-      "color": "#e7e5df"
+      "color": "#f0f0f0"
     },
     {
       "slug": "wordmark-ink",
       "name": "Texte des visuels texte",
-      "color": "#1f2a3a"
+      "color": "#141414"
     },
     {
       "slug": "on-navy",
-      "name": "Texte sur bandeau sombre",
-      "color": "#eeeae1"
+      "name": "Texte sur bandeau contrasté",
+      "color": "#e5e5e5"
     },
     {
       "slug": "on-navy-heading",
-      "name": "Titre sur bandeau sombre",
+      "name": "Titre sur bandeau contrasté",
       "color": "#ffffff"
     },
     {
       "slug": "on-navy-muted",
-      "name": "Texte secondaire sur bandeau sombre",
-      "color": "#c9ced8"
+      "name": "Texte secondaire sur bandeau contrasté",
+      "color": "#bdbdbd"
     },
     {
       "slug": "on-navy-accent",
-      "name": "Accent sur bandeau sombre",
-      "color": "#ff7a5c"
+      "name": "Bouton sur bandeau contrasté",
+      "color": "#ffffff"
     },
     {
       "slug": "on-navy-accent-ink",
-      "name": "Texte sur accent du bandeau sombre",
-      "color": "#111418"
+      "name": "Texte du bouton sur bandeau contrasté",
+      "color": "#111111"
     },
     {
       "slug": "accent-1",
       "name": "Accent 1 (hérité)",
-      "color": "#c8432a"
+      "color": "#141414"
     },
     {
       "slug": "accent-2",
       "name": "Accent 2 (hérité)",
-      "color": "#f3ddd6"
+      "color": "#f2f2f2"
     },
     {
       "slug": "accent-3",
       "name": "Accent 3 (hérité)",
-      "color": "#1f2a3a"
+      "color": "#000000"
     },
     {
       "slug": "accent-4",
       "name": "Accent 4 (hérité)",
-      "color": "#4d5563"
+      "color": "#555555"
     },
     {
       "slug": "accent-5",
       "name": "Accent 5 (hérité)",
-      "color": "#ffffff"
+      "color": "#f5f5f5"
     },
     {
       "slug": "accent-6",
       "name": "Accent 6 (hérité)",
-      "color": "#d9d5ca"
+      "color": "#dedede"
     }
   ],
   "darkColors": {
-    "base": "#111418",
-    "surface": "#1a1f27",
-    "contrast": "#eeeae1",
-    "muted": "#aab2bf",
-    "line": "#2c333e",
-    "accent": "#ff7a5c",
-    "accent-ink": "#111418",
-    "navy": "#0b0e13",
-    "accent-1": "#ff7a5c",
-    "accent-2": "#3a2620",
-    "accent-3": "#0b0e13",
-    "accent-4": "#aab2bf",
-    "accent-5": "#1a1f27",
-    "accent-6": "#2c333e",
-    "wordmark": "#232a35",
-    "wordmark-ink": "#eeeae1"
+    "base": "#141414",
+    "surface": "#1b1b1b",
+    "contrast": "#ffffff",
+    "muted": "#a8a8a8",
+    "line": "#2b2b2b",
+    "accent": "#ffffff",
+    "accent-ink": "#111111",
+    "accent-strong": "#d6d6d6",
+    "accent-soft": "#1f1f1f",
+    "grey": "#bdbdbd",
+    "grey-text": "#a8a8a8",
+    "navy": "#bdbdbd",
+    "on-navy": "#1a1a1a",
+    "on-navy-heading": "#111111",
+    "on-navy-muted": "#333333",
+    "on-navy-accent": "#111111",
+    "on-navy-accent-ink": "#ffffff",
+    "accent-1": "#ffffff",
+    "accent-2": "#1f1f1f",
+    "accent-3": "#000000",
+    "accent-4": "#a8a8a8",
+    "accent-5": "#1b1b1b",
+    "accent-6": "#2b2b2b",
+    "wordmark": "#1f1f1f",
+    "wordmark-ink": "#ffffff"
   },
   "gradients": [
     {
@@ -248,6 +277,11 @@
   ],
   "fontFamilies": [
     {
+      "slug": "nunito",
+      "name": "Nunito",
+      "fontFamily": "Nunito, system-ui, -apple-system, \"Segoe UI\", sans-serif"
+    },
+    {
       "slug": "manrope",
       "name": "Manrope",
       "fontFamily": "Manrope, system-ui, -apple-system, \"Segoe UI\", sans-serif"
@@ -282,12 +316,12 @@
     {
       "slug": "x-large",
       "name": "Très grand",
-      "size": "clamp(1.7rem, 3.4vw, 2.6rem)"
+      "size": "clamp(2rem, 4.4vw, 3.5rem)"
     },
     {
       "slug": "xx-large",
       "name": "Extra grand",
-      "size": "clamp(2.3rem, 5.2vw, 4.4rem)"
+      "size": "clamp(2.9rem, 8vw, 6rem)"
     }
   ],
   "spacing": [
@@ -409,17 +443,17 @@
   "body": {
     "backgroundColorSlug": "base",
     "textColorSlug": "contrast",
-    "fontFamilySlug": "fira-code",
+    "fontFamilySlug": "nunito",
     "fontSizeSlug": "medium",
-    "fontWeight": "400",
+    "fontWeight": "500",
     "letterSpacing": "0",
     "lineHeight": "1.6"
   },
   "headings": {
-    "fontFamilySlug": "fira-code",
-    "fontWeight": "700",
-    "letterSpacing": "-0.01em",
-    "lineHeight": "1.12",
+    "fontFamilySlug": "nunito",
+    "fontWeight": "800",
+    "letterSpacing": "-0.02em",
+    "lineHeight": "1.05",
     "sizes": {
       "h1": {
         "sizeSlug": "xx-large"
@@ -428,8 +462,8 @@
         "sizeSlug": "x-large"
       },
       "h3": {
-        "size": "clamp(1.2rem, 2vw, 1.4rem)",
-        "fontWeight": "700"
+        "size": "clamp(1.35rem, 2.4vw, 1.9rem)",
+        "fontWeight": "750"
       },
       "h4": {
         "size": "1.125rem",

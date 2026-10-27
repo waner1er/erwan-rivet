@@ -26,3 +26,7 @@ pnpm-debug.log*
 
 # SQLite database and uploaded media
 data/
+
+# impeccable: decision drafts and sketches
+.impeccable/mocks/
+.impeccable/decision-payload*.json

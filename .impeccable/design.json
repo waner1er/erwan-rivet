@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-27T11:05:00Z",
+  "title": "Design System: Erwan RIVET",
+  "extensions": {
+    "colorMeta": {
+      "console-black": {
+        "role": "neutral",
+        "displayName": "Noir console",
+        "canonical": "#141414",
+        "tonalRamp": [
+          "#0a0a0a",
+          "#141414",
+          "#1f1f1f",
+          "#2b2b2b",
+          "#555555",
+          "#a8a8a8",
+          "#d6d6d6",
+          "#f6f6f4"
+        ]
+      },
+      "ink-white": {
+        "role": "primary",
+        "displayName": "Encre blanche",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#141414",
+          "#2b2b2b",
+          "#555555",
+          "#808080",
+          "#a8a8a8",
+          "#bdbdbd",
+          "#e0e0dd",
+          "#ffffff"
+        ]
+      },
+      "console-grey": {
+        "role": "neutral",
+        "displayName": "Gris console",
+        "canonical": "#bdbdbd",
+        "tonalRamp": [
+          "#2b2b2b",
+          "#4a4a4a",
+          "#6b6b6b",
+          "#8c8c8c",
+          "#a8a8a8",
+          "#bdbdbd",
+          "#d6d6d6",
+          "#ececea"
+        ]
+      },
+      "dim-white": {
+        "role": "neutral",
+        "displayName": "Blanc estompé",
+        "canonical": "#a8a8a8"
+      },
+      "paper-light": {
+        "role": "neutral",
+        "displayName": "Papier clair",
+        "canonical": "#ffffff"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Nom d'Erwan et titres de page."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Titres de section."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Services, projets, sous-parties."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Chapô sous un titre."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texte courant, 56ch maximum."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Contexte d'un projet."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Toutes les transitions et révélations."
+      },
+      {
+        "name": "unveil",
+        "value": "clip-path inset(100% 0 0 0) -> inset(0), 1.3s",
+        "purpose": "Apparition du portrait et de la capture d'accueil."
+      },
+      {
+        "name": "color-lift",
+        "value": "filter grayscale(1) -> none, 0.8s",
+        "purpose": "Retour de la couleur sur une image de projet."
+      },
+      {
+        "name": "dim",
+        "value": "opacity 0.35, 0.5s",
+        "purpose": "Projets non survolés."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "600px"
+      },
+      {
+        "name": "tablet",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Bouton principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Action principale (« Parlons de votre site »).",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Parlons de votre site</a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;min-height:48px;padding:.85rem 1.5rem;border-radius:999px;border:2px solid #ffffff;background:#ffffff;color:#141414;font:700 1rem Nunito,system-ui,sans-serif;text-decoration:none;transition:background .25s,border-color .25s}.ds-btn-primary:hover{background:#d6d6d6;border-color:#d6d6d6}.ds-btn-primary:focus-visible{outline:2px solid #ffffff;outline-offset:4px}"
+    },
+    {
+      "name": "Bouton contour",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Action secondaire.",
+      "html": "<a class=\"ds-btn-outline\" href=\"#\">Voir mes réalisations</a>",
+      "css": ".ds-btn-outline{display:inline-flex;align-items:center;min-height:48px;padding:.85rem 1.5rem;border-radius:999px;border:2px solid #ffffff;background:transparent;color:#ffffff;font:700 1rem Nunito,system-ui,sans-serif;text-decoration:none;transition:background .25s,color .25s}.ds-btn-outline:hover{background:#ffffff;color:#141414}.ds-btn-outline:focus-visible{outline:2px solid #ffffff;outline-offset:4px}"
+    },
+    {
+      "name": "Champ de formulaire",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Champ du formulaire de contact.",
+      "html": "<input class=\"ds-input\" placeholder=\"Prénom\">",
+      "css": ".ds-input{min-height:48px;padding:.7rem .9rem;border-radius:10px;border:1px solid #2b2b2b;background:#141414;color:#ffffff;font:500 1rem Nunito,system-ui,sans-serif;caret-color:#ffffff}.ds-input::placeholder{color:#a8a8a8}.ds-input:focus{outline:none;border-color:#ffffff;box-shadow:0 0 0 3px rgb(255 255 255 / .25)}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "description": "Page courante à pleine encre, les autres estompées.",
+      "html": "<nav class=\"ds-nav\"><a aria-current=\"page\" href=\"#\">Accueil</a><a href=\"#\">Mon parcours</a><a href=\"#\">Réalisations</a></nav>",
+      "css": ".ds-nav{display:flex;gap:1.6rem;font:700 .98rem Nunito,system-ui,sans-serif}.ds-nav a{color:#ffffff;text-decoration:none;padding:.3rem 0;opacity:.6;background:linear-gradient(#fff,#fff) 0 100%/0 2px no-repeat;transition:opacity .3s,background-size .5s cubic-bezier(.16,1,.3,1)}.ds-nav a:hover,.ds-nav a[aria-current]{opacity:1;background-size:100% 2px}"
+    },
+    {
+      "name": "Étiquette",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Étiquette de projet.",
+      "html": "<a class=\"ds-tag\" href=\"#\">wordpress</a>",
+      "css": ".ds-tag{display:inline-block;padding:.2rem .7rem;border:1px solid #2b2b2b;border-radius:999px;color:#a8a8a8;font:500 .85rem Nunito,system-ui,sans-serif;text-decoration:none}.ds-tag:hover{border-color:#ffffff;color:#ffffff}"
+    },
+    {
+      "name": "Projet",
+      "kind": "custom",
+      "refersTo": "project-thumb",
+      "description": "Image en niveaux de gris qui reprend ses couleurs au survol.",
+      "html": "<a class=\"ds-project\" href=\"#\"><span class=\"ds-project__img\"></span><span class=\"ds-project__ctx\">Freelance</span><strong>Momentum Conseil</strong></a>",
+      "css": ".ds-project{display:grid;gap:.4rem;width:280px;color:#ffffff;text-decoration:none;font-family:Nunito,system-ui,sans-serif}.ds-project__img{aspect-ratio:16/10;border-radius:8px;background:linear-gradient(135deg,#1c3a5e,#c8a96a);filter:grayscale(1);transition:filter .8s cubic-bezier(.16,1,.3,1)}.ds-project:hover .ds-project__img{filter:none}.ds-project__ctx{color:#a8a8a8;font-weight:600;font-size:.92rem}.ds-project strong{font-size:1.5rem;font-weight:750;letter-spacing:-.02em}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Le menu de console",
+    "overview": "Le site se lit comme le menu d'une console portable au thème minimal : un fond presque noir, une seule encre blanche, et ce qui n'est pas sélectionné reste en retrait. L'interface ne porte aucune couleur. La couleur appartient au travail et à la personne : le portrait d'Erwan, et les captures de projets qui reprennent leurs vraies couleurs quand on les désigne.\n\nLa densité est faible et la lecture calme. De grandes respirations séparent les sections, les éléments sont ouverts et séparés par des filets, jamais enfermés dans des cartes. Le mouvement reste rare : le portrait se révèle par un masque à l'arrivée, les images de projets se révèlent au défilement et reprennent leurs couleurs au survol, et rien ne suit le pointeur.",
+    "keyCharacteristics": [
+      "Noir et blanc pur, gris console pour un seul bandeau ; aucune teinte d'accent.",
+      "Nunito 800 pour les titres, 500 pour le texte.",
+      "Éléments inactifs estompés, élément actif à pleine encre.",
+      "Images de projets en niveaux de gris, en couleur au survol.",
+      "Sombre par défaut, variante claire automatique."
+    ],
+    "rules": [
+      {
+        "name": "La règle de l'interface muette",
+        "body": "L'interface n'a pas de couleur d'accent. Toute couleur visible vient d'une image (portrait, capture, logo).",
+        "section": "colors"
+      },
+      {
+        "name": "La règle de l'élément sélectionné",
+        "body": "Un seul élément à pleine encre dans un groupe : la page courante dans la navigation, le projet survolé dans une liste (les autres passent à 35 % d'opacité).",
+        "section": "colors"
+      },
+      {
+        "name": "La règle du titre qui suffit",
+        "body": "Pas de sur-titre en petites capitales au-dessus d'un titre. Une ligne au-dessus d'un titre n'existe que si elle porte une information propre (question d'un bandeau d'appel, lien de retour « ← Réalisation »), en texte normal.",
+        "section": "typography"
+      },
+      {
+        "name": "La règle du plat",
+        "body": "Aucune ombre, nulle part.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do garder l'interface en noir, blanc et gris ; laisser la couleur aux images.",
+      "Do montrer les images de projets en niveaux de gris et leur rendre la couleur au survol ou au passage au centre de l'écran.",
+      "Do montrer le portrait d'Erwan en couleurs naturelles.",
+      "Do estomper les éléments non sélectionnés d'un groupe (navigation 60 %, projets 35 %).",
+      "Do couper toute animation sous prefers-reduced-motion: reduce."
+    ],
+    "donts": [
+      "Don't ajouter une couleur d'accent à l'interface.",
+      "Don't placer de sur-titre en petites capitales au-dessus d'un titre.",
+      "Don't enfermer des éléments de même niveau dans des cartes identiques à bordure et fond.",
+      "Don't utiliser d'illustrations génériques (type unDraw), de dégradés, de verre dépoli ni de néon.",
+      "Don't reproduire l'interface d'une console (barre d'état, menu d'icônes, raccourcis de manette) : seule l'esthétique est retenue.",
+      "Don't faire suivre le pointeur à quoi que ce soit (parallaxe, bouton aimanté, pastille de curseur) ni animer en boucle infinie.",
+      "Don't utiliser de glyphes (→, ←, ✓) comme icônes, ni de fond crème ou teinté.",
+      "Don't présenter des outils ou services en grille de cartes « icône + titre + texte » identiques."
+    ]
+  }
+}

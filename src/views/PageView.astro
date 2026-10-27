@@ -51,7 +51,7 @@ const jsonLd = pageSchema(page, { description, image: ogImage, site: Astro.site,
   {
     page.template === 'cover' && (
       <main id="wp--skip-link--target" class="has-global-padding is-layout-constrained">
-        <Cover title={page.title} image={page.cover_image} eyebrow={page.title} />
+        <Cover title={page.title} image={page.cover_image} />
         <div class="wan-section alignwide is-layout-constrained wan-constrained-left">
           <div class="entry-content is-layout-flow">
             <Content html={html} />
@@ -64,7 +64,7 @@ const jsonLd = pageSchema(page, { description, image: ogImage, site: Astro.site,
   {
     page.template === 'blog' && (
       <main id="wp--skip-link--target" class="has-global-padding is-layout-constrained">
-        <Cover title={page.title} eyebrow={page.title}>
+        <Cover title={page.title}>
           <Content html={html} />
         </Cover>
         <div class="wan-section alignwide">
@@ -77,7 +77,7 @@ const jsonLd = pageSchema(page, { description, image: ogImage, site: Astro.site,
   {
     page.template === 'list' && (
       <main id="wp--skip-link--target" class="has-global-padding is-layout-constrained">
-        <Cover title={page.title} eyebrow={page.title}>
+        <Cover title={page.title}>
           <Content html={html} />
         </Cover>
         {sections.map((section) => (
